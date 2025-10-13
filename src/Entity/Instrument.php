@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\InstrumentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +33,18 @@ class Instrument
 
     #[ORM\ManyToOne(inversedBy: 'instruments')]
     private ?Marque $instrument = null;
+
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'intrument')]
+    private Collection $interventions;
+
+    #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'instrument')]
+    private Collection $contratPrets;
+
+    public function __construct()
+    {
+        $this->interventions = new ArrayCollection();
+        $this->contratPrets = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -106,6 +120,66 @@ class Instrument
     public function setInstrument(?Marque $instrument): static
     {
         $this->instrument = $instrument;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Intervention>
+     */
+    public function getInterventions(): Collection
+    {
+        return $this->interventions;
+    }
+
+    public function addIntervention(Intervention $intervention): static
+    {
+        if (!$this->interventions->contains($intervention)) {
+            $this->interventions->add($intervention);
+            $intervention->setIntrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIntervention(Intervention $intervention): static
+    {
+        if ($this->interventions->removeElement($intervention)) {
+            // set the owning side to null (unless already changed)
+            if ($intervention->getIntrument() === $this) {
+                $intervention->setIntrument(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ContratPret>
+     */
+    public function getContratPrets(): Collection
+    {
+        return $this->contratPrets;
+    }
+
+    public function addContratPret(ContratPret $contratPret): static
+    {
+        if (!$this->contratPrets->contains($contratPret)) {
+            $this->contratPrets->add($contratPret);
+            $contratPret->setInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeContratPret(ContratPret $contratPret): static
+    {
+        if ($this->contratPrets->removeElement($contratPret)) {
+            // set the owning side to null (unless already changed)
+            if ($contratPret->getInstrument() === $this) {
+                $contratPret->setInstrument(null);
+            }
+        }
 
         return $this;
     }
