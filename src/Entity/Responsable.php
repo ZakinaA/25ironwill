@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ResponsableRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ResponsableRepository::class)]
@@ -36,6 +38,17 @@ class Responsable
 
     #[ORM\Column(length: 50)]
     private ?string $mail = null;
+
+    #[ORM\ManyToMany(targetEntity: Eleve::class, inversedBy: 'responsables')]
+    private Collection $eleve;
+
+    #[ORM\ManyToOne(inversedBy: 'responsables')]
+    private ?Tranche $tranche = null;
+
+    public function __construct()
+    {
+        $this->eleve = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -134,6 +147,42 @@ class Responsable
     public function setMail(string $mail): static
     {
         $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Eleve>
+     */
+    public function getEleve(): Collection
+    {
+        return $this->eleve;
+    }
+
+    public function addEleve(Eleve $eleve): static
+    {
+        if (!$this->eleve->contains($eleve)) {
+            $this->eleve->add($eleve);
+        }
+
+        return $this;
+    }
+
+    public function removeEleve(Eleve $eleve): static
+    {
+        $this->eleve->removeElement($eleve);
+
+        return $this;
+    }
+
+    public function getTranche(): ?Tranche
+    {
+        return $this->tranche;
+    }
+
+    public function setTranche(?Tranche $tranche): static
+    {
+        $this->tranche = $tranche;
 
         return $this;
     }

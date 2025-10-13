@@ -42,9 +42,16 @@ class Eleve
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
     private Collection $contratPrets;
 
+    #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
+    private Collection $responsables;
+
+    #[ORM\ManyToOne(inversedBy: 'eleves')]
+    private ?Tranche $tranche = null;
+
     public function __construct()
     {
         $this->contratPrets = new ArrayCollection();
+        $this->responsables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -174,6 +181,45 @@ class Eleve
                 $contratPret->setEleve(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Responsable>
+     */
+    public function getResponsables(): Collection
+    {
+        return $this->responsables;
+    }
+
+    public function addResponsable(Responsable $responsable): static
+    {
+        if (!$this->responsables->contains($responsable)) {
+            $this->responsables->add($responsable);
+            $responsable->addEleve($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponsable(Responsable $responsable): static
+    {
+        if ($this->responsables->removeElement($responsable)) {
+            $responsable->removeEleve($this);
+        }
+
+        return $this;
+    }
+
+    public function getTranche(): ?Tranche
+    {
+        return $this->tranche;
+    }
+
+    public function setTranche(?Tranche $tranche): static
+    {
+        $this->tranche = $tranche;
 
         return $this;
     }
