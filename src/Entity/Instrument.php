@@ -29,6 +29,10 @@ class Instrument
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cheminImage = null;
 
+    #[ORM\ManyToOne(inversedBy: 'instruments')]
+    private ?Marque $instrument = null;
+
+
     public function getId(): ?int
     {
         return $this->id;
@@ -93,4 +97,17 @@ class Instrument
 
         return $this;
     }
+
+    public function getInstrument(): ?Marque
+    {
+        return $this->instrument;
+    }
+
+    public function setInstrument(?Marque $instrument): static
+    {
+        $this->instrument = $instrument;
+
+        return $this;
+    }
+
 }
