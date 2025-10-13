@@ -34,7 +34,7 @@ class Instrument
     #[ORM\ManyToOne(inversedBy: 'instruments')]
     private ?Marque $instrument = null;
 
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'intrument')]
+    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'instrument')]
     private Collection $interventions;
 
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'instrument')]
@@ -136,7 +136,7 @@ class Instrument
     {
         if (!$this->interventions->contains($intervention)) {
             $this->interventions->add($intervention);
-            $intervention->setIntrument($this);
+            $intervention->setInstrument($this);
         }
 
         return $this;
@@ -146,8 +146,8 @@ class Instrument
     {
         if ($this->interventions->removeElement($intervention)) {
             // set the owning side to null (unless already changed)
-            if ($intervention->getIntrument() === $this) {
-                $intervention->setIntrument(null);
+            if ($intervention->getInstrument() === $this) {
+                $intervention->setInstrument(null);
             }
         }
 
