@@ -29,6 +29,9 @@ class ContratPret
     #[ORM\Column(length: 50)]
     private ?string $etatDetailleRetour = null;
 
+    #[ORM\ManyToOne(inversedBy: 'contratPrets')]
+    private ?Eleve $eleve = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -90,6 +93,18 @@ class ContratPret
     public function setEtatDetailleRetour(string $etatDetailleRetour): static
     {
         $this->etatDetailleRetour = $etatDetailleRetour;
+
+        return $this;
+    }
+
+    public function getEleve(): ?Eleve
+    {
+        return $this->eleve;
+    }
+
+    public function setEleve(?Eleve $eleve): static
+    {
+        $this->eleve = $eleve;
 
         return $this;
     }
