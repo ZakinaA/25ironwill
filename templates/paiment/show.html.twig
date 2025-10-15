@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiment{% endblock %}
+
+{% block body %}
+    <h1>Paiment</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ paiment.id }}</td>
+            </tr>
+            <tr>
+                <th>Montant</th>
+                <td>{{ paiment.montant }}</td>
+            </tr>
+            <tr>
+                <th>DatePaiment</th>
+                <td>{{ paiment.datePaiment ? paiment.datePaiment|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_paiment_index') }}">back to list</a>
+
+    <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}">edit</a>
+
+    {{ include('paiment/_delete_form.html.twig') }}
+{% endblock %}
