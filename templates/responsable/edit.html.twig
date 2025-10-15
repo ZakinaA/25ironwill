@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Responsable{% endblock %}
+
+{% block body %}
+    <h1>Edit Responsable</h1>
+
+    {{ include('responsable/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_responsable_index') }}">back to list</a>
+
+    {{ include('responsable/_delete_form.html.twig') }}
+{% endblock %}

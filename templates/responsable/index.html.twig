@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Responsable index{% endblock %}
+
+{% block body %}
+    <h1>Responsable index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>NumRue</th>
+                <th>Rue</th>
+                <th>Copos</th>
+                <th>Ville</th>
+                <th>Tel</th>
+                <th>Mail</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for responsable in responsables %}
+            <tr>
+                <td>{{ responsable.id }}</td>
+                <td>{{ responsable.nom }}</td>
+                <td>{{ responsable.prenom }}</td>
+                <td>{{ responsable.numRue }}</td>
+                <td>{{ responsable.rue }}</td>
+                <td>{{ responsable.copos }}</td>
+                <td>{{ responsable.ville }}</td>
+                <td>{{ responsable.tel }}</td>
+                <td>{{ responsable.mail }}</td>
+                <td>
+                    <a href="{{ path('app_responsable_show', {'id': responsable.id}) }}">show</a>
+                    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_responsable_new') }}">Create new</a>
+{% endblock %}
