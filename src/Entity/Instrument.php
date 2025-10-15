@@ -23,7 +23,7 @@ class Instrument
     private ?\DateTimeInterface $dateAchat = null;
 
     #[ORM\Column]
-    private ?bool $prixAchat = null;
+    private ?float $prixAchat = null;
 
     #[ORM\Column(length: 50)]
     private ?string $utilisation = null;
@@ -32,13 +32,16 @@ class Instrument
     private ?string $cheminImage = null;
 
     #[ORM\ManyToOne(inversedBy: 'instruments')]
-    private ?Marque $instrument = null;
+    private ?Marque $marque = null;
 
     #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'instrument')]
     private Collection $interventions;
 
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'instrument')]
     private Collection $contratPrets;
+
+    #[ORM\ManyToOne(inversedBy: 'instruments')]
+    private ?TypeInstrument $type = null;
 
     public function __construct()
     {
@@ -76,17 +79,23 @@ class Instrument
         return $this;
     }
 
-    public function isPrixAchat(): ?bool
+    public function isPrixAchat(): ?float
     {
         return $this->prixAchat;
     }
 
-    public function setPrixAchat(bool $prixAchat): static
+    public function getPrixAchat(): ?float
+    {
+        return $this->prixAchat;
+    }
+
+    public function setPrixAchat(float $prixAchat): static
     {
         $this->prixAchat = $prixAchat;
 
         return $this;
     }
+
 
     public function getUtilisation(): ?string
     {
@@ -112,17 +121,18 @@ class Instrument
         return $this;
     }
 
-    public function getInstrument(): ?Marque
+    public function getMarque(): ?Marque
     {
-        return $this->instrument;
+        return $this->marque;
     }
 
-    public function setInstrument(?Marque $instrument): static
+    public function setMarque(?Marque $marque): static
     {
-        $this->instrument = $instrument;
+        $this->marque = $marque;
 
         return $this;
     }
+
 
     /**
      * @return Collection<int, Intervention>
@@ -180,6 +190,18 @@ class Instrument
                 $contratPret->setInstrument(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): ?TypeInstrument
+    {
+        return $this->type;
+    }
+
+    public function setType(?TypeInstrument $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }
