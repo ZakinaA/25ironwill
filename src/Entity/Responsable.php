@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\ProfessionnelRepository;
+use App\Repository\ResponsableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ProfessionnelRepository::class)]
-class Professionnel
+#[ORM\Entity(repositoryClass: ResponsableRepository::class)]
+class Responsable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,34 +18,36 @@ class Professionnel
     #[ORM\Column(length: 30)]
     private ?string $nom = null;
 
+    #[ORM\Column(length: 30)]
+    private ?string $prenom = null;
+
     #[ORM\Column]
     private ?int $numRue = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 40)]
     private ?string $rue = null;
 
     #[ORM\Column]
     private ?int $copos = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 40)]
     private ?string $ville = null;
 
-    #[ORM\Column(length: 12)]
-    private ?string $tel = null;
+    #[ORM\Column]
+    private ?int $tel = null;
 
-    #[ORM\Column(length: 70)]
+    #[ORM\Column(length: 50)]
     private ?string $mail = null;
 
-    #[ORM\OneToMany(targetEntity: Intervention::class, mappedBy: 'professionnel')]
-    private Collection $interventions;
+    #[ORM\ManyToMany(targetEntity: Eleve::class, inversedBy: 'responsables')]
+    private Collection $eleve;
 
-    #[ORM\ManyToMany(targetEntity: Metier::class, mappedBy: 'professionnel')]
-    private Collection $metiers;
+    #[ORM\ManyToOne(inversedBy: 'responsables')]
+    private ?Tranche $tranche = null;
 
     public function __construct()
     {
-        $this->interventions = new ArrayCollection();
-        $this->metiers = new ArrayCollection();
+        $this->eleve = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,6 +63,18 @@ class Professionnel
     public function setNom(string $nom): static
     {
         $this->nom = $nom;
+
+        return $this;
+    }
+
+    public function getPrenom(): ?string
+    {
+        return $this->prenom;
+    }
+
+    public function setPrenom(string $prenom): static
+    {
+        $this->prenom = $prenom;
 
         return $this;
     }
@@ -113,12 +127,12 @@ class Professionnel
         return $this;
     }
 
-    public function getTel(): ?string
+    public function getTel(): ?int
     {
         return $this->tel;
     }
 
-    public function setTel(string $tel): static
+    public function setTel(int $tel): static
     {
         $this->tel = $tel;
 
@@ -138,58 +152,37 @@ class Professionnel
     }
 
     /**
-     * @return Collection<int, Intervention>
+     * @return Collection<int, Eleve>
      */
-    public function getInterventions(): Collection
+    public function getEleve(): Collection
     {
-        return $this->interventions;
+        return $this->eleve;
     }
 
-    public function addIntervention(Intervention $intervention): static
+    public function addEleve(Eleve $eleve): static
     {
-        if (!$this->interventions->contains($intervention)) {
-            $this->interventions->add($intervention);
-            $intervention->setProfessionnel($this);
+        if (!$this->eleve->contains($eleve)) {
+            $this->eleve->add($eleve);
         }
 
         return $this;
     }
 
-    public function removeIntervention(Intervention $intervention): static
+    public function removeEleve(Eleve $eleve): static
     {
-        if ($this->interventions->removeElement($intervention)) {
-            // set the owning side to null (unless already changed)
-            if ($intervention->getProfessionnel() === $this) {
-                $intervention->setProfessionnel(null);
-            }
-        }
+        $this->eleve->removeElement($eleve);
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Metier>
-     */
-    public function getMetiers(): Collection
+    public function getTranche(): ?Tranche
     {
-        return $this->metiers;
+        return $this->tranche;
     }
 
-    public function addMetier(Metier $metier): static
+    public function setTranche(?Tranche $tranche): static
     {
-        if (!$this->metiers->contains($metier)) {
-            $this->metiers->add($metier);
-            $metier->addProfessionnel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMetier(Metier $metier): static
-    {
-        if ($this->metiers->removeElement($metier)) {
-            $metier->removeProfessionnel($this);
-        }
+        $this->tranche = $tranche;
 
         return $this;
     }

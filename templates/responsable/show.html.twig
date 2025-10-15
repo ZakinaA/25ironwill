@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Responsable{% endblock %}
+
+{% block body %}
+    <h1>Responsable</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ responsable.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ responsable.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ responsable.prenom }}</td>
+            </tr>
+            <tr>
+                <th>NumRue</th>
+                <td>{{ responsable.numRue }}</td>
+            </tr>
+            <tr>
+                <th>Rue</th>
+                <td>{{ responsable.rue }}</td>
+            </tr>
+            <tr>
+                <th>Copos</th>
+                <td>{{ responsable.copos }}</td>
+            </tr>
+            <tr>
+                <th>Ville</th>
+                <td>{{ responsable.ville }}</td>
+            </tr>
+            <tr>
+                <th>Tel</th>
+                <td>{{ responsable.tel }}</td>
+            </tr>
+            <tr>
+                <th>Mail</th>
+                <td>{{ responsable.mail }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_responsable_index') }}">back to list</a>
+
+    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
+
+    {{ include('responsable/_delete_form.html.twig') }}
+{% endblock %}
