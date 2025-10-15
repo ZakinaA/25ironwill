@@ -17,7 +17,11 @@
                 <th>Ville</th>
                 <th>Tel</th>
                 <th>Mail</th>
+                <th>Responsable 1</th>
+                <th>Responsable 2 </th>
                 <th>actions</th>
+                
+
             </tr>
         </thead>
         <tbody>
@@ -32,7 +36,15 @@
                 <td>{{ eleve.ville }}</td>
                 <td>{{ eleve.tel }}</td>
                 <td>{{ eleve.mail }}</td>
+                <<td>
+    {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
+    {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
+                </td>
+
                 <td>
+    {{ eleve.responsables|length > 1 ? eleve.responsables[1].nom : '' }}
+    {{ eleve.responsables|length > 1 ? eleve.responsables[1].prenom : '' }}
+            </td>
                     <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>
                     <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>
                 </td>
