@@ -26,6 +26,12 @@ class Cours
     #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $heureFin = null;
 
+    #[ORM\Column]
+    private ?int $nbPlaces = null;
+
+    #[ORM\Column]
+    private ?int $AgeMaxi = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,6 +81,30 @@ class Cours
     public function setHeureFin(\DateTimeInterface $heureFin): static
     {
         $this->heureFin = $heureFin;
+
+        return $this;
+    }
+
+    public function getNbPlaces(): ?int
+    {
+        return $this->nbPlaces;
+    }
+
+    public function setNbPlaces(int $nbPlaces): static
+    {
+        $this->nbPlaces = $nbPlaces;
+
+        return $this;
+    }
+
+    public function getAgeMaxi(): ?int
+    {
+        return $this->AgeMaxi;
+    }
+
+    public function setAgeMaxi(int $AgeMaxi): static
+    {
+        $this->AgeMaxi = $AgeMaxi;
 
         return $this;
     }
