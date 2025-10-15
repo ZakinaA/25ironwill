@@ -28,8 +28,12 @@
                 <td>{{ instrument.utilisation }}</td>
             </tr>
             <tr>
-                <th>CheminImage</th>
-                <td>{{ instrument.cheminImage }}</td>
+                <th>Image</th>
+                <td>
+                    {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
+                    <img src="{{ asset(photo) }}" alt="Image instrument {{ instrument.id }}" style="max-width: 300px; height: auto;"
+                        onerror="this.onerror=null; this.src='{{ asset('images/instrument/default.jpg') }}';">
+                </td>
             </tr>
         </tbody>
     </table>

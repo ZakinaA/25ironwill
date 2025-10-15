@@ -25,7 +25,10 @@
                 <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
                 <td>{{ instrument.prixAchat }}</td>
                 <td>{{ instrument.utilisation }}</td>
-                <td>{{ instrument.cheminImage }}</td>
+                <td>
+                    {% set photo = 'images/instrument/' ~  instrument.id ~ '.jpg' %}
+                    <img src="{{asset(photo)}}" alt="Image instrument {{instrument.id}}" style="width: 100px; height: auto;">
+                </td>
                 <td>
                     <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">show</a>
                     <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
