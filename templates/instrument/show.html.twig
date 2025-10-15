@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Instrument{% endblock %}
+
+{% block body %}
+    <h1>Instrument</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ instrument.id }}</td>
+            </tr>
+            <tr>
+                <th>NumSerie</th>
+                <td>{{ instrument.numSerie }}</td>
+            </tr>
+            <tr>
+                <th>DateAchat</th>
+                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>PrixAchat</th>
+                <td>{{ instrument.prixAchat }}</td>
+            </tr>
+            <tr>
+                <th>Utilisation</th>
+                <td>{{ instrument.utilisation }}</td>
+            </tr>
+            <tr>
+                <th>CheminImage</th>
+                <td>{{ instrument.cheminImage }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_instrument_index') }}">back to list</a>
+
+    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
+
+    {{ include('instrument/_delete_form.html.twig') }}
+{% endblock %}

@@ -43,10 +43,18 @@ class Instrument
     #[ORM\ManyToOne(inversedBy: 'instruments')]
     private ?TypeInstrument $type = null;
 
+    #[ORM\ManyToMany(targetEntity: Couleur::class, mappedBy: 'instrument')]
+    private Collection $couleurs;
+
+    #[ORM\OneToMany(targetEntity: Accessoire::class, mappedBy: 'instrument')]
+    private Collection $accessoires;
+
     public function __construct()
     {
         $this->interventions = new ArrayCollection();
         $this->contratPrets = new ArrayCollection();
+        $this->couleurs = new ArrayCollection();
+        $this->accessoires = new ArrayCollection();
     }
 
 
@@ -202,6 +210,63 @@ class Instrument
     public function setType(?TypeInstrument $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Couleur>
+     */
+    public function getCouleurs(): Collection
+    {
+        return $this->couleurs;
+    }
+
+    public function addCouleur(Couleur $couleur): static
+    {
+        if (!$this->couleurs->contains($couleur)) {
+            $this->couleurs->add($couleur);
+            $couleur->addInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCouleur(Couleur $couleur): static
+    {
+        if ($this->couleurs->removeElement($couleur)) {
+            $couleur->removeInstrument($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Accessoire>
+     */
+    public function getAccessoires(): Collection
+    {
+        return $this->accessoires;
+    }
+
+    public function addAccessoire(Accessoire $accessoire): static
+    {
+        if (!$this->accessoires->contains($accessoire)) {
+            $this->accessoires->add($accessoire);
+            $accessoire->setInstrument($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessoire(Accessoire $accessoire): static
+    {
+        if ($this->accessoires->removeElement($accessoire)) {
+            // set the owning side to null (unless already changed)
+            if ($accessoire->getInstrument() === $this) {
+                $accessoire->setInstrument(null);
+            }
+        }
 
         return $this;
     }

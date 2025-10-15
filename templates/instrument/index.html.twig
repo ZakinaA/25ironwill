@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Instrument index{% endblock %}
+
+{% block body %}
+    <h1>Instrument index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>NumSerie</th>
+                <th>DateAchat</th>
+                <th>PrixAchat</th>
+                <th>Utilisation</th>
+                <th>CheminImage</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for instrument in instruments %}
+            <tr>
+                <td>{{ instrument.id }}</td>
+                <td>{{ instrument.numSerie }}</td>
+                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
+                <td>{{ instrument.prixAchat }}</td>
+                <td>{{ instrument.utilisation }}</td>
+                <td>{{ instrument.cheminImage }}</td>
+                <td>
+                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">show</a>
+                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_instrument_new') }}">Create new</a>
+{% endblock %}
