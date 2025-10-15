@@ -14,7 +14,8 @@
                 <th>Description</th>
                 <th>Prix</th>
                 <th>Quotite</th>
-                <th>actions</th>
+                <th>Type d'instrument</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -26,6 +27,8 @@
                 <td>{{ intervention.description }}</td>
                 <td>{{ intervention.prix }}</td>
                 <td>{{ intervention.quotite }}</td>
+                <td>{{ intervention.instrument.type.libelle}}</td>
+                
                 <td>
                     <a href="{{ path('app_intervention_show', {'id': intervention.id}) }}">show</a>
                     <a href="{{ path('app_intervention_edit', {'id': intervention.id}) }}">edit</a>
