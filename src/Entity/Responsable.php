@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\EleveRepository;
+use App\Repository\ResponsableRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EleveRepository::class)]
-class Eleve
+#[ORM\Entity(repositoryClass: ResponsableRepository::class)]
+class Responsable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -24,34 +24,30 @@ class Eleve
     #[ORM\Column]
     private ?int $numRue = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $rue = null;
 
     #[ORM\Column]
     private ?int $copos = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 40)]
     private ?string $ville = null;
 
     #[ORM\Column]
     private ?int $tel = null;
 
-    #[ORM\Column(length: 40)]
+    #[ORM\Column(length: 50)]
     private ?string $mail = null;
 
-    #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
-    private Collection $contratPrets;
+    #[ORM\ManyToMany(targetEntity: Eleve::class, inversedBy: 'responsables')]
+    private Collection $eleve;
 
-    #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
-    private Collection $responsables;
-
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
+    #[ORM\ManyToOne(inversedBy: 'responsables')]
     private ?Tranche $tranche = null;
 
     public function __construct()
     {
-        $this->contratPrets = new ArrayCollection();
-        $this->responsables = new ArrayCollection();
+        $this->eleve = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -156,58 +152,25 @@ class Eleve
     }
 
     /**
-     * @return Collection<int, ContratPret>
+     * @return Collection<int, Eleve>
      */
-    public function getContratPrets(): Collection
+    public function getEleve(): Collection
     {
-        return $this->contratPrets;
+        return $this->eleve;
     }
 
-    public function addContratPret(ContratPret $contratPret): static
+    public function addEleve(Eleve $eleve): static
     {
-        if (!$this->contratPrets->contains($contratPret)) {
-            $this->contratPrets->add($contratPret);
-            $contratPret->setEleve($this);
+        if (!$this->eleve->contains($eleve)) {
+            $this->eleve->add($eleve);
         }
 
         return $this;
     }
 
-    public function removeContratPret(ContratPret $contratPret): static
+    public function removeEleve(Eleve $eleve): static
     {
-        if ($this->contratPrets->removeElement($contratPret)) {
-            // set the owning side to null (unless already changed)
-            if ($contratPret->getEleve() === $this) {
-                $contratPret->setEleve(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Responsable>
-     */
-    public function getResponsables(): Collection
-    {
-        return $this->responsables;
-    }
-
-    public function addResponsable(Responsable $responsable): static
-    {
-        if (!$this->responsables->contains($responsable)) {
-            $this->responsables->add($responsable);
-            $responsable->addEleve($this);
-        }
-
-        return $this;
-    }
-
-    public function removeResponsable(Responsable $responsable): static
-    {
-        if ($this->responsables->removeElement($responsable)) {
-            $responsable->removeEleve($this);
-        }
+        $this->eleve->removeElement($eleve);
 
         return $this;
     }
