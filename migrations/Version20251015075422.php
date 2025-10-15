@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20251015072921 extends AbstractMigration
+final class Version20251015075422 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -39,7 +39,7 @@ final class Version20251015072921 extends AbstractMigration
         $this->addSql('CREATE TABLE tarif (id INT AUTO_INCREMENT NOT NULL, tranche_id INT DEFAULT NULL, type_id INT DEFAULT NULL, montant DOUBLE PRECISION NOT NULL, INDEX IDX_E7189C9B76F6B31 (tranche_id), INDEX IDX_E7189C9C54C8C93 (type_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tranche (id INT AUTO_INCREMENT NOT NULL, libelle VARCHAR(50) NOT NULL, quotient_mini INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE type (id INT AUTO_INCREMENT NOT NULL, nom VARCHAR(30) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE type_instrument (id INT AUTO_INCREMENT NOT NULL, classe_instrument_id INT DEFAULT NULL, libelle VARCHAR(255) DEFAULT NULL, INDEX IDX_21BCBFF8CE879FB1 (classe_instrument_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE type_instrument (id INT AUTO_INCREMENT NOT NULL, classe_instrument_id INT DEFAULT NULL, classeinstrument_id INT DEFAULT NULL, libelle VARCHAR(255) DEFAULT NULL, INDEX IDX_21BCBFF8CE879FB1 (classe_instrument_id), INDEX IDX_21BCBFF8F7D7F589 (classeinstrument_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('ALTER TABLE accessoire ADD CONSTRAINT FK_8FD026ACF11D9C FOREIGN KEY (instrument_id) REFERENCES instrument (id)');
         $this->addSql('ALTER TABLE contrat_pret ADD CONSTRAINT FK_1FB84C67A6CC7B2 FOREIGN KEY (eleve_id) REFERENCES eleve (id)');
         $this->addSql('ALTER TABLE contrat_pret ADD CONSTRAINT FK_1FB84C67CF11D9C FOREIGN KEY (instrument_id) REFERENCES instrument (id)');
@@ -60,6 +60,7 @@ final class Version20251015072921 extends AbstractMigration
         $this->addSql('ALTER TABLE tarif ADD CONSTRAINT FK_E7189C9B76F6B31 FOREIGN KEY (tranche_id) REFERENCES tranche (id)');
         $this->addSql('ALTER TABLE tarif ADD CONSTRAINT FK_E7189C9C54C8C93 FOREIGN KEY (type_id) REFERENCES type (id)');
         $this->addSql('ALTER TABLE type_instrument ADD CONSTRAINT FK_21BCBFF8CE879FB1 FOREIGN KEY (classe_instrument_id) REFERENCES type_instrument (id)');
+        $this->addSql('ALTER TABLE type_instrument ADD CONSTRAINT FK_21BCBFF8F7D7F589 FOREIGN KEY (classeinstrument_id) REFERENCES classe_instrument (id)');
     }
 
     public function down(Schema $schema): void
@@ -85,6 +86,7 @@ final class Version20251015072921 extends AbstractMigration
         $this->addSql('ALTER TABLE tarif DROP FOREIGN KEY FK_E7189C9B76F6B31');
         $this->addSql('ALTER TABLE tarif DROP FOREIGN KEY FK_E7189C9C54C8C93');
         $this->addSql('ALTER TABLE type_instrument DROP FOREIGN KEY FK_21BCBFF8CE879FB1');
+        $this->addSql('ALTER TABLE type_instrument DROP FOREIGN KEY FK_21BCBFF8F7D7F589');
         $this->addSql('DROP TABLE accessoire');
         $this->addSql('DROP TABLE classe_instrument');
         $this->addSql('DROP TABLE contrat_pret');
