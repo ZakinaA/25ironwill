@@ -2,6 +2,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% if app.user %}
+        <p>Connecté en tant que : {{ app.user.email }}</p>
+        <p>ID de l'utilisateur : {{ app.user.id }}</p>
+    {% else %}
+        <p>Vous n'êtes pas connecté.</p>
+    {% endif %}
+
     <h2>Bienvenue sur la page d'accueil</h2>
     
     <div>
