@@ -5,7 +5,7 @@
 {% block body %}
 <h1 style="text-align:center; margin-bottom: 25px;">Inscription à un cours</h1>
 
-{# Message flash de succès #}
+{# ‼️ Message flash de succès #}
 {% for message in app.flashes('success') %}
     <div style="color: green; background: #eaffea; border: 1px solid #8cd98c; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
         {{ message }}
@@ -17,15 +17,15 @@
         <thead style="background-color: #f5f5f5;">
             <tr>
                 <th style="width: 18%;">Élève</th>
-                <th style="width: 18%;">Responsable 1</th>
-                <th style="width: 18%;">Responsable 2</th>
+                {#<th style="width: 18%;">Responsable1</th> #}
+               {# <th style="width: 18%;">Responsable2</th> #}
                 <th style="width: 36%;">Cours</th>
                 <th style="width: 10%;">Action</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                {# Élève avec filtre #}
+                {# ‼️ Élève avec filtre #}
                 <td>
                     <input type="text" id="search-eleve" placeholder="Rechercher un élève..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     <select name="eleve" id="eleve" style="width: 90%; padding: 5px;">
@@ -35,10 +35,10 @@
                     </select>
                 </td>
 
-                {# Responsable 1 avec filtre #}
+                {# ‼️ Responsable1 avec filtre 
                 <td>
-                    <input type="text" id="search-resp1" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable1" id="resp1" style="width: 90%; padding: 5px;">
+                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
                         {% for eleve in eleves %}
                             <option value="{{ eleve.id }}">
                                 {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
@@ -46,12 +46,12 @@
                             </option>
                         {% endfor %}
                     </select>
-                </td>
+                </td> #}
 
-                {# Responsable 2 avec filtre #}
+                {# ‼️ Responsable2 avec filtre
                 <td>
-                    <input type="text" id="search-resp2" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable2" id="resp2" style="width: 90%; padding: 5px;">
+                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
                         {% for eleve in eleves %}
                             <option value="{{ eleve.id }}">
                                 {{ eleve.responsables|length > 1 ? eleve.responsables[1].nom : '' }}
@@ -59,9 +59,9 @@
                             </option>
                         {% endfor %}
                     </select>
-                </td>
+                </td> #}
 
-                {# Liste de cours avec cases à cocher #}
+                {# ‼️ Liste de cours avec cases à cocher #}
                 <td style="vertical-align: top; text-align: left;">
                     <div style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
                         {% for cours in cours %}
@@ -96,29 +96,54 @@
     </table>
 </form>
 
-{# Script JS pour filtrer les listes déroulantes #}
+{# ‼️ Script JS pour filtrer les élèves #}
 <script>
-function setupFilter(inputId, selectId) {
-    const searchInput = document.getElementById(inputId);
-    const select = document.getElementById(selectId);
+const searchInput = document.getElementById('search-eleve');
+const selectEleve = document.getElementById('eleve');
 
-    searchInput.addEventListener('input', function() {
-        const filter = this.value.toLowerCase();
-        let firstVisible = null;
+searchInput.addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    let firstVisible = null;
 
-        Array.from(select.options).forEach(option => {
-            const text = option.text.toLowerCase();
-            option.style.display = text.includes(filter) ? 'block' : 'none';
-            if (text.includes(filter) && !firstVisible) firstVisible = option;
-        });
-
-        if (firstVisible) select.value = firstVisible.value;
+    Array.from(selectEleve.options).forEach(option => {
+        const text = option.text.toLowerCase();
+        if (text.includes(filter)) {
+            option.style.display = 'block';
+            if (!firstVisible) firstVisible = option;
+        } else {
+            option.style.display = 'none';
+        }
     });
-}
 
-// Appliquer le filtre à chaque champ
-setupFilter('search-eleve', 'eleve');
-setupFilter('search-resp1', 'resp1');
-setupFilter('search-resp2', 'resp2');
+    if (firstVisible) {
+        selectEleve.value = firstVisible.value;
+    }
+});
+
+
 </script>
+
+{# <script>
+const searchInput = document.getElementById('search-responsable');
+const Responsable = document.getElementById('responsable');
+
+searchInput.addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    let firstVisible = null;
+
+    Array.from(selectResponsable.options).forEach(option => {
+        const text = option.text.toLowerCase();
+        if (text.includes(filter)) {
+            option.style.display = 'block';
+            if (!firstVisible) firstVisible = option;
+        } else {
+            option.style.display = 'none';
+        }
+    });
+
+    if (firstVisible) {
+        selectResponsable.value = firstVisible.value;
+    }
+});
+</script>#}
 {% endblock %}
