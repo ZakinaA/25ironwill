@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Emusic - Votre Passion Musicale{% endblock %}</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>🎵</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}
+    <style>
+        /* ---- Réinitialisation ---- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ---- Styles généraux ---- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0f2ff, #f4f6f9);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* ---- En-tête ---- */
+        header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            animation: slideDown 0.8s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* ---- Menu navigation ---- */
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav a::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover {
+            color: #d4e2ff;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* ---- Boutons connexion/inscription ---- */
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-auth {
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-login:hover {
+            background: white;
+            color: #007bff;
+        }
+
+        .btn-signup {
+            background: white;
+            color: #007bff;
+        }
+
+        .btn-signup:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* ---- Section héro ---- */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(0, 123, 255, 0.1), rgba(0, 86, 179, 0.05));
+            border-radius: 15px;
+            margin: 2rem auto;
+            max-width: 1100px;
+            animation: fadeIn 1.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            color: #0056b3;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 2rem;
+        }
+
+        /* ---- Conteneur principal ---- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* ---- Sections services ---- */
+        .services {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .service-card h3 {
+            color: #007bff;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ---- Boutons ---- */
+        .btn {
+            display: inline-block;
+            padding: 0.6rem 1.3rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004080);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ---- Pied de page ---- */
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero h2 {
+                font-size: 2rem;
+            }
+
+            .services {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    {% endblock %}
+
+    {% block javascripts %}{% endblock %}
+</head>
+<body>
+
+    <header>
+        <h1>🎵 Emusic</h1>
+        <nav>
+            <a href="{{ path('app_accueil') }}">Accueil</a>
+            <a href="">Cours</a>
+            <a href="">Instruments</a>
+            <a href="">Contact</a>
+        </nav>
+        <div class="auth-buttons">
+            <a href="" class="btn-auth btn-login">Connexion</a>
+            <a href="" class="btn-auth btn-signup">Inscription</a>
+        </div>
+    </header>
+
+    <main>
+        {% block body %}
+        <section class="hero">
+            <h2>Bienvenue chez Emusic</h2>
+            <p>Votre destination pour apprendre la musique et trouver l'instrument parfait</p>
+            <a href="" class="btn">Rejoignez-nous maintenant</a>
+        </section>
+
+        <div class="container">
+            <div class="services">
+                <div class="service-card">
+                    <div class="service-icon">🎸</div>
+                    <h3>Cours de Musique</h3>
+                    <p>Apprenez avec des professeurs passionnés. Piano, guitare, violon, batterie et plus encore !</p>
+                    <a href="" class="btn">Découvrir nos cours</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎹</div>
+                    <h3>Vente d'Instruments</h3>
+                    <p>Large sélection d'instruments de qualité pour tous les niveaux et tous les budgets.</p>
+                    <a href="" class="btn">Voir nos instruments</a>
+                </div>
+
+                <div class="service-card">
+                    <div class="service-icon">🎼</div>
+                    <h3>Ateliers & Événements</h3>
+                    <p>Participez à nos ateliers collectifs et concerts. Partagez votre passion musicale !</p>
+                    <a href="" class="btn">Nos événements</a>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </main>
+
+    <footer>
+        &copy; {{ "now"|date("Y") }} - Harmonie Club - Tous droits réservés
+    </footer>
+
+</body>
+</html>
