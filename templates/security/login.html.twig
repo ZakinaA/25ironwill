@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Connexion - Harmonie Club{% endblock %}</title>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'><text y='1.2em' font-size='96'>🎵</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    {% block stylesheets %}
+    <style>
+        /* ---- Réinitialisation ---- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ---- Styles généraux ---- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0f2ff, #f4f6f9);
+            color: #333;
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ---- En-tête ---- */
+        header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1.2rem 2rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            animation: slideDown 0.8s ease;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        header h1 {
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+
+        /* ---- Conteneur principal ---- */
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        /* ---- Carte de connexion ---- */
+        .login-card {
+            background: white;
+            padding: 3rem 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-card h2 {
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+
+        .login-card .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* ---- Formulaire ---- */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        /* ---- Checkbox ---- */
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-check input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .form-check label {
+            cursor: pointer;
+            font-weight: 400;
+            font-size: 0.9rem;
+        }
+
+        /* ---- Bouton ---- */
+        .btn {
+            width: 100%;
+            padding: 0.9rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004080);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ---- Liens additionnels ---- */
+        .form-footer {
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .form-footer a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        .form-footer p {
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* ---- Pied de page ---- */
+        footer {
+            background: #343a40;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            .login-card {
+                padding: 2rem 1.5rem;
+            }
+
+            .login-card h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+    {% endblock %}
+
+    {% block javascripts %}{% endblock %}
+</head>
+<body>
+
+    <header>
+        <h1><a href="{{ path('app_accueil') }}">🎵 Emusic</a></h1>
+    </header>
+
+    <main>
+        {% block body %}
+        <div class="login-card">
+            <h2>Connexion</h2>
+            <p class="subtitle">Accédez à votre espace personnel</p>
+
+            <form method="post" action="{{ path('app_login') }}">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        required 
+                        autofocus
+                        placeholder="votre@email.com"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        required
+                        placeholder="••••••••"
+                    >
+                </div>
+
+                <div class="form-check">
+                    <input 
+                        type="checkbox" 
+                        id="remember_me" 
+                        name="remember_me"
+                    >
+                    <label for="remember_me">Se souvenir de moi</label>
+                </div>
+
+                <button type="submit" class="btn">Se connecter</button>
+
+                <div class="form-footer">
+                    <a href="#">Mot de passe oublié ?</a>
+                    <p>Pas encore de compte ? <a href="">Inscrivez-vous</a></p>
+                </div>
+            </form>
+        </div>
+        {% endblock %}
+    </main>
+
+    <footer>
+        &copy; {{ "now"|date("Y") }} - Harmonie Club - Tous droits réservés
+    </footer>
+
+</body>
+</html>
