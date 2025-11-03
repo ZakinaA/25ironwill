@@ -18,10 +18,16 @@ class RegistrationController extends AbstractController
         EntityManagerInterface $entityManager,
         UserPasswordHasherInterface $passwordHasher
     ): Response {
-        // Exemple simple sans formulaire Symfony (pour comprendre le mécanisme)
         if ($request->isMethod('POST')) {
             $email = $request->request->get('email');
             $plainPassword = $request->request->get('password');
+            $confirmPassword = $request->request->get('confirm_password');
+
+            // Vérification des mots de passe
+            if ($plainPassword !== $confirmPassword) {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                return $this->redirectToRoute('app_register');
+            }
 
             // Création de l'utilisateur
             $user = new User();
@@ -42,7 +48,6 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        // Si c’est une requête GET, on affiche simplement le formulaire HTML
         return $this->render('registration/register.html.twig');
     }
 }

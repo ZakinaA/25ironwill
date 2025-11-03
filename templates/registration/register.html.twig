@@ -1,19 +1,158 @@
-{% extends 'accueil/accueil.html.twig' %}
-
-{% block title %}Inscription{% endblock %}
 
 {% block body %}
-<h1>Créer un compte</h1>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background: linear-gradient(135deg, rgba(0, 86, 179, 0.8), rgba(0, 123, 255, 0.7)), 
+                    url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1920&q=80') 
+                    no-repeat center center / cover;
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
 
-<form method="post">
-    <label for="email">Email :</label>
-    <input type="email" id="email" name="email" required>
+    .register-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(15px);
+        -webkit-backdrop-filter: blur(15px);
+        padding: 3rem 2.5rem;
+        border-radius: 20px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.25);
+        width: 90%;
+        max-width: 440px;
+        animation: fadeInUp 1s ease;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
 
-    <label for="password">Mot de passe :</label>
-    <input type="password" id="password" name="password" required>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(40px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-    <button type="submit" class="btn btn-primary">S'inscrire</button>
-</form>
+    .register-card h1 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: #fff;
+        letter-spacing: 1px;
+    }
 
-<a href="{{ path('app_login') }}">Déjà un compte ? Connectez-vous ici.</a>
+    .register-card .subtitle {
+        text-align: center;
+        color: #dce4f7;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.4rem;
+    }
+
+    .form-group label {
+        display: block;
+        color: #fff;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 0.9rem 1rem;
+        border: none;
+        border-radius: 10px;
+        font-size: 1rem;
+        font-family: 'Inter', sans-serif;
+        transition: all 0.3s ease;
+        background: rgba(255, 255, 255, 0.85);
+    }
+
+    .form-group input:focus {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+    }
+
+    .btn {
+        width: 100%;
+        padding: 0.9rem;
+        background: linear-gradient(135deg, #007bff, #00c6ff);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: linear-gradient(135deg, #0056b3, #007bff);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+    }
+
+    .form-footer {
+        margin-top: 2rem;
+        text-align: center;
+        color: #f8f9fa;
+        font-size: 0.9rem;
+    }
+
+    .form-footer a {
+        color: #00c6ff;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    .form-footer a:hover {
+        color: #fff;
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+document.querySelector('form').addEventListener('submit', function (e) {
+    const password = document.getElementById('password').value;
+    const confirm = document.getElementById('confirm_password').value;
+
+    if (password !== confirm) {
+        e.preventDefault();
+        alert('Les mots de passe ne correspondent pas !');
+    }
+});
+</script>
+
+
+<div class="register-card">
+    <h1>Créer un compte</h1>
+    <p class="subtitle">Rejoignez Harmonie Club dès maintenant</p>
+
+    <form method="post" action="{{ path('app_register') }}">
+        <div class="form-group">
+            <label for="email">Adresse e-mail</label>
+            <input type="email" id="email" name="email" required placeholder="exemple@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required placeholder="•••••••••">
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirmer le mot de passe</label>
+            <input type="password" id="confirm_password" name="confirm_password" required placeholder="•••••••••">
+        </div>
+
+        <button type="submit" class="btn">S'inscrire</button>
+
+        <div class="form-footer">
+            <p>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous ici</a></p>
+        </div>
+    </form>
+</div>
 {% endblock %}
