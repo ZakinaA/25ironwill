@@ -1,0 +1,165 @@
+{% extends 'accueil/accueil.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        /* ---- Tableau moderne ---- */
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 2rem 0;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+        }
+
+        /* Header du tableau */
+        .table thead {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+        }
+
+        .table thead th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.95rem;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+
+        /* Effet hover sur le header (animation subtile) */
+        .table thead th::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: #d4e2ff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .table thead th:hover::after {
+            width: 80%;
+        }
+
+        /* Lignes du tableau */
+        .table tbody tr {
+            background: #ffffff;
+            transition: all 0.3s ease, transform 0.2s ease;
+            cursor: default;
+        }
+
+        /* Lignes alternées */
+        .table tbody tr:nth-child(even) {
+            background: #f4f6f9;
+        }
+
+        /* Hover sur les lignes */
+        .table tbody tr:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        .table tbody td {
+            padding: 0.9rem 1rem;
+            font-size: 0.9rem;
+            color: #333;
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.3s ease;
+        }
+
+        .table tbody td[colspan] {
+            text-align: center;
+            font-style: italic;
+            color: #888;
+            padding: 1.5rem;
+        }
+
+        /* Bouton créer nouveau */
+        .btn {
+            display: inline-block;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #0056b3, #004080);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .table thead {
+                display: none;
+            }
+            .table tbody tr {
+                display: block;
+                margin-bottom: 1rem;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            }
+            .table tbody td {
+                display: flex;
+                justify-content: space-between;
+                padding: 0.8rem 1rem;
+                border-bottom: none;
+            }
+            .table tbody td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: #555;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h2>Liste des cours</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Libelle</th>
+                    <th>Age Mini</th>
+                    <th>Heure Début</th>
+                    <th>Heure Fin</th>
+                    <th>Nb Places</th>
+                    <th>Age Maxi</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for cour in cours %}
+                <tr>
+                    <td data-label="Id">{{ cour.id }}</td>
+                    <td data-label="Libelle">{{ cour.libelle }}</td>
+                    <td data-label="Age Mini">{{ cour.ageMini }}</td>
+                    <td data-label="Heure Début">{{ cour.heureDebut ? cour.heureDebut|date('Y-m-d H:i:s') : '' }}</td>
+                    <td data-label="Heure Fin">{{ cour.heureFin ? cour.heureFin|date('H:i:s') : '' }}</td>
+                    <td data-label="Nb Places">{{ cour.nbPlaces }}</td>
+                    <td data-label="Age Maxi">{{ cour.AgeMaxi }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7">Aucun cours trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -36,7 +36,6 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            animation: slideDown 0.8s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -203,7 +202,7 @@
             text-decoration: none;
             font-weight: 600;
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            transition: all 0.9s ease;
             margin-top: 1rem;
         }
 
@@ -255,7 +254,7 @@
         <h1>🎵 Emusic</h1>
         <nav>
             <a href="{{ path('app_accueil') }}">Accueil</a>
-            <a href="">Cours</a>
+            <a href="{{ path('app_accueil_cours') }}">Cours</a>
             <a href="">Instruments</a>
             <a href="">Contact</a>
         </nav>
