@@ -1,3 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription à un cours{% endblock %}
+
+{% block body %}
 <h1>Inscription à un cours</h1>
 
 {% for message in app.flashes('success') %}
@@ -5,6 +10,9 @@
 {% endfor %}
 
 <form method="post">
+    <label for="search-eleve">Rechercher un élève :</label>
+    <input type="text" id="search-eleve" placeholder="Tapez le nom ou prénom" style="margin-bottom: 10px; width: 300px;">
+
     <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
         <thead>
             <tr>
@@ -16,14 +24,14 @@
         <tbody>
             <tr>
                 <td>
-                    <select name="eleve" id="eleve">
+                    <select name="eleve" id="eleve" style="width: 100%;">
                         {% for eleve in eleves %}
                             <option value="{{ eleve.id }}">{{ eleve.nom }} {{ eleve.prenom }}</option>
                         {% endfor %}
                     </select>
                 </td>
                 <td>
-                    <select name="cours" id="cours">
+                    <select name="cours" id="cours" style="width: 100%;">
                         {% for cours in cours %}
                             <option value="{{ cours.id }}">
                                 {{ cours.libelle }} - Jour: {{ cours.jour.libelle }} - Début: {{ cours.heureDebut|date('H:i') }}
@@ -39,16 +47,29 @@
     </table>
 </form>
 
-<!-- Script pour filtrer les élèves -->
 <script>
 const searchInput = document.getElementById('search-eleve');
 const selectEleve = document.getElementById('eleve');
 
 searchInput.addEventListener('input', function() {
     const filter = this.value.toLowerCase();
+    let firstVisible = null;
+
     Array.from(selectEleve.options).forEach(option => {
         const text = option.text.toLowerCase();
-        option.style.display = text.includes(filter) ? 'block' : 'none';
+        if (text.includes(filter)) {
+            option.style.display = 'block';
+            if (!firstVisible) {
+                firstVisible = option;
+            }
+        } else {
+            option.style.display = 'none';
+        }
     });
+
+    if (firstVisible) {
+        selectEleve.value = firstVisible.value;
+    }
 });
 </script>
+{% endblock %}
