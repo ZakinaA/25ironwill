@@ -3,50 +3,100 @@
 {% block title %}Inscription à un cours{% endblock %}
 
 {% block body %}
-<h1>Inscription à un cours</h1>
+<h1 style="text-align:center; margin-bottom: 25px;">Inscription à un cours</h1>
 
+{# ‼️ Message flash de succès #}
 {% for message in app.flashes('success') %}
-    <div style="color: green; margin-bottom: 10px;">{{ message }}</div>
+    <div style="color: green; background: #eaffea; border: 1px solid #8cd98c; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+        {{ message }}
+    </div>
 {% endfor %}
 
 <form method="post">
-    <label for="search-eleve">Rechercher un élève :</label>
-    <input type="text" id="search-eleve" placeholder="Tapez le nom ou prénom" style="margin-bottom: 10px; width: 300px;">
-
-    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%;">
-        <thead>
+    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: center;">
+        <thead style="background-color: #f5f5f5;">
             <tr>
-                <th>Élève</th>
-                <th>Cours</th>
-                <th>Action</th>
+                <th style="width: 18%;">Élève</th>
+                {#<th style="width: 18%;">Responsable1</th> #}
+               {# <th style="width: 18%;">Responsable2</th> #}
+                <th style="width: 36%;">Cours</th>
+                <th style="width: 10%;">Action</th>
             </tr>
         </thead>
         <tbody>
             <tr>
+                {# ‼️ Élève avec filtre #}
                 <td>
-                    <select name="eleve" id="eleve" style="width: 100%;">
+                    <input type="text" id="search-eleve" placeholder="Rechercher un élève..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="eleve" id="eleve" style="width: 90%; padding: 5px;">
                         {% for eleve in eleves %}
                             <option value="{{ eleve.id }}">{{ eleve.nom }} {{ eleve.prenom }}</option>
                         {% endfor %}
                     </select>
                 </td>
+
+                {# ‼️ Responsable1 avec filtre 
                 <td>
-                    <select name="cours" id="cours" style="width: 100%;">
-                        {% for cours in cours %}
-                            <option value="{{ cours.id }}">
-                                {{ cours.libelle }} - Jour: {{ cours.jour.libelle }} - Début: {{ cours.heureDebut|date('H:i') }}
+                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
+                        {% for eleve in eleves %}
+                            <option value="{{ eleve.id }}">
+                                {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
+                                {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
                             </option>
                         {% endfor %}
                     </select>
-                </td>
+                </td> #}
+
+                {# ‼️ Responsable2 avec filtre
                 <td>
-                    <button type="submit">Inscrire</button>
+                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
+                        {% for eleve in eleves %}
+                            <option value="{{ eleve.id }}">
+                                {{ eleve.responsables|length > 1 ? eleve.responsables[1].nom : '' }}
+                                {{ eleve.responsables|length > 1 ? eleve.responsables[1].prenom : '' }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td> #}
+
+                {# ‼️ Liste de cours avec cases à cocher #}
+                <td style="vertical-align: top; text-align: left;">
+                    <div style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
+                        {% for cours in cours %}
+                            <label style="display: block; margin-bottom: 6px;">
+                                <input type="checkbox" name="cours[]" value="{{ cours.id }}">
+                                {{ cours.libelle }} –
+                                {% if cours.jour is defined and cours.jour %}
+                                    {{ cours.jour.libelle is defined ? cours.jour.libelle : cours.jour }}
+                                {% else %}
+                                    Jour inconnu
+                                {% endif %}
+                                – {{ cours.heureDebut|date('H:i') }}
+                            </label>
+                        {% endfor %}
+                    </div>
+                </td>
+
+                <td>
+                    <button type="submit" style="
+                        padding: 10px 15px;
+                        border: none;
+                        background-color: #3498db;
+                        color: white;
+                        border-radius: 6px;
+                        cursor: pointer;
+                        transition: 0.3s;">
+                        Inscrire
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
 </form>
 
+{# ‼️ Script JS pour filtrer les élèves #}
 <script>
 const searchInput = document.getElementById('search-eleve');
 const selectEleve = document.getElementById('eleve');
@@ -59,9 +109,7 @@ searchInput.addEventListener('input', function() {
         const text = option.text.toLowerCase();
         if (text.includes(filter)) {
             option.style.display = 'block';
-            if (!firstVisible) {
-                firstVisible = option;
-            }
+            if (!firstVisible) firstVisible = option;
         } else {
             option.style.display = 'none';
         }
@@ -71,5 +119,31 @@ searchInput.addEventListener('input', function() {
         selectEleve.value = firstVisible.value;
     }
 });
+
+
 </script>
+
+{# <script>
+const searchInput = document.getElementById('search-responsable');
+const Responsable = document.getElementById('responsable');
+
+searchInput.addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    let firstVisible = null;
+
+    Array.from(selectResponsable.options).forEach(option => {
+        const text = option.text.toLowerCase();
+        if (text.includes(filter)) {
+            option.style.display = 'block';
+            if (!firstVisible) firstVisible = option;
+        } else {
+            option.style.display = 'none';
+        }
+    });
+
+    if (firstVisible) {
+        selectResponsable.value = firstVisible.value;
+    }
+});
+</script>#}
 {% endblock %}
