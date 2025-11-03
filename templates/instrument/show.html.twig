@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Instrument{% endblock %}
+{% block title %}Instrument {{ instrument.id }}{% endblock %}
 
 {% block body %}
     <h1>Instrument</h1>
@@ -12,35 +12,97 @@
                 <td>{{ instrument.id }}</td>
             </tr>
             <tr>
-                <th>NumSerie</th>
+                <th>Numéro de série</th>
                 <td>{{ instrument.numSerie }}</td>
             </tr>
             <tr>
-                <th>DateAchat</th>
+                <th>Date d'achat</th>
                 <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
-                <th>PrixAchat</th>
-                <td>{{ instrument.prixAchat }}</td>
+                <th>Prix d'achat</th>
+                <td>{{ instrument.prixAchat }} €</td>
             </tr>
             <tr>
                 <th>Utilisation</th>
                 <td>{{ instrument.utilisation }}</td>
             </tr>
             <tr>
+                <th>Marque</th>
+                <td>{{ instrument.marque ? instrument.marque.libelle : '—' }}</td>
+            </tr>
+            <tr>
+                <th>Type d'instrument</th>
+                <td>{{ instrument.type ? instrument.type.libelle : '—' }}</td>
+            </tr>
+            <tr>
+                <th>Couleurs</th>
+                <td>
+                    {% if instrument.couleurs is not empty %}
+                        {% for couleur in instrument.couleurs %}
+                            <span class="badge bg-secondary">{{ couleur.nom }}</span>
+                        {% endfor %}
+                    {% else %}
+                        Aucune couleur renseignée
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
                 <th>Image</th>
                 <td>
                     {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
-                    <img src="{{ asset(photo) }}" alt="Image instrument {{ instrument.id }}" style="max-width: 300px; height: auto;"
-                        onerror="this.onerror=null; this.src='{{ asset('images/instrument/default.jpg') }}';">
+                    <img src="{{ asset(photo) }}" 
+                         alt="Image instrument {{ instrument.id }}" 
+                         style="max-width: 300px; height: auto;"
+                         onerror="this.onerror=null; this.src='{{ asset('images/instrument/default.jpg') }}';">
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_instrument_index') }}">back to list</a>
+    <h3>Accessoires</h3>
+    {% if instrument.accessoires is not empty %}
+        <ul>
+            {% for accessoire in instrument.accessoires %}
+                <li>{{ accessoire.libelle }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun accessoire enregistré.</p>
+    {% endif %}
 
-    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
+    <h3>Interventions</h3>
+    {% if instrument.interventions is not empty %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Date début</th>
+                    <th>Date fin</th>
+                    <th>Description</th>
+                    <th>Prix</th>
+                    <th>Quotité</th>
+                    <th>Professionnel</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for intervention in instrument.interventions %}
+                    <tr>
+                        <td>{{ intervention.dateDebut|date('Y-m-d') }}</td>
+                        <td>{{ intervention.dateFin|date('Y-m-d') }}</td>
+                        <td>{{ intervention.description }}</td>
+                        <td>{{ intervention.prix }} €</td>
+                        <td>{{ intervention.quotite }}%</td>
+                        <td>{{ intervention.professionnel ? intervention.professionnel.nom : '—' }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Aucune intervention enregistrée.</p>
+    {% endif %}
+
+    <a href="{{ path('app_instrument_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-primary mt-3">Modifier</a>
 
     {{ include('instrument/_delete_form.html.twig') }}
 {% endblock %}
