@@ -7,6 +7,7 @@ use App\Entity\TrancheQuotient;
 use App\Entity\Cours;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse; // Nécessaire pour l'API
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -65,5 +66,30 @@ class TarifCoursController extends AbstractController
             'controller_name' => 'TarifCoursController',
             'tarifs_par_tranche' => $tarifsParTranche,
         ]);
+    }
+
+    /**
+     * Route API pour récupérer le tarif basé sur l'ID de la tranche et l'ID du type de cours.
+     * Cette méthode est destinée à être appelée par JavaScript (Fetch API) pour le calcul automatique.
+     */
+    #[Route('/api/get-tarif/{trancheId}/{coursId}', name: 'api_get_tarif', methods: ['GET'])]
+    public function getTarifApi(EntityManagerInterface $entityManager, int $trancheId, int $coursId): JsonResponse
+    {
+        // Recherche du tarif correspondant aux deux critères
+        $tarif = $entityManager->getRepository(TarifCours::class)->findOneBy([
+            // ASSUREZ-VOUS QUE CES NOMS DE PROPRIÉTÉS SONT CORRECTS DANS TarifCours
+            'trancheQuotientId' => $trancheId, 
+            'coursId' => $coursId,             
+        ]);
+
+        if (!$tarif) {
+            // Retourne 0.00 si aucune correspondance n'est trouvée pour la combinaison
+            return new JsonResponse(['montant' => 0.00, 'error' => 'Tarif non trouvé pour cette combinaison.'], Response::HTTP_NOT_FOUND);
+        }
+        
+        // Supposons que getPrixFacture() retourne le montant
+        $montant = $tarif->getPrixFacture(); 
+
+        return new JsonResponse(['montant' => $montant]);
     }
 }

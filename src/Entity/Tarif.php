@@ -16,9 +16,7 @@ class Tarif
     #[ORM\Column]
     private ?float $montant = null;
 
-    #[ORM\ManyToOne(inversedBy: 'tarifs')]
-    private ?Tranche $tranche = null;
-
+  
     #[ORM\ManyToOne(inversedBy: 'tarifs')]
     private ?Type $type = null;
 
@@ -39,17 +37,6 @@ class Tarif
         return $this;
     }
 
-    public function getTranche(): ?Tranche
-    {
-        return $this->tranche;
-    }
-
-    public function setTranche(?Tranche $tranche): static
-    {
-        $this->tranche = $tranche;
-
-        return $this;
-    }
 
     public function getType(): ?Type
     {

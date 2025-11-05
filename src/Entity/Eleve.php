@@ -45,21 +45,15 @@ class Eleve
     #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
     private Collection $responsables;
 
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
-    private ?Tranche $tranche = null;
 
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
     private Collection $inscriptions;
-
-    #[ORM\OneToMany(targetEntity: Paiment::class, mappedBy: 'eleve')]
-    private Collection $paiments;
 
     public function __construct()
     {
         $this->contratPrets = new ArrayCollection();
         $this->responsables = new ArrayCollection();
         $this->inscriptions = new ArrayCollection();
-        $this->paiments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -220,17 +214,6 @@ class Eleve
         return $this;
     }
 
-    public function getTranche(): ?Tranche
-    {
-        return $this->tranche;
-    }
-
-    public function setTranche(?Tranche $tranche): static
-    {
-        $this->tranche = $tranche;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Inscription>
@@ -256,36 +239,6 @@ class Eleve
             // set the owning side to null (unless already changed)
             if ($inscription->getEleve() === $this) {
                 $inscription->setEleve(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Paiment>
-     */
-    public function getPaiments(): Collection
-    {
-        return $this->paiments;
-    }
-
-    public function addPaiment(Paiment $paiment): static
-    {
-        if (!$this->paiments->contains($paiment)) {
-            $this->paiments->add($paiment);
-            $paiment->setEleve($this);
-        }
-
-        return $this;
-    }
-
-    public function removePaiment(Paiment $paiment): static
-    {
-        if ($this->paiments->removeElement($paiment)) {
-            // set the owning side to null (unless already changed)
-            if ($paiment->getEleve() === $this) {
-                $paiment->setEleve(null);
             }
         }
 

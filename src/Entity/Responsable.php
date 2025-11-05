@@ -42,8 +42,6 @@ class Responsable
     #[ORM\ManyToMany(targetEntity: Eleve::class, inversedBy: 'responsables')]
     private Collection $eleve;
 
-    #[ORM\ManyToOne(inversedBy: 'responsables')]
-    private ?Tranche $tranche = null;
 
     public function __construct()
     {
@@ -175,15 +173,5 @@ class Responsable
         return $this;
     }
 
-    public function getTranche(): ?Tranche
-    {
-        return $this->tranche;
-    }
-
-    public function setTranche(?Tranche $tranche): static
-    {
-        $this->tranche = $tranche;
-
-        return $this;
-    }
+   
 }

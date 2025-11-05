@@ -27,9 +27,13 @@ class TrancheQuotient
     #[ORM\OneToMany(targetEntity: TarifCours::class, mappedBy: 'tranche_quotient_id')]
     private Collection $tarifCours;
 
+    #[ORM\OneToMany(targetEntity: Paiment::class, mappedBy: 'quotient')]
+    private Collection $paiments;
+
     public function __construct()
     {
         $this->tarifCours = new ArrayCollection();
+        $this->paiments = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +101,36 @@ class TrancheQuotient
             // set the owning side to null (unless already changed)
             if ($tarifCour->getTrancheQuotientId() === $this) {
                 $tarifCour->setTrancheQuotientId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Paiment>
+     */
+    public function getPaiments(): Collection
+    {
+        return $this->paiments;
+    }
+
+    public function addPaiment(Paiment $paiment): static
+    {
+        if (!$this->paiments->contains($paiment)) {
+            $this->paiments->add($paiment);
+            $paiment->setQuotient($this);
+        }
+
+        return $this;
+    }
+
+    public function removePaiment(Paiment $paiment): static
+    {
+        if ($this->paiments->removeElement($paiment)) {
+            // set the owning side to null (unless already changed)
+            if ($paiment->getQuotient() === $this) {
+                $paiment->setQuotient(null);
             }
         }
 

@@ -16,10 +16,10 @@
     <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: center;">
         <thead style="background-color: #f5f5f5;">
             <tr>
-                <th style="width: 18%;">Élève</th>
-                <th style="width: 18%;">Responsable 1</th> 
-                <th style="width: 18%;">Responsable 2</th> 
-                <th style="width: 36%;">Cours</th>
+                <th style="width: 25%;">Élève</th>
+                <th style="width: 25%;">Responsable 1</th> 
+               
+                <th style="width: 40%;">Cours</th>
                 <th style="width: 10%;">Action</th>
             </tr>
         </thead>
@@ -51,20 +51,7 @@
                     </select>
                 </td>
 
-                {# Responsable 2 avec filtre #}
-                <td>
-                    <input type="text" id="search-responsable2" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable[]" id="responsable2" style="width: 90%; padding: 5px;">
-                        <option value="">-- Sélectionner --</option>
-                        {% for eleve in eleves %}
-                            {% if eleve.responsables|length > 1 %}
-                                <option value="{{ eleve.responsables[1].id }}">
-                                    {{ eleve.responsables[1].nom }} {{ eleve.responsables[1].prenom }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </td> 
+            
 
                 {# Liste de cours avec cases à cocher #}
                 <td style="vertical-align: top; text-align: left;">
