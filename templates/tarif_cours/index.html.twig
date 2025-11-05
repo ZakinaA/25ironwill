@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Barème des Tarifs des Cours{% endblock %}
+
+{% block body %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .tarif-table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .tarif-table th, .tarif-table td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        .tarif-table th { background-color: #f2f2f2; color: #333; font-weight: bold; }
+        .tarif-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .tarif-table tr:hover { background-color: #e9e9e9; }
+        .text-left { text-align: left; }
+    </style>
+
+    <div class="example-wrapper">
+        <h1>Barème des Tarifs par Quotient Familial 💰</h1>
+
+        <table class="tarif-table">
+            <thead>
+                <tr>
+                    <th class="text-left">Quotient Familial</th>
+                    <th>Cours Individuel (ID 1)</th>
+                    <th>Cours Collectif (ID 2)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tranche_id, data in tarifs_par_tranche %}
+                    <tr>
+                        {# Affiche la plage de quotient familial #}
+                        <td class="text-left">
+                            {% if data.min is null or data.min == 0 %}
+                                {{ data.max }} et inférieur
+                            {% elseif data.max is null %}
+                                {{ data.min }} et supérieur
+                            {% else %}
+                                {{ data.min }} à {{ data.max }}
+                            {% endif %}
+                        </td>
+                        
+                        {# Affiche le prix pour le cours Individuel (ID 1) #}
+                        <td>
+                            {% if data.prix_individuel is not null %}
+                                {{ data.prix_individuel|number_format(2, ',', ' ') }} €
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        
+                        {# Affiche le prix pour le cours Collectif (ID 2) #}
+                        <td>
+                            {% if data.prix_collectif is not null %}
+                                {{ data.prix_collectif|number_format(2, ',', ' ') }} €
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
