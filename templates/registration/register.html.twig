@@ -1,4 +1,3 @@
-
 {% block body %}
 <style>
     body {
@@ -12,6 +11,7 @@
         align-items: center;
         min-height: 100vh;
         margin: 0;
+        padding: 2rem 0;
     }
 
     .register-card {
@@ -22,9 +22,10 @@
         border-radius: 20px;
         box-shadow: 0 8px 30px rgba(0,0,0,0.25);
         width: 90%;
-        max-width: 440px;
+        max-width: 500px;
         animation: fadeInUp 1s ease;
         border: 1px solid rgba(255,255,255,0.2);
+        margin: 2rem auto;
     }
 
     @keyframes fadeInUp {
@@ -48,7 +49,7 @@
     }
 
     .form-group {
-        margin-bottom: 1.4rem;
+        margin-bottom: 1.2rem;
     }
 
     .form-group label {
@@ -59,20 +60,39 @@
         margin-bottom: 0.4rem;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group select {
         width: 100%;
-        padding: 0.9rem 1rem;
+        padding: 0.85rem 1rem;
         border: none;
         border-radius: 10px;
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-family: 'Inter', sans-serif;
         transition: all 0.3s ease;
         background: rgba(255, 255, 255, 0.85);
+        box-sizing: border-box;
     }
 
-    .form-group input:focus {
+    .form-group select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2em;
+        padding-right: 2.5rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
         outline: none;
         box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 1rem;
     }
 
     .btn {
@@ -87,6 +107,7 @@
         cursor: pointer;
         box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         transition: all 0.3s ease;
+        margin-top: 1rem;
     }
 
     .btn:hover {
@@ -113,7 +134,115 @@
         color: #fff;
         text-decoration: underline;
     }
+
+    .alert {
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .alert-error {
+        background: rgba(220, 53, 69, 0.9);
+        color: #fff;
+    }
+
+    .alert-success {
+        background: rgba(40, 167, 69, 0.9);
+        color: #fff;
+    }
+
+    @media (max-width: 600px) {
+        .form-row {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
+
+<div class="register-card">
+    <h1>Créer un compte</h1>
+    <p class="subtitle">Rejoignez notre école de musique</p>
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-error">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <form method="post" action="{{ path('app_register') }}">
+
+        <div class="form-group">
+            <label for="nom">Nom *</label>
+            <input type="text" id="nom" name="nom" required placeholder="Dupont">
+        </div>
+
+        <div class="form-group">
+            <label for="prenom">Prénom *</label>
+            <input type="text" id="prenom" name="prenom" required placeholder="Marie">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Adresse e-mail *</label>
+            <input type="email" id="email" name="email" required placeholder="marie.dupont@email.com">
+        </div>
+
+        <div class="form-group">
+            <label for="type">Je suis *</label>
+            <select id="type" name="type" required>
+                <option value="">-- Sélectionnez --</option>
+                <option value="eleve">Élève</option>
+                <option value="responsable">Responsable</option>
+            </select>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="num_rue">N° Rue</label>
+                <input type="number" id="num_rue" name="num_rue" placeholder="98">
+            </div>
+
+            <div class="form-group">
+                <label for="rue">Rue</label>
+                <input type="text" id="rue" name="rue" placeholder="Rue de la Musique">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="copos">Code Postal</label>
+                <input type="number" id="copos" name="copos" placeholder="75001">
+            </div>
+
+            <div class="form-group">
+                <label for="ville">Ville</label>
+                <input type="text" id="ville" name="ville" placeholder="Paris">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="tel">Téléphone</label>
+            <input type="tel" id="tel" name="tel" placeholder="0601020304">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Mot de passe *</label>
+            <input type="password" id="password" name="password" required placeholder="•••••••••">
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirmer le mot de passe *</label>
+            <input type="password" id="confirm_password" name="confirm_password" required placeholder="•••••••••">
+        </div>
+
+        <button type="submit" class="btn">S'inscrire</button>
+
+        <div class="form-footer">
+            <p>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous ici</a></p>
+        </div>
+    </form>
+</div>
 
 <script>
 document.querySelector('form').addEventListener('submit', function (e) {
@@ -126,33 +255,4 @@ document.querySelector('form').addEventListener('submit', function (e) {
     }
 });
 </script>
-
-
-<div class="register-card">
-    <h1>Créer un compte</h1>
-    <p class="subtitle">Rejoignez Harmonie Club dès maintenant</p>
-
-    <form method="post" action="{{ path('app_register') }}">
-        <div class="form-group">
-            <label for="email">Adresse e-mail</label>
-            <input type="email" id="email" name="email" required placeholder="exemple@email.com">
-        </div>
-
-        <div class="form-group">
-            <label for="password">Mot de passe</label>
-            <input type="password" id="password" name="password" required placeholder="•••••••••">
-        </div>
-
-        <div class="form-group">
-            <label for="confirm_password">Confirmer le mot de passe</label>
-            <input type="password" id="confirm_password" name="confirm_password" required placeholder="•••••••••">
-        </div>
-
-        <button type="submit" class="btn">S'inscrire</button>
-
-        <div class="form-footer">
-            <p>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous ici</a></p>
-        </div>
-    </form>
-</div>
 {% endblock %}

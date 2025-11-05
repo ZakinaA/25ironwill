@@ -13,10 +13,20 @@ class DashboardController extends AbstractController
     public function index(EleveRepository $eleveRepository): Response
     {
         $eleves = $eleveRepository->findAll(); // récupère tous les élèves
+        $eleve = $entityManager->getRepository(Eleve::class)->findOneBy(['user' => $this->getUser()]);
+
+        // Récupérer tous les cours via les inscriptions
+        $coursList = $eleve->getInscriptions()->map(function($inscription) {
+            return $inscription->getCours();
+        });
+
+        $coursList = $eleve->getInscriptions()->map(fn($i) => $i->getCours())->toArray();
+
 
         return $this->render('dashboard/index.html.twig', [
             'controller_name' => 'Page d\'Accueil',
             'eleves' => $eleves, // passe la variable au template
+            'coursList' => $coursList,
         ]);
     }
 }

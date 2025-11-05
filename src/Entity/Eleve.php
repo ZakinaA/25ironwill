@@ -24,7 +24,7 @@ class Eleve
     #[ORM\Column]
     private ?int $numRue = null;
 
-    #[ORM\Column(length: 30)]
+    #[ORM\Column(length: 30, nullable: true)]
     private ?string $rue = null;
 
     #[ORM\Column]
@@ -50,6 +50,13 @@ class Eleve
 
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
     private Collection $inscriptions;
+
+    #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
+    public function getUser(): ?User { return $this->user; }
+    public function setUser(User $user): self { $this->user = $user; return $this; }
 
     public function __construct()
     {
