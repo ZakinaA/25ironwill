@@ -2,18 +2,33 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% if app.user %}
+    {% if 'ROLE_USER' in app.user.roles %}
+        <p></p>
+    {% elseif 'ROLE_Admin' in app.user.roles %}
+
         <p>Connecté en tant que : {{ app.user.email }}</p>
         <p>ID de l'utilisateur : {{ app.user.id }}</p>
-    {% else %}
-        <p>Vous n'êtes pas connecté.</p>
+
+            {% if 'ROLE_ADMIN' in app.user.roles %}
+                <p>Rôle : Administrateur</p>
+            {% elseif 'ROLE_USER' in app.user.roles %}
+                <p>Rôle : Utilisateur</p>
+            {% endif %}
+
     {% endif %}
 
-    <h2>Bienvenue sur la page d'accueil</h2>
+    <h2>Bienvenue {{app.user.email}}</h2>
     
     <div>
         <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
         <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
     </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <a href="{{ path('app_logout') }}" class="btn">Se déconnecter</a>
+
 
 {% endblock %}
