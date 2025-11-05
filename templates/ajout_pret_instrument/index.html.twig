@@ -48,22 +48,12 @@
         .btn-primary:hover {
             background-color: #0056b3;
         }
+
+        /* Supprime l’espace du champ hidden CSRF */
+        input[type="hidden"] {
+            display: none;
+        }
     </style>
+
 {% endblock %}
 
-{% block body %}
-    <div class="form-container">
-        <h1>Ajouter un prêt d'instrument</h1>
-
-        {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
-            {% for field in form %}
-                <div class="form-group">
-                    {{ form_label(field) }}
-                    {{ form_widget(field, {'attr': {'class': 'form-control'}}) }}
-                    {{ form_errors(field) }}
-                </div>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
-        {{ form_end(form) }}
-    </div>
-{% endblock %}
