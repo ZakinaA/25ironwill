@@ -5,7 +5,7 @@
 {% block body %}
 <h1 style="text-align:center; margin-bottom: 25px;">Inscription à un cours</h1>
 
-{# ‼️ Message flash de succès #}
+{# Message flash de succès #}
 {% for message in app.flashes('success') %}
     <div style="color: green; background: #eaffea; border: 1px solid #8cd98c; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
         {{ message }}
@@ -17,51 +17,56 @@
         <thead style="background-color: #f5f5f5;">
             <tr>
                 <th style="width: 18%;">Élève</th>
-                {#<th style="width: 18%;">Responsable1</th> #}
-               {# <th style="width: 18%;">Responsable2</th> #}
+                <th style="width: 18%;">Responsable 1</th> 
+                <th style="width: 18%;">Responsable 2</th> 
                 <th style="width: 36%;">Cours</th>
                 <th style="width: 10%;">Action</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                {# ‼️ Élève avec filtre #}
+                {# Élève avec filtre #}
                 <td>
                     <input type="text" id="search-eleve" placeholder="Rechercher un élève..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
                     <select name="eleve" id="eleve" style="width: 90%; padding: 5px;">
+                        <option value="">-- Sélectionner un élève --</option>
                         {% for eleve in eleves %}
                             <option value="{{ eleve.id }}">{{ eleve.nom }} {{ eleve.prenom }}</option>
                         {% endfor %}
                     </select>
                 </td>
 
-                {# ‼️ Responsable1 avec filtre 
+                {# Responsable 1 avec filtre #}
                 <td>
-                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
+                    <input type="text" id="search-responsable1" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable[]" id="responsable1" style="width: 90%; padding: 5px;">
+                        <option value="">-- Sélectionner --</option>
                         {% for eleve in eleves %}
-                            <option value="{{ eleve.id }}">
-                                {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
-                                {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
-                            </option>
+                            {% if eleve.responsables|length > 0 %}
+                                <option value="{{ eleve.responsables[0].id }}">
+                                    {{ eleve.responsables[0].nom }} {{ eleve.responsables[0].prenom }}
+                                </option>
+                            {% endif %}
                         {% endfor %}
                     </select>
-                </td> #}
+                </td>
 
-                {# ‼️ Responsable2 avec filtre
+                {# Responsable 2 avec filtre #}
                 <td>
-                    <input type="text" id="search-eleve" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable" id="responsable" style="width: 90%; padding: 5px;">
+                    <input type="text" id="search-responsable2" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
+                    <select name="responsable[]" id="responsable2" style="width: 90%; padding: 5px;">
+                        <option value="">-- Sélectionner --</option>
                         {% for eleve in eleves %}
-                            <option value="{{ eleve.id }}">
-                                {{ eleve.responsables|length > 1 ? eleve.responsables[1].nom : '' }}
-                                {{ eleve.responsables|length > 1 ? eleve.responsables[1].prenom : '' }}
-                            </option>
+                            {% if eleve.responsables|length > 1 %}
+                                <option value="{{ eleve.responsables[1].id }}">
+                                    {{ eleve.responsables[1].nom }} {{ eleve.responsables[1].prenom }}
+                                </option>
+                            {% endif %}
                         {% endfor %}
                     </select>
-                </td> #}
+                </td> 
 
-                {# ‼️ Liste de cours avec cases à cocher #}
+                {# Liste de cours avec cases à cocher #}
                 <td style="vertical-align: top; text-align: left;">
                     <div style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
                         {% for cours in cours %}
@@ -96,16 +101,18 @@
     </table>
 </form>
 
-{# ‼️ Script JS pour filtrer les élèves #}
+{# Script JS pour filtrer les élèves #}
 <script>
-const searchInput = document.getElementById('search-eleve');
+const searchEleve = document.getElementById('search-eleve');
 const selectEleve = document.getElementById('eleve');
 
-searchInput.addEventListener('input', function() {
+searchEleve.addEventListener('input', function() {
     const filter = this.value.toLowerCase();
     let firstVisible = null;
 
     Array.from(selectEleve.options).forEach(option => {
+        if (option.value === '') return; // Ignore l'option vide
+        
         const text = option.text.toLowerCase();
         if (text.includes(filter)) {
             option.style.display = 'block';
@@ -120,18 +127,17 @@ searchInput.addEventListener('input', function() {
     }
 });
 
+// Script pour filtrer Responsable 1
+const searchResponsable1 = document.getElementById('search-responsable1');
+const selectResponsable1 = document.getElementById('responsable1');
 
-</script>
-
-{# <script>
-const searchInput = document.getElementById('search-responsable');
-const Responsable = document.getElementById('responsable');
-
-searchInput.addEventListener('input', function() {
+searchResponsable1.addEventListener('input', function() {
     const filter = this.value.toLowerCase();
     let firstVisible = null;
 
-    Array.from(selectResponsable.options).forEach(option => {
+    Array.from(selectResponsable1.options).forEach(option => {
+        if (option.value === '') return; // Ignore l'option vide
+        
         const text = option.text.toLowerCase();
         if (text.includes(filter)) {
             option.style.display = 'block';
@@ -142,8 +148,34 @@ searchInput.addEventListener('input', function() {
     });
 
     if (firstVisible) {
-        selectResponsable.value = firstVisible.value;
+        selectResponsable1.value = firstVisible.value;
     }
 });
-</script>#}
+
+// Script pour filtrer Responsable 2
+const searchResponsable2 = document.getElementById('search-responsable2');
+const selectResponsable2 = document.getElementById('responsable2');
+
+searchResponsable2.addEventListener('input', function() {
+    const filter = this.value.toLowerCase();
+    let firstVisible = null;
+
+    Array.from(selectResponsable2.options).forEach(option => {
+        if (option.value === '') return; // Ignore l'option vide
+        
+        const text = option.text.toLowerCase();
+        if (text.includes(filter)) {
+            option.style.display = 'block';
+            if (!firstVisible) firstVisible = option;
+        } else {
+            option.style.display = 'none';
+        }
+    });
+
+    if (firstVisible) {
+        selectResponsable2.value = firstVisible.value;
+    }
+});
+</script>
+
 {% endblock %}

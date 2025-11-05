@@ -19,6 +19,7 @@ class EleveController extends AbstractController
     {
         return $this->render('eleve/index.html.twig', [
             'eleves' => $eleveRepository->findAll(),
+           
         ]);
     }
 
