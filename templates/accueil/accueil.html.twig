@@ -259,9 +259,17 @@
             <a href="">Contact</a>
         </nav>
         <div class="auth-buttons">
-            <a href="{{ path('app_login') }}" class="btn-auth btn-login">Connexion</a>
-            <a href="{{ path('app_register') }}" class="btn-auth btn-signup">Inscription</a>
+            {% if app.user %}
+                <!-- L'utilisateur est connecté -->
+                <span>Bonjour, {{ app.user.nom }}</span>
+                <a href="{{ path('app_logout') }}" class="btn-auth btn-login">Déconnexion</a>
+            {% else %}
+                <!-- L'utilisateur n'est pas connecté -->
+                <a href="{{ path('app_login') }}" class="btn-auth btn-login">Connexion</a>
+                <a href="{{ path('app_register') }}" class="btn-auth btn-signup">Inscription</a>
+            {% endif %}
         </div>
+
     </header>
 
     <main>

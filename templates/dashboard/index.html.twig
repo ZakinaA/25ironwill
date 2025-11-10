@@ -1,44 +1,56 @@
-{% block title %}Accueil{% endblock %}
 {% extends 'base.html.twig' %}
-
+{% block title %}Accueil{% endblock %}
 {% block body %}
-
-    <h2>Bienvenue {{app.user.prenom}} {{app.user.nom}}</h2>
-
-    {% if 'ROLE_USER' in app.user.roles %}
+    <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+    
+    {% if is_granted('ROLE_ADMIN') %}
+        <p>Connecté en tant que : {{ app.user.nom }}</p>
+        <p>ID de l'utilisateur : {{ app.user.id }}</p>
+        <p>Rôle : Administrateur</p>
         
+    {% elseif is_granted('ROLE_GESTIONNAIRE') %}
+        <p>Connecté en tant que gestionnaire</p>
         <div>
             <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
             <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
         </div>
-
-        <h3>Mes cours :</h3>
-        <ul>
-        {% for cours in coursList %}
-            <li>{{ cours.libelle }}</li>
+        
+    {% elseif is_granted('ROLE_RESPONSABLE') %}
+        <p>Connecté en tant que responsable</p>
+        <h3>Mes élèves :</h3>
+    
+        
+    {% elseif is_granted('ROLE_ELEVE') %}
+        <div>
+            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
+            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        </div>
+        <h3>Mes cours :</h3>  
+        {% if coursList is not empty %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Libellé</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cour in coursList %}
+                        <tr>
+                            <td>{{ cour.libelle }}</td>
+                            <td>{{ cour.heureDebut|date('d/m/Y à H:i') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         {% else %}
-            <li>Aucun cours inscrit.</li>
-        {% endfor %}
-        </ul>   
-
-    {% elseif 'ROLE_Admin' in app.user.roles %}
-
-        <p>Connecté en tant que : {{ app.user.nom }}</p>
-        <p>ID de l'utilisateur : {{ app.user.id }}</p>
-
-            {% if 'ROLE_ADMIN' in app.user.roles %}
-                <p>Rôle : Administrateur</p>
-            {% elseif 'ROLE_USER' in app.user.roles %}
-                <p>Rôle : Utilisateur</p>
-            {% endif %}
-
+            <p>Aucun cours inscrit.</p>
+        {% endif %}
+        
+    {% else %}
+        <p>Rôle non reconnu</p>
     {% endif %}
-
-    <br>
-    <br>
-    <br>
-    <br>
+    
+    <br><br><br><br>
     <a href="{{ path('app_logout') }}" class="btn">Se déconnecter</a>
-
-
 {% endblock %}

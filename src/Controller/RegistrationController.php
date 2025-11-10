@@ -50,8 +50,14 @@ class RegistrationController extends AbstractController
             $user->setEmail($email);
             $user->setNom($nom);
             $user->setPrenom($prenom);
-            $user->setRoles(['ROLE_USER']);
             
+            // Attribution automatique du rôle selon le type choisi
+            if ($type === 'eleve') {
+                $user->setRoles(['ROLE_ELEVE']);
+            } elseif ($type === 'responsable') {
+                $user->setRoles(['ROLE_RESPONSABLE']);
+            }
+                        
             // Hachage du mot de passe (AVANT de persister)
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
