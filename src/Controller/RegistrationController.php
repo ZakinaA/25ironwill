@@ -83,12 +83,15 @@ class RegistrationController extends AbstractController
                 $responsable->setPrenom($prenom);
                 $responsable->setUser($user);
                 $entityManager->persist($responsable);
+                $responsable->setMail($email);
 
-                $responsable->setNumRue($numRue ? (int)$numRue : 0);
-                $responsable->setRue($rue ?? '');
-                $responsable->setCopos($copos ? (int)$copos : 0);
-                $responsable->setVille($ville ?? '');
-                $responsable->setTel($tel ? (int)$tel : 0);
+                $responsable->setNumRue($numRue !== '' ? (int)$numRue : null);
+                $responsable->setRue($rue !== '' ? $rue : null);
+                $responsable->setCopos($copos !== '' ? (int)$copos : null);
+                $responsable->setVille($ville !== '' ? $ville : null);
+                $responsable->setTel($tel !== '' ? (int)$tel : null);
+                    
+                $entityManager->persist($responsable);
             }
             
             $entityManager->flush();

@@ -2,8 +2,25 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+    <h2>Bienvenue {{app.user.prenom}} {{app.user.nom}}</h2>
+
     {% if 'ROLE_USER' in app.user.roles %}
-        <p></p>
+        
+        <div>
+            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
+            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        </div>
+
+        <h3>Mes cours :</h3>
+        <ul>
+        {% for cours in coursList %}
+            <li>{{ cours.libelle }}</li>
+        {% else %}
+            <li>Aucun cours inscrit.</li>
+        {% endfor %}
+        </ul>   
+
     {% elseif 'ROLE_Admin' in app.user.roles %}
 
         <p>Connecté en tant que : {{ app.user.nom }}</p>
@@ -16,23 +33,6 @@
             {% endif %}
 
     {% endif %}
-
-    <h2>Bienvenue <strong>{{app.user.prenom}} {{app.user.nom}}</strong></h2>
-    {{app.user.eleve.tel}}
-    <div>
-        <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
-        <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
-    </div>
-
-    <h3>Mes cours :</h3>
-    <ul>
-    {% for cours in coursList %}
-        <li>{{ cours.libelle }}</li>
-    {% else %}
-        <li>Aucun cours inscrit.</li>
-    {% endfor %}
-    </ul>   
-
 
     <br>
     <br>
