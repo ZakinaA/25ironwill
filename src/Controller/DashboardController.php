@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Eleve;
 use App\Repository\EleveRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,7 +12,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class DashboardController extends AbstractController
 {
     #[Route('/dashboard', name: 'app_dashboard')]
-    public function index(EleveRepository $eleveRepository): Response
+    public function index(
+        EleveRepository $eleveRepository,
+        EntityManagerInterface $entityManager
+    ): Response
     {
         $eleves = $eleveRepository->findAll(); // récupère tous les élèves
         $eleve = $entityManager->getRepository(Eleve::class)->findOneBy(['user' => $this->getUser()]);
@@ -19,13 +24,11 @@ class DashboardController extends AbstractController
         $coursList = $eleve->getInscriptions()->map(function($inscription) {
             return $inscription->getCours();
         });
-
-        $coursList = $eleve->getInscriptions()->map(fn($i) => $i->getCours())->toArray();
-
-
+        
+        
         return $this->render('dashboard/index.html.twig', [
-            'controller_name' => 'Page d\'Accueil',
-            'eleves' => $eleves, // passe la variable au template
+            'eleves' => $eleves,
+            'eleve' => $eleve,
             'coursList' => $coursList,
         ]);
     }

@@ -27,7 +27,7 @@
     <h3>Mes cours :</h3>
     <ul>
     {% for cours in coursList %}
-        <li>{{ cours.nom }} - {{ cours.professeur.nom }}</li>
+        <li>{{ cours.libelle }}</li>
     {% else %}
         <li>Aucun cours inscrit.</li>
     {% endfor %}
