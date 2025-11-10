@@ -42,6 +42,9 @@ class Responsable
     #[ORM\ManyToMany(targetEntity: Eleve::class, inversedBy: 'responsables')]
     private Collection $eleve;
 
+    #[ORM\ManyToOne(inversedBy: 'responsables')]
+    private ?tranchequotient $quotient = null;
+
 
     public function __construct()
     {
@@ -169,6 +172,18 @@ class Responsable
     public function removeEleve(Eleve $eleve): static
     {
         $this->eleve->removeElement($eleve);
+
+        return $this;
+    }
+
+    public function getQuotient(): ?tranchequotient
+    {
+        return $this->quotient;
+    }
+
+    public function setQuotient(?tranchequotient $quotient): static
+    {
+        $this->quotient = $quotient;
 
         return $this;
     }

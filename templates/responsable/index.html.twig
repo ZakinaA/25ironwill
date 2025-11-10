@@ -17,6 +17,7 @@
                 <th>Ville</th>
                 <th>Tel</th>
                 <th>Mail</th>
+                <th>Quotient</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -32,6 +33,11 @@
                 <td>{{ responsable.ville }}</td>
                 <td>{{ responsable.tel }}</td>
                 <td>{{ responsable.mail }}</td>
+                
+                {# --- MODIFICATION ICI --- #}
+                {# Ajout de '?' pour ne pas planter si 'quotient' est null #}
+                <td>{{ responsable.quotient ? responsable.quotient.libelle : '' }}</td>
+                
                 <td>
                     <a href="{{ path('app_responsable_show', {'id': responsable.id}) }}">show</a>
                     <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>

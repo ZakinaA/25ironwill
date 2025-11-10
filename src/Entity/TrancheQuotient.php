@@ -16,13 +16,13 @@ class TrancheQuotient
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nom_tranche = null;
+    private ?string $libelle = null;
 
     #[ORM\Column]
-    private ?int $quotient_min = null;
+    private ?int $quotientMin = null;
 
     #[ORM\Column]
-    private ?int $quotient_max = null;
+    private ?int $quotientMax = null;
 
     #[ORM\OneToMany(targetEntity: TarifCours::class, mappedBy: 'tranche_quotient_id')]
     private Collection $tarifCours;
@@ -30,10 +30,14 @@ class TrancheQuotient
     #[ORM\OneToMany(targetEntity: Paiment::class, mappedBy: 'quotient')]
     private Collection $paiments;
 
+    #[ORM\OneToMany(targetEntity: Responsable::class, mappedBy: 'quotient')]
+    private Collection $responsables;
+
     public function __construct()
     {
         $this->tarifCours = new ArrayCollection();
         $this->paiments = new ArrayCollection();
+        $this->responsables = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -41,38 +45,42 @@ class TrancheQuotient
         return $this->id;
     }
 
-    public function getNomTranche(): ?string
+    // --- MODIFICATION ICI ---
+    // Renommé "getNomTranche" en "getLibelle"
+    public function getLibelle(): ?string
     {
-        return $this->nom_tranche;
+        return $this->libelle;
     }
 
-    public function setNomTranche(string $nom_tranche): static
+    // Renommé "setNomTranche" en "setLibelle"
+    public function setLibelle(string $libelle): static
     {
-        $this->nom_tranche = $nom_tranche;
+        $this->libelle = $libelle;
 
         return $this;
     }
+    // --- FIN MODIFICATION ---
 
     public function getQuotientMin(): ?int
     {
-        return $this->quotient_min;
+        return $this->quotientMin;
     }
 
-    public function setQuotientMin(int $quotient_min): static
+    public function setQuotientMin(int $quotientMin): static
     {
-        $this->quotient_min = $quotient_min;
+        $this->quotientMin = $quotientMin;
 
         return $this;
     }
 
     public function getQuotientMax(): ?int
     {
-        return $this->quotient_max;
+        return $this->quotientMax;
     }
 
-    public function setQuotientMax(int $quotient_max): static
+    public function setQuotientMax(int $quotientMax): static
     {
-        $this->quotient_max = $quotient_max;
+        $this->quotientMax = $quotientMax;
 
         return $this;
     }
@@ -131,6 +139,36 @@ class TrancheQuotient
             // set the owning side to null (unless already changed)
             if ($paiment->getQuotient() === $this) {
                 $paiment->setQuotient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Responsable>
+     */
+    public function getResponsables(): Collection
+    {
+        return $this->responsables;
+    }
+
+    public function addResponsable(Responsable $responsable): static
+    {
+        if (!$this->responsables->contains($responsable)) {
+            $this->responsables->add($responsable);
+            $responsable->setQuotient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponsable(Responsable $responsable): static
+    {
+        if ($this->responsables->removeElement($responsable)) {
+            // set the owning side to null (unless already changed)
+            if ($responsable->getQuotient() === $this) {
+                $responsable->setQuotient(null);
             }
         }
 
