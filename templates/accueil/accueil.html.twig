@@ -262,11 +262,12 @@
             {% if app.user %}
                 <!-- L'utilisateur est connecté -->
                 <span>Bonjour, {{ app.user.nom }}</span>
-                <a href="{{ path('app_logout') }}" class="btn-auth btn-login">Déconnexion</a>
+                <a href="{{ path('app_dashboard') }}" class="btn-auth btn-signup">Tableau de bord</a>
+                <a href="{{ path('app_logout') }}" class="btn-auth btn-login" >Déconnexion</a>
             {% else %}
                 <!-- L'utilisateur n'est pas connecté -->
                 <a href="{{ path('app_login') }}" class="btn-auth btn-login">Connexion</a>
-                <a href="{{ path('app_register') }}" class="btn-auth btn-signup">Inscription</a>
+                <a href="{{ path('app_register') }}" class="btn-auth btn-signup" >Inscription</a>
             {% endif %}
         </div>
 

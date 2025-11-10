@@ -16,8 +16,12 @@
         </div>
         
     {% elseif is_granted('ROLE_RESPONSABLE') %}
-        <p>Connecté en tant que responsable</p>
+        <div>
+            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
+            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        </div>
         <h3>Mes élèves :</h3>
+
     
         
     {% elseif is_granted('ROLE_ELEVE') %}
@@ -25,12 +29,13 @@
             <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
             <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
         </div>
+        <br>
         <h3>Mes cours :</h3>  
         {% if coursList is not empty %}
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Libellé</th>
+                        <th>Nom du cours</th>
                         <th>Date</th>
                     </tr>
                 </thead>
@@ -43,6 +48,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <a href="{{ path('app_inscription_cours') }}" class="btn">S'inscrire à un cours</a>
         {% else %}
             <p>Aucun cours inscrit.</p>
         {% endif %}
@@ -52,5 +59,5 @@
     {% endif %}
     
     <br><br><br><br>
-    <a href="{{ path('app_logout') }}" class="btn">Se déconnecter</a>
+
 {% endblock %}

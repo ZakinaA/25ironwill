@@ -3,177 +3,436 @@
 {% block title %}Inscription à un cours{% endblock %}
 
 {% block body %}
-<h1 style="text-align:center; margin-bottom: 25px;">Inscription à un cours</h1>
+<style>
+    .inscription-container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 2rem;
+    }
 
-{# Message flash de succès #}
-{% for message in app.flashes('success') %}
-    <div style="color: green; background: #eaffea; border: 1px solid #8cd98c; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
-        {{ message }}
-    </div>
-{% endfor %}
+    .page-title {
+        text-align: center;
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-<form method="post">
-    <table border="1" cellpadding="8" cellspacing="0" style="border-collapse: collapse; width: 100%; text-align: center;">
-        <thead style="background-color: #f5f5f5;">
-            <tr>
-                <th style="width: 18%;">Élève</th>
-                <th style="width: 18%;">Responsable 1</th> 
-                <th style="width: 18%;">Responsable 2</th> 
-                <th style="width: 36%;">Cours</th>
-                <th style="width: 10%;">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                {# Élève avec filtre #}
-                <td>
-                    <input type="text" id="search-eleve" placeholder="Rechercher un élève..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="eleve" id="eleve" style="width: 90%; padding: 5px;">
-                        <option value="">-- Sélectionner un élève --</option>
-                        {% for eleve in eleves %}
-                            <option value="{{ eleve.id }}">{{ eleve.nom }} {{ eleve.prenom }}</option>
-                        {% endfor %}
-                    </select>
-                </td>
+    .page-subtitle {
+        text-align: center;
+        color: #6c757d;
+        margin-bottom: 3rem;
+        font-size: 1.1rem;
+    }
 
-                {# Responsable 1 avec filtre #}
-                <td>
-                    <input type="text" id="search-responsable1" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable[]" id="responsable1" style="width: 90%; padding: 5px;">
-                        <option value="">-- Sélectionner --</option>
-                        {% for eleve in eleves %}
-                            {% if eleve.responsables|length > 0 %}
-                                <option value="{{ eleve.responsables[0].id }}">
-                                    {{ eleve.responsables[0].nom }} {{ eleve.responsables[0].prenom }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </td>
+    .alert-success {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 12px;
+        margin-bottom: 2rem;
+        box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+        animation: slideIn 0.5s ease;
+    }
 
-                {# Responsable 2 avec filtre #}
-                <td>
-                    <input type="text" id="search-responsable2" placeholder="Rechercher un responsable..." style="width: 90%; padding: 5px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                    <select name="responsable[]" id="responsable2" style="width: 90%; padding: 5px;">
-                        <option value="">-- Sélectionner --</option>
-                        {% for eleve in eleves %}
-                            {% if eleve.responsables|length > 1 %}
-                                <option value="{{ eleve.responsables[1].id }}">
-                                    {{ eleve.responsables[1].nom }} {{ eleve.responsables[1].prenom }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </td> 
+    @keyframes slideIn {
+        from { transform: translateY(-20px); opacity: 0; }
+        to { transform: translateY(0); opacity: 1; }
+    }
 
-                {# Liste de cours avec cases à cocher #}
-                <td style="vertical-align: top; text-align: left;">
-                    <div style="max-height: 250px; overflow-y: auto; padding-left: 10px;">
-                        {% for cours in cours %}
-                            <label style="display: block; margin-bottom: 6px;">
-                                <input type="checkbox" name="cours[]" value="{{ cours.id }}">
-                                {{ cours.libelle }} –
-                                {% if cours.jour is defined and cours.jour %}
-                                    {{ cours.jour.libelle is defined ? cours.jour.libelle : cours.jour }}
-                                {% else %}
-                                    Jour inconnu
-                                {% endif %}
-                                – {{ cours.heureDebut|date('H:i') }}
-                            </label>
-                        {% endfor %}
-                    </div>
-                </td>
+    .inscription-form {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        animation: fadeInUp 0.8s ease;
+    }
 
-                <td>
-                    <button type="submit" style="
-                        padding: 10px 15px;
-                        border: none;
-                        background-color: #3498db;
-                        color: white;
-                        border-radius: 6px;
-                        cursor: pointer;
-                        transition: 0.3s;">
-                        Inscrire
-                    </button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</form>
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-{# Script JS pour filtrer les élèves #}
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .form-section {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 1.5rem;
+        border-radius: 15px;
+        border: 2px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+    .form-section:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        border-color: #007bff;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #007bff;
+        margin-bottom: 1rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .section-title::before {
+        content: "●";
+        font-size: 1.5rem;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    .custom-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        font-size: 0.95rem;
+        background: white;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23007bff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1.2em;
+        padding-right: 3rem;
+    }
+
+    .custom-select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+    }
+
+    .cours-section {
+        grid-column: 1 / -1;
+        background: linear-gradient(135deg, #e3f2fd, #f8f9fa);
+        padding: 2rem;
+        border-radius: 15px;
+        border: 2px solid #90caf9;
+    }
+
+    .cours-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 1rem;
+        max-height: 400px;
+        overflow-y: auto;
+        padding: 1rem;
+    }
+
+    .cours-grid::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .cours-grid::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .cours-grid::-webkit-scrollbar-thumb {
+        background: #007bff;
+        border-radius: 10px;
+    }
+
+    .cours-card {
+        background: white;
+        padding: 1rem;
+        border-radius: 12px;
+        border: 2px solid #dee2e6;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .cours-card:hover {
+        border-color: #007bff;
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .cours-card input[type="checkbox"] {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        accent-color: #007bff;
+    }
+
+    .cours-card input[type="checkbox"]:checked + .cours-info {
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+    }
+
+    .cours-info {
+        padding-right: 2rem;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+        padding: 0.5rem;
+    }
+
+    .cours-libelle {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .cours-details {
+        font-size: 0.85rem;
+        opacity: 0.8;
+    }
+
+    .submit-container {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .submit-btn {
+        padding: 1rem 3rem;
+        background: linear-gradient(135deg, #007bff, #0056b3);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(0, 123, 255, 0.4);
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .submit-btn:hover {
+        background: linear-gradient(135deg, #0056b3, #003d82);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.5);
+    }
+
+    .submit-btn:active {
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .cours-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="inscription-container">
+    <h1 class="page-title">🎵 Inscription aux Cours</h1>
+    <p class="page-subtitle">Sélectionnez un élève, les responsables et les cours souhaités</p>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert-success">
+            ✓ {{ message }}
+        </div>
+    {% endfor %}
+
+<form method="post" class="inscription-form">
+    <div class="form-grid">
+        {% if not is_granted('ROLE_USER') %}
+            <!-- Section Élève -->
+            <div class="form-section">
+                <div class="section-title">👤 Élève</div>
+                <input type="text" 
+                       id="search-eleve" 
+                       class="search-input" 
+                       placeholder="🔍 Rechercher un élève...">
+                <select name="eleve" id="eleve" class="custom-select" required>
+                    <option value="">-- Sélectionner un élève --</option>
+                    {% for eleve in eleves %}
+                        <option value="{{ eleve.id }}">{{ eleve.nom }} {{ eleve.prenom }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Section Responsable 1 -->
+            <div class="form-section">
+                <div class="section-title">👨‍👩‍👧 Responsable 1</div>
+                <input type="text" 
+                       id="search-responsable1" 
+                       class="search-input" 
+                       placeholder="🔍 Rechercher...">
+                <select name="responsable[]" id="responsable1" class="custom-select">
+                    <option value="">-- Optionnel --</option>
+                    {% for eleve in eleves %}
+                        {% if eleve.responsables|length > 0 %}
+                            <option value="{{ eleve.responsables[0].id }}">
+                                {{ eleve.responsables[0].nom }} {{ eleve.responsables[0].prenom }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Section Responsable 2 -->
+            <div class="form-section">
+                <div class="section-title">👨‍👩‍👧 Responsable 2</div>
+                <input type="text" 
+                       id="search-responsable2" 
+                       class="search-input" 
+                       placeholder="🔍 Rechercher...">
+                <select name="responsable[]" id="responsable2" class="custom-select">
+                    <option value="">-- Optionnel --</option>
+                    {% for eleve in eleves %}
+                        {% if eleve.responsables|length > 1 %}
+                            <option value="{{ eleve.responsables[1].id }}">
+                                {{ eleve.responsables[1].nom }} {{ eleve.responsables[1].prenom }}
+                            </option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+        {% else %}
+            <!-- Si c'est un élève connecté -->
+            <input type="hidden" name="eleve" value="{{ app.user.id }}">
+        {% endif %}
+
+
+            <!-- Section Cours -->
+            <div class="cours-section">
+                <div class="section-title">📚 Sélectionnez les cours</div>
+                <div class="cours-grid">
+                    {% for cour in cours %}
+                        <label class="cours-card">
+                            <input type="checkbox" name="cours[]" value="{{ cour.id }}">
+                            <div class="cours-info">
+                                <div class="cours-libelle">{{ cour.libelle }}</div>
+                                <div class="cours-details">
+                                    📅 {% if cour.jour is defined and cour.jour %}
+                                        {{ cour.jour.libelle is defined ? cour.jour.libelle : cour.jour }}
+                                    {% else %}
+                                        Jour inconnu
+                                    {% endif %}
+                                    <br>
+                                    🕐 {{ cour.heureDebut|date('H:i') }}
+                                </div>
+                            </div>
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="submit-container">
+            <button type="submit" class="submit-btn">
+                ✓ Valider l'inscription
+            </button>
+        </div>
+    </form>
+</div>
+
 <script>
-const searchEleve = document.getElementById('search-eleve');
-const selectEleve = document.getElementById('eleve');
+// Fonction générique de filtrage
+function setupFilter(searchId, selectId) {
+    const searchInput = document.getElementById(searchId);
+    const selectElement = document.getElementById(selectId);
 
-searchEleve.addEventListener('input', function() {
-    const filter = this.value.toLowerCase();
-    let firstVisible = null;
+    searchInput.addEventListener('input', function() {
+        const filter = this.value.toLowerCase();
+        let firstVisible = null;
 
-    Array.from(selectEleve.options).forEach(option => {
-        if (option.value === '') return; // Ignore l'option vide
-        
-        const text = option.text.toLowerCase();
-        if (text.includes(filter)) {
-            option.style.display = 'block';
-            if (!firstVisible) firstVisible = option;
-        } else {
-            option.style.display = 'none';
+        Array.from(selectElement.options).forEach(option => {
+            if (option.value === '') return;
+            
+            const text = option.text.toLowerCase();
+            if (text.includes(filter)) {
+                option.style.display = 'block';
+                if (!firstVisible) firstVisible = option;
+            } else {
+                option.style.display = 'none';
+            }
+        });
+
+        if (firstVisible && filter !== '') {
+            selectElement.value = firstVisible.value;
         }
     });
+}
 
-    if (firstVisible) {
-        selectEleve.value = firstVisible.value;
-    }
+// Initialisation des filtres
+setupFilter('search-eleve', 'eleve');
+setupFilter('search-responsable1', 'responsable1');
+setupFilter('search-responsable2', 'responsable2');
+
+// Animation des cartes de cours
+document.querySelectorAll('.cours-card').forEach(card => {
+    const checkbox = card.querySelector('input[type="checkbox"]');
+    const info = card.querySelector('.cours-info');
+    
+    card.addEventListener('click', function(e) {
+        if (e.target !== checkbox) {
+            checkbox.checked = !checkbox.checked;
+            if (checkbox.checked) {
+                info.style.background = 'linear-gradient(135deg, #007bff, #0056b3)';
+                info.style.color = 'white';
+            } else {
+                info.style.background = 'transparent';
+                info.style.color = 'inherit';
+            }
+        }
+    });
+    
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            info.style.background = 'linear-gradient(135deg, #007bff, #0056b3)';
+            info.style.color = 'white';
+        } else {
+            info.style.background = 'transparent';
+            info.style.color = 'inherit';
+        }
+    });
 });
 
-// Script pour filtrer Responsable 1
-const searchResponsable1 = document.getElementById('search-responsable1');
-const selectResponsable1 = document.getElementById('responsable1');
-
-searchResponsable1.addEventListener('input', function() {
-    const filter = this.value.toLowerCase();
-    let firstVisible = null;
-
-    Array.from(selectResponsable1.options).forEach(option => {
-        if (option.value === '') return; // Ignore l'option vide
-        
-        const text = option.text.toLowerCase();
-        if (text.includes(filter)) {
-            option.style.display = 'block';
-            if (!firstVisible) firstVisible = option;
-        } else {
-            option.style.display = 'none';
-        }
-    });
-
-    if (firstVisible) {
-        selectResponsable1.value = firstVisible.value;
+// Validation du formulaire
+document.querySelector('form').addEventListener('submit', function(e) {
+    const eleveSelect = document.getElementById('eleve');
+    const coursCheckboxes = document.querySelectorAll('input[name="cours[]"]:checked');
+    
+    if (!eleveSelect.value) {
+        e.preventDefault();
+        alert('⚠️ Veuillez sélectionner un élève');
+        eleveSelect.focus();
+        return;
     }
-});
-
-// Script pour filtrer Responsable 2
-const searchResponsable2 = document.getElementById('search-responsable2');
-const selectResponsable2 = document.getElementById('responsable2');
-
-searchResponsable2.addEventListener('input', function() {
-    const filter = this.value.toLowerCase();
-    let firstVisible = null;
-
-    Array.from(selectResponsable2.options).forEach(option => {
-        if (option.value === '') return; // Ignore l'option vide
-        
-        const text = option.text.toLowerCase();
-        if (text.includes(filter)) {
-            option.style.display = 'block';
-            if (!firstVisible) firstVisible = option;
-        } else {
-            option.style.display = 'none';
-        }
-    });
-
-    if (firstVisible) {
-        selectResponsable2.value = firstVisible.value;
+    
+    if (coursCheckboxes.length === 0) {
+        e.preventDefault();
+        alert('⚠️ Veuillez sélectionner au moins un cours');
+        return;
     }
 });
 </script>
