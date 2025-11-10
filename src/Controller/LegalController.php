@@ -20,4 +20,22 @@ class LegalController extends AbstractController
             'current_route' => $route
         ]);
     }
+    #[Route('/mentions-legales-accueil', name: 'app_mentions_legales_accueil')]
+        public function legal(Request $request): Response
+    {
+        $route = $request->attributes->get('_route');
+
+        return $this->render('accueil/legal.html.twig', [
+            'current_route' => $route
+        ]);
+    }
+    #[Route('/cookie-accueil', name: 'app_cookies_accueil')]
+     public function cookiesAccueil(Request $request): Response
+    {
+        $route = $request->attributes->get('_route');
+
+        return $this->render('accueil/legal.html.twig', [
+            'current_route' => $route
+        ]);
+    }
 }

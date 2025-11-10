@@ -28,4 +28,11 @@ class AccueilController extends AbstractController
             'cours' => $coursRepository->findAll(),
         ]);
     }
+    #[Route('/acceuil-contact', name: 'app_acceuil_contact')]
+    public function contact(): Response
+    {
+        return $this->render('accueil/contact.html.twig', [
+            'title' => 'Contactez-nous',
+        ]);
+    }
 }
