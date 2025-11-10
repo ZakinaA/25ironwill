@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'accueil/accueil.html.twig' %}
 
 {% block body %}
     <h1>
-    {% if current_route == 'app_mentions_legales' %}
+    {% if current_route == 'app_mentions_legales_accueil' %}
     <h1>Mentions légales</h1>
     <p>
     Harmonie Club – Emusic<br>
@@ -24,7 +24,7 @@
     </h1>
 
     <p>
-    {% if current_route == 'app_cookies' %}
+    {% if current_route == 'app_cookies_accueil' %}
     <h1>Politique de Cookies</h1>
     <p>
     Notre site utilise des cookies pour améliorer votre expérience utilisateur et analyser notre trafic. En poursuivant votre navigation, vous acceptez l'utilisation de ces cookies.
