@@ -17,9 +17,11 @@ class InscriptionCoursController extends AbstractController
     #[Route('/inscription_cours', name: 'app_inscription_cours')]
     public function index(Request $request, EntityManagerInterface $em): Response
     {
+        $user = $this->getUser(); // Récupère l'utilisateur connecté
+        $eleve = $em->getRepository(Eleve::class)->findOneBy(['user' => $user]);
+
         $eleveId = $request->request->get('eleve');
         $coursIds = $request->request->all('cours');
-        // On récupère les responsables mais on ne les utilise pas pour l'instant
         $responsableIds = $request->request->all('responsable');
 
         if ($request->isMethod('POST') && $eleveId && !empty($coursIds)) {
@@ -33,9 +35,6 @@ class InscriptionCoursController extends AbstractController
                         $inscription->setEleve($eleve);
                         $inscription->setCours($cours);
                         $inscription->setDateInscription(new \DateTime());
-                        
-                        // Pas de setResponsable() puisqu'il n'y a pas de relation
-                        
                         $em->persist($inscription);
                     }
                 }
@@ -51,6 +50,8 @@ class InscriptionCoursController extends AbstractController
             'eleves' => $em->getRepository(Eleve::class)->findAll(),
             'cours' => $em->getRepository(Cours::class)->findAll(),
             'responsables' => $em->getRepository(Responsable::class)->findAll(),
+            'eleve' => $eleve, // 🧠 tu passes l'élève connecté ici
         ]);
     }
+
 }
