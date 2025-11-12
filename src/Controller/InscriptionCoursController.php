@@ -34,7 +34,6 @@ class InscriptionCoursController extends AbstractController
                         $inscription->setCours($cours);
                         $inscription->setDateInscription(new \DateTime());
                         
-                        // Pas de setResponsable() puisqu'il n'y a pas de relation
                         
                         $em->persist($inscription);
                     }

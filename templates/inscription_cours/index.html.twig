@@ -318,7 +318,7 @@
             </div>
         {% else %}
             <!-- Si c'est un élève connecté -->
-            <input type="hidden" name="eleve" value="{{ app.user.id }}">
+            <input type="hidden" name="eleve" value="{{ app.eleve.id }}=={{app.user.id}}">
         {% endif %}
 
 
@@ -332,13 +332,13 @@
                             <div class="cours-info">
                                 <div class="cours-libelle">{{ cour.libelle }}</div>
                                 <div class="cours-details">
-                                    📅 {% if cour.jour is defined and cour.jour %}
+                                    {% if cour.jour is defined and cour.jour %}
                                         {{ cour.jour.libelle is defined ? cour.jour.libelle : cour.jour }}
                                     {% else %}
                                         Jour inconnu
                                     {% endif %}
                                     <br>
-                                    🕐 {{ cour.heureDebut|date('H:i') }}
+                                    {{ cour.heureDebut|date('H:i') }}
                                 </div>
                             </div>
                         </label>
