@@ -39,6 +39,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Eleve::class)]
     private ?Eleve $eleve = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $rue = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $copos = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $ville = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $tel = null;
+
     
 
     public function getEleve(): ?Eleve
@@ -150,6 +162,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setNumRue(string $numRue): static
     {
         $this->numRue = $numRue;
+
+        return $this;
+    }
+
+    public function getRue(): ?string
+    {
+        return $this->rue;
+    }
+
+    public function setRue(?string $rue): static
+    {
+        $this->rue = $rue;
+
+        return $this;
+    }
+
+    public function getCopos(): ?int
+    {
+        return $this->copos;
+    }
+
+    public function setCopos(?int $copos): static
+    {
+        $this->copos = $copos;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(?string $ville): static
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getTel(): ?int
+    {
+        return $this->tel;
+    }
+
+    public function setTel(?int $tel): static
+    {
+        $this->tel = $tel;
 
         return $this;
     }
