@@ -7,6 +7,8 @@
         <p>Connecté en tant que : {{ app.user.nom }}</p>
         <p>ID de l'utilisateur : {{ app.user.id }}</p>
         <p>Rôle : Administrateur</p>
+        <a href="{{ path('app_paiment_index') }}" class="btn">Gestion des paiements</a>
+        <a href="{{ path('app_instrument_index') }}" class="btn">Gestion des instruments</a>
         
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}
         <p>Connecté en tant que gestionnaire</p>

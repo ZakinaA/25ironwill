@@ -39,6 +39,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Eleve::class)]
     private ?Eleve $eleve = null;
 
+    
+
     public function getEleve(): ?Eleve
     {
         return $this->eleve;
