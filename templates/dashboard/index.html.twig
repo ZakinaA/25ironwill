@@ -37,6 +37,7 @@
                     <tr>
                         <th>Nom du cours</th>
                         <th>Date</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -44,6 +45,9 @@
                         <tr>
                             <td>{{ cour.libelle }}</td>
                             <td>{{ cour.heureDebut|date('d/m/Y à H:i') }}</td>
+                            <td>
+                                <a href="{{ path('app_cours_show', {'id': cour.id}) }}">Voir</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
