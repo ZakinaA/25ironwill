@@ -43,7 +43,8 @@ class Responsable
     private Collection $eleve;
 
     #[ORM\ManyToOne(inversedBy: 'responsables')]
-    private ?Tranche $tranche = null;
+    private ?tranchequotient $quotient = null;
+
 
     #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -183,15 +184,17 @@ class Responsable
         return $this;
     }
 
-    public function getTranche(): ?Tranche
+    public function getQuotient(): ?tranchequotient
     {
-        return $this->tranche;
+        return $this->quotient;
     }
 
-    public function setTranche(?Tranche $tranche): static
+    public function setQuotient(?tranchequotient $quotient): static
     {
-        $this->tranche = $tranche;
+        $this->quotient = $quotient;
 
         return $this;
     }
+
+   
 }

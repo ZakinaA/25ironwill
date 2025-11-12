@@ -11,6 +11,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+use App\Entity\TarifCours;
+use App\Repository\TarifCoursRepository;
+use Symfony\Component\Form\FormError;
+
 #[Route('/paiment')]
 class PaimentController extends AbstractController
 {
@@ -23,13 +27,38 @@ class PaimentController extends AbstractController
     }
 
     #[Route('/new', name: 'app_paiment_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, TarifCoursRepository $tarifCoursRepository): Response
     {
         $paiment = new Paiment();
         $form = $this->createForm(PaimentType::class, $paiment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            
+            $formData = $request->request->all()['paiment'] ?? [];
+            $trancheId = $formData['tranche_id'] ?? null;
+            $coursId = $formData['cours_id'] ?? null;
+            
+            $montantSaisi = $paiment->getMontant();
+
+            if ($trancheId && $coursId) {
+                $tarifOfficiel = $tarifCoursRepository->findOneBy([
+                    'trancheQuotientId' => $trancheId, 
+                    'coursId' => $coursId,             
+                ]);
+
+                if ($tarifOfficiel) {
+                    $montantAttendu = $tarifOfficiel->getPrixFacture();
+                    
+                    if ($montantSaisi != $montantAttendu) {
+                        $paiment->setMontant($montantAttendu);
+                    }
+                } else {
+                    $paiment->setMontant(0.00); 
+                    $this->addFlash('error', 'Aucun tarif officiel n\'a été trouvé pour la combinaison sélectionnée. Le paiement a été enregistré à 0.00 €.');
+                }
+            } 
+            
             $entityManager->persist($paiment);
             $entityManager->flush();
 

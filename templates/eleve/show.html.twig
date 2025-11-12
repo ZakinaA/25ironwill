@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Eleve{% endblock %}
+{% block title %}Eleve - {{ eleve.nom }} {{ eleve.prenom }}{% endblock %}
 
 {% block body %}
-    <h1>Eleve</h1>
+    <h1>Détails de l'élève</h1>
 
     <table class="table">
         <tbody>
@@ -43,12 +43,41 @@
                 <th>Mail</th>
                 <td>{{ eleve.mail }}</td>
             </tr>
+            
+            {# --- NOUVELLE LIGNE POUR AFFICHER LES COURS --- #}
+            <tr>
+                <th>Cours Inscrits</th>
+                <td>
+                    {# Nous itérons sur la collection d'inscriptions de l'élève #}
+                    {% for inscription in eleve.inscriptions %}
+                        
+                        {# On vérifie si l'inscription est bien liée à un cours (non null) #}
+                        {% if inscription.cours is not null %}
+                            {# On affiche le libellé du cours #}
+                            *{{ inscription.cours.libelle }} {# Optionnel : Afficher la date d'inscription ou d'autres infos de la table Inscription #}
+                            {# {% if inscription.dateInscription is defined %}
+                                (Depuis le {{ inscription.dateInscription|date('d/m/Y') }})
+                            {% endif %} #}
+                            
+                            <br>
+                        {% else %}
+                            <span class="text-muted">Aucun cours associé à cette inscription.</span>
+                        {% endif %}
+
+                    {% else %}
+                        {# Ce bloc s'exécute si eleve.inscriptions est vide #}
+                        <span class="text-danger">Cet élève n'a aucune inscription enregistrée.</span>
+                    {% endfor %}
+                </td>
+            </tr>
+            {# --------------------------------------------- #}
+            
         </tbody>
     </table>
 
-    <a href="{{ path('app_eleve_index') }}">back to list</a>
+    <a href="{{ path('app_eleve_index') }}" class="btn btn-info">Retour à la liste</a>
 
-    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>
+    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-warning">Modifier</a>
 
     {{ include('eleve/_delete_form.html.twig') }}
 {% endblock %}

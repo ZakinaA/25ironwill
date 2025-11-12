@@ -1,11 +1,151 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Paiment{% endblock %}
+{% block title %}Nouveau Paiement{% endblock %}
 
 {% block body %}
-    <h1>Create new Paiment</h1>
+    <div class="form-wrapper">
+        <h1>Enregistrer un Nouveau Paiement</h1>
 
-    {{ include('paiment/_form.html.twig') }}
+        {{ include('paiment/_form.html.twig') }}
+        
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ path('app_paiment_index') }}" class="btn-back">
+                &larr; Retour à la liste
+            </a>
+        </div>
+    </div>
+    
+    <style>
+        .form-wrapper { 
+            margin: 2em auto; 
+            max-width: 600px; 
+            padding: 30px; 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+        .form-control, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus, select:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+            outline: none;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+        .btn-back {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .btn-back:hover {
+            color: #0d47a1;
+        }
+        .alert-info {
+            background-color: #e9efff;
+            border: 1px solid #b8cffb;
+            color: #1a73e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .loading-indicator {
+            color: #ff9800;
+            font-weight: bold;
+        }
+    </style>
 
-    <a href="{{ path('app_paiment_index') }}">back to list</a>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Remplacez 'paiment_cours', 'paiment_tranche' et 'paiment_montant' par les IDs générés par Symfony si différents.
+            const coursSelect = document.getElementById('paiment_cours');
+            const trancheSelect = document.getElementById('paiment_tranche');
+            const montantInput = document.getElementById('paiment_montant');
+            const statusDiv = document.getElementById('loading_status');
+            
+            if (!coursSelect || !trancheSelect || !montantInput) {
+                console.error("Erreur: Les champs nécessaires au calcul (cours, tranche, montant) n'ont pas été trouvés.");
+                return;
+            }
+
+            function updateMontant() {
+                const coursId = coursSelect.value;
+                const trancheId = trancheSelect.value;
+                
+                if (!coursId || !trancheId) {
+                    montantInput.value = '';
+                    statusDiv.innerHTML = 'Veuillez choisir le Type de Cours et la Tranche QF pour calculer le montant.';
+                    statusDiv.className = 'alert-info';
+                    return;
+                }
+
+                statusDiv.innerHTML = '<span class="loading-indicator">Calcul en cours...</span>';
+                statusDiv.className = 'alert-info';
+
+                const apiUrl = `{{ path('api_get_tarif', {trancheId: 'TR_ID', coursId: 'CR_ID'}) }}`
+                    .replace('TR_ID', trancheId)
+                    .replace('CR_ID', coursId);
+                
+                fetch(apiUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            return response.json().then(error => { throw new Error(error.error || 'Erreur inconnue.'); });
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const montant = parseFloat(data.montant).toFixed(2);
+                        montantInput.value = montant;
+                        statusDiv.innerHTML = `Montant du tarif trouvé : <strong>${montant} €</strong>.`;
+                        statusDiv.className = 'alert-info';
+                    })
+                    .catch(error => {
+                        montantInput.value = '0.00';
+                        statusDiv.innerHTML = `Erreur : ${error.message}. Vérifiez les données de la table tarif.`;
+                        statusDiv.className = 'alert-info';
+                    });
+            }
+
+            coursSelect.addEventListener('change', updateMontant);
+            trancheSelect.addEventListener('change', updateMontant);
+
+            // Déclencher le calcul au chargement de la page si les valeurs sont déjà sélectionnées
+            updateMontant();
+        });
+    </script>
 {% endblock %}
