@@ -1,5 +1,42 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 --
--- Déchargement des données pour les tables de base (sans dépendances)
+-- Vider les tables dans l'ordre inverse des dépendances (si elles existent)
+--
+SET FOREIGN_KEY_CHECKS=0;
+TRUNCATE TABLE `paiment`;
+TRUNCATE TABLE `inscription`;
+TRUNCATE TABLE `intervention`;
+TRUNCATE TABLE `couleur_instrument`;
+TRUNCATE TABLE `contrat_pret`;
+TRUNCATE TABLE `accessoire`;
+TRUNCATE TABLE `tarif_cours`;
+TRUNCATE TABLE `responsable_eleve`;
+TRUNCATE TABLE `cours`;
+TRUNCATE TABLE `instrument`;
+TRUNCATE TABLE `professeur_type_instrument`;
+TRUNCATE TABLE `metier_professionnel`;
+TRUNCATE TABLE `responsable`;
+TRUNCATE TABLE `eleve`;
+TRUNCATE TABLE `tarif`;
+TRUNCATE TABLE `type_instrument`;
+TRUNCATE TABLE `tranche_quotient`;
+TRUNCATE TABLE `professionnel`;
+TRUNCATE TABLE `professeur`;
+TRUNCATE TABLE `metier`;
+TRUNCATE TABLE `marque`;
+TRUNCATE TABLE `jour`;
+TRUNCATE TABLE `couleur`;
+TRUNCATE TABLE `contact`;
+TRUNCATE TABLE `classe_instrument`;
+TRUNCATE TABLE `type`;
+TRUNCATE TABLE `user`;
+SET FOREIGN_KEY_CHECKS=1;
+
+--
+-- Insertion des données de base (sans dépendances)
 --
 
 INSERT INTO `user` (`id`, `email`, `roles`, `password`, `nom`, `prenom`, `num_rue`) VALUES
@@ -61,15 +98,19 @@ INSERT INTO `professionnel` (`id`, `nom`, `num_rue`, `rue`, `copos`, `ville`, `t
 (2, 'Piano Service', 30, 'Avenue des Claviers', 69003, 'Lyon', '0478901234', 'info@pianoservice.fr'),
 (3, 'Vent-Debout', 5, 'Place du Mistral', 13002, 'Marseille', '0491234567', 'reparation@ventdebout.com');
 
+--
+-- Insertion table `tranche_quotient` (BASÉE SUR L'IMAGE)
+--
 INSERT INTO `tranche_quotient` (`id`, `libelle`, `quotient_min`, `quotient_max`) VALUES
-(1, 'Tranche 1', 0, 450),
-(2, 'Tranche 2', 451, 680),
-(3, 'Tranche 3', 681, 935),
-(4, 'Tranche 4', 936, 1800),
-(5, 'Tranche 5', 1801, 99999);
+(1, '0 à 250', 0, 250),
+(2, '251 à 425', 251, 425),
+(3, '426 à 680', 426, 680),
+(4, '681 à 935', 681, 935),
+(5, '936 à 1800', 936, 1800),
+(6, '1801 et supérieur', 1801, 999999);
 
 --
--- Déchargement des données pour les tables dépendantes (Niveau 2)
+-- Insertion tables dépendantes (Niveau 2)
 --
 
 INSERT INTO `type_instrument` (`id`, `classe_instrument_id`, `classeinstrument_id`, `libelle`) VALUES
@@ -87,8 +128,8 @@ INSERT INTO `eleve` (`id`, `user_id`, `nom`, `prenom`, `num_rue`, `rue`, `copos`
 (3, 7, 'Petit', 'Lucie', 30, 'Boulevard du Port', 13008, 'Marseille', 634567890, 'lucie.petit@example.com');
 
 INSERT INTO `responsable` (`id`, `quotient_id`, `user_id`, `nom`, `prenom`, `num_rue`, `rue`, `copos`, `ville`, `tel`, `mail`) VALUES
-(1, 2, 2, 'Durand', 'Paul', 10, 'Rue de la Gare', 75010, 'Paris', 612345678, 'parent.durand@example.com'),
-(2, 4, 3, 'Martin', 'Sophie', 20, 'Avenue des Lilas', 69005, 'Lyon', 623456789, 'parent.martin@example.com'),
+(1, 3, 2, 'Durand', 'Paul', 10, 'Rue de la Gare', 75010, 'Paris', 612345678, 'parent.durand@example.com'),
+(2, 5, 3, 'Martin', 'Sophie', 20, 'Avenue des Lilas', 69005, 'Lyon', 623456789, 'parent.martin@example.com'),
 (3, 1, 6, 'Petit', 'Marc', 30, 'Boulevard du Port', 13008, 'Marseille', 634567890, 'parent.petit@example.com');
 
 INSERT INTO `metier_professionnel` (`metier_id`, `professionnel_id`) VALUES
@@ -109,7 +150,7 @@ INSERT INTO `tarif` (`id`, `type_id`, `montant`) VALUES
 (2, 2, 550.00);
 
 --
--- Déchargement des données pour les tables dépendantes (Niveau 3)
+-- Insertion tables dépendantes (Niveau 3)
 --
 
 INSERT INTO `instrument` (`id`, `marque_id`, `type_id`, `num_serie`, `date_achat`, `prix_achat`, `utilisation`, `chemin_image`) VALUES
@@ -130,20 +171,28 @@ INSERT INTO `responsable_eleve` (`responsable_id`, `eleve_id`) VALUES
 (2, 2),
 (3, 3);
 
-INSERT INTO `tarif_cours` (`id`, `tranche_quotient_id_id`, `cours_id_id`, `prix_facture`) VALUES
-(1, 1, 1, '150'),
-(2, 1, 2, '250'),
-(3, 2, 1, '180'),
-(4, 2, 2, '300'),
-(5, 3, 1, '210'),
-(6, 3, 2, '350'),
-(7, 4, 1, '240'),
-(8, 4, 2, '400'),
-(9, 5, 1, '270'),
-(10, 5, 2, '450');
+--
+-- Insertion table `tarif_cours` (BASÉE SUR L'IMAGE)
+-- (Rappel: Type ID 1 = Collectif, Type ID 2 = Individuel)
+--
+INSERT INTO `tarif_cours` (`tranche_quotient_id_id`, `cours_id_id`, `prix_facture`) VALUES
+(NULL, 2, '417'), -- " -9999 à -1" (NULL) / Cours Individuel
+(NULL, 1, '209'), -- " -9999 à -1" (NULL) / Cours Collectif
+(1, 2, '60'), -- "0 à 250" / Cours Individuel
+(1, 1, '30'), -- "0 à 250" / Cours Collectif
+(2, 2, '96'), -- "251 à 425" / Cours Individuel
+(2, 1, '48'), -- "251 à 425" / Cours Collectif
+(3, 2, '126'), -- "426 à 680" / Cours Individuel
+(3, 1, '63'), -- "426 à 680" / Cours Collectif
+(4, 2, '192'), -- "681 à 935" / Cours Individuel
+(4, 1, '96'), -- "681 à 935" / Cours Collectif
+(5, 2, '282'), -- "936 à 1800" / Cours Individuel
+(5, 1, '141'), -- "936 à 1800" / Cours Collectif
+(6, 2, '330'), -- "1801 et supérieur" / Cours Individuel
+(6, 1, '165'); -- "1801 et supérieur" / Cours Collectif
 
 --
--- Déchargement des données pour les tables dépendantes (Niveau 4)
+-- Insertion tables dépendantes (Niveau 4)
 --
 
 INSERT INTO `accessoire` (`id`, `instrument_id`, `libelle`) VALUES
@@ -176,10 +225,12 @@ INSERT INTO `inscription` (`id`, `cours_id`, `eleve_id`, `date_inscription`) VAL
 (4, 2, 2, '2025-09-05');
 
 --
--- Déchargement des données pour les tables dépendantes (Niveau 5)
+-- Insertion tables dépendantes (Niveau 5)
 --
 
 INSERT INTO `paiment` (`id`, `inscription_id`, `eleve_id`, `quotient_id`, `montant`, `date_paiment`) VALUES
-(1, 1, 1, 2, 300.00, '2025-09-10'),
-(2, 2, 2, 4, 400.00, '2025-09-11'),
-(3, 3, 3, 1, 150.00, '2025-09-12');
+(1, 1, 1, 3, 63.00, '2025-09-10'), -- Eleve 1 (Durand, QF 3) s'inscrit au cours 2 (Collectif) -> Prix = 63
+(2, 2, 2, 5, 282.00, '2025-09-11'), -- Eleve 2 (Martin, QF 5) s'inscrit au cours 1 (Individuel) -> Prix = 282
+(3, 3, 3, 1, 30.00, '2025-09-12'); -- Eleve 3 (Petit, QF 1) s'inscrit au cours 3 (Collectif) -> Prix = 30
+
+COMMIT;
