@@ -45,8 +45,6 @@ class Eleve
     #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
     private Collection $responsables;
 
-    #[ORM\ManyToOne(inversedBy: 'eleves')]
-    private ?Tranche $tranche = null;
 
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
     private Collection $inscriptions;
@@ -223,17 +221,6 @@ class Eleve
         return $this;
     }
 
-    public function getTranche(): ?Tranche
-    {
-        return $this->tranche;
-    }
-
-    public function setTranche(?Tranche $tranche): static
-    {
-        $this->tranche = $tranche;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Inscription>

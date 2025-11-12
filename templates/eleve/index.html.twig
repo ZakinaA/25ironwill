@@ -18,7 +18,7 @@
                 <th>Tel</th>
                 <th>Mail</th>
                 <th>Responsable 1</th>
-                <th>Responsable 2 </th>
+                <th>Cours Inscrit</th>
                 <th>actions</th>
                 
 
@@ -40,11 +40,18 @@
     {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
     {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
                 </td>
-
                 <td>
-    {{ eleve.responsables|length > 1 ? eleve.responsables[1].nom : '' }}
-    {{ eleve.responsables|length > 1 ? eleve.responsables[1].prenom : '' }}
-            </td>
+    {% for inscription in eleve.inscriptions %}
+        {% if inscription.cours %}
+            {# on utilise 'inscription.cours' pour obtenir l'objet Cours #}
+            {# puis on utilise 'libelle' pour appeler getLibelle() sur cet objet #}
+             -{{ inscription.cours.libelle|default('N/A') }} <br> 
+        {% else %}
+            Pas de cours trouvé pour cette inscription. <br>
+        {% endif %}
+    {% endfor %}
+</td>
+                <td>
                     <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}">show</a>
                     <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}">edit</a>
                 </td>

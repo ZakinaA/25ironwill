@@ -2,27 +2,27 @@
 
 namespace App\Repository;
 
-use App\Entity\Tarif;
+use App\Entity\TarifCours;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Tarif>
+ * @extends ServiceEntityRepository<TarifCours>
  *
- * @method Tarif|null find($id, $lockMode = null, $lockVersion = null)
- * @method Tarif|null findOneBy(array $criteria, array $orderBy = null)
- * @method Tarif[]    findAll()
- * @method Tarif[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method TarifCours|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TarifCours|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TarifCours[]    findAll()
+ * @method TarifCours[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class TarifRepository extends ServiceEntityRepository
+class TarifCoursRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Tarif::class);
+        parent::__construct($registry, TarifCours::class);
     }
 
 //    /**
-//     * @return Tarif[] Returns an array of Tarif objects
+//     * @return TarifCours[] Returns an array of TarifCours objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -36,7 +36,7 @@ class TarifRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Tarif
+//    public function findOneBySomeField($value): ?TarifCours
 //    {
 //        return $this->createQueryBuilder('t')
 //            ->andWhere('t.exampleField = :val')

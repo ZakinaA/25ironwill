@@ -1,13 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Eleve{% endblock %}
+{% block title %}Modifier l'élève{% endblock %}
 
 {% block body %}
-    <h1>Edit Eleve</h1>
+    <h1>Modification de l'élève : {{ eleve.prenom }} {{ eleve.nom }}</h1>
 
-    {{ include('eleve/_form.html.twig', {'button_label': 'Update'}) }}
+    {# 
+        1. Le formulaire : 
+        Il est inclus depuis le template _form.html.twig.
+        Le contrôleur doit passer la variable 'form' qui est construite autour de l'objet 'eleve'.
+        On passe simplement le label du bouton.
+    #}
+    {{ include('eleve/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_eleve_index') }}">back to list</a>
-
-    {{ include('eleve/_delete_form.html.twig') }}
+    <hr>
+    
+    <div class="d-flex justify-content-between">
+        {# Lien de retour à la liste #}
+        <a href="{{ path('app_eleve_index') }}" class="btn btn-info">
+            Retour à la liste
+        </a>
+        
+        {# Lien de suppression : NÉCESSITE L'ID DE L'ÉLÈVE #}
+        {# On passe la variable 'eleve' complète au _delete_form.html.twig #}
+        {{ include('eleve/_delete_form.html.twig', {'eleve': eleve}) }}
+    </div>
+    
 {% endblock %}

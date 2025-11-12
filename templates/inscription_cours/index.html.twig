@@ -264,7 +264,6 @@
 <form method="post" class="inscription-form">
     <div class="form-grid">
         {% if not is_granted('ROLE_USER') %}
-            <!-- Section Élève -->
             <div class="form-section">
                 <div class="section-title">👤 Élève</div>
                 <input type="text" 
@@ -279,7 +278,6 @@
                 </select>
             </div>
 
-            <!-- Section Responsable 1 -->
             <div class="form-section">
                 <div class="section-title">👨‍👩‍👧 Responsable 1</div>
                 <input type="text" 
@@ -298,7 +296,6 @@
                 </select>
             </div>
 
-            <!-- Section Responsable 2 -->
             <div class="form-section">
                 <div class="section-title">👨‍👩‍👧 Responsable 2</div>
                 <input type="text" 
@@ -317,12 +314,10 @@
                 </select>
             </div>
         {% else %}
-            <!-- Si c'est un élève connecté -->
             <input type="hidden" name="eleve" value="{{ eleve.id }}">
         {% endif %}
 
 
-            <!-- Section Cours -->
             <div class="cours-section">
                 <div class="section-title">📚 Sélectionnez les cours</div>
                 <div class="cours-grid">

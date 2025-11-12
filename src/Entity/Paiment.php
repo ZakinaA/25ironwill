@@ -23,6 +23,12 @@ class Paiment
     #[ORM\ManyToOne(inversedBy: 'paiment')]
     private ?Inscription $inscription = null;
 
+    #[ORM\ManyToOne(inversedBy: 'paiments')]
+    private ?eleve $eleve = null;
+
+    #[ORM\ManyToOne(inversedBy: 'paiments')]
+    private ?TrancheQuotient $quotient = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -60,6 +66,30 @@ class Paiment
     public function setInscription(?Inscription $inscription): static
     {
         $this->inscription = $inscription;
+
+        return $this;
+    }
+
+    public function getEleve(): ?eleve
+    {
+        return $this->eleve;
+    }
+
+    public function setEleve(?eleve $eleve): static
+    {
+        $this->eleve = $eleve;
+
+        return $this;
+    }
+
+    public function getQuotient(): ?TrancheQuotient
+    {
+        return $this->quotient;
+    }
+
+    public function setQuotient(?TrancheQuotient $quotient): static
+    {
+        $this->quotient = $quotient;
 
         return $this;
     }
