@@ -1,46 +1,231 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Instrument index{% endblock %}
+{% block title %}Gestion des instruments{% endblock %}
 
 {% block body %}
-    <h1>Instrument index</h1>
+<h1 style="text-align:center">Gestion des instruments</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>NumSerie</th>
-                <th>DateAchat</th>
-                <th>PrixAchat</th>
-                <th>Utilisation</th>
-                <th>CheminImage</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for instrument in instruments %}
-            <tr>
-                <td>{{ instrument.id }}</td>
-                <td>{{ instrument.numSerie }}</td>
-                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
-                <td>{{ instrument.prixAchat }}</td>
-                <td>{{ instrument.utilisation }}</td>
-                <td>
-                    {% set photo = 'images/instrument/' ~  instrument.id ~ '.jpg' %}
-                    <img src="{{asset(photo)}}" alt="Image instrument {{instrument.id}}" style="width: 100px; height: auto;">
-                </td>
-                <td>
-                    <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}">show</a>
-                    <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="instrument-container">
 
-    <a href="{{ path('app_instrument_new') }}">Create new</a>
+    <!-- Bouton pour basculer -->
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="toggle-btn-container">
+        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
+        <button id="show-form-btn" class="toggle-btn">Ajouter un instrument</button>
+    </div>
+    {% endif %}
+
+    {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
+    <div class="toggle-btn-container">
+        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
+        <button id="show-form-btn" class="toggle-btn">Louer un instrument</button>
+    </div>
+    {% endif %}
+
+    <!-- Tableau des instruments -->
+    <div class="instrument-table" id="instrument-list">
+    <h2 style="text-align:center">Liste des instruments</h2>
+        <table>
+            <thead>
+                <tr>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Id</th>
+                    {% endif %}
+                    <th>Numéro de série</th>
+                    <th>Date d’achat</th>
+                    <th>Prix (€)</th>
+                    <th>Utilisation</th>
+                    <th>Image</th>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for instrument in instruments %}
+                <tr>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>{{ instrument.id }}</td>
+                    {% endif %}
+                    <td>{{ instrument.numSerie }}</td>
+                    <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
+                    <td>{{ instrument.prixAchat }}</td>
+                    <td>{{ instrument.utilisation }}</td>
+                    <td>
+                        {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
+                        <img src="{{ asset(photo) }}" alt="Image instrument {{ instrument.id }}" style="width: 80px; border-radius: 8px;">
+                    </td>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <td>
+                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-sm">Voir</a>
+                            <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-sm" style="background: #ffc107; color: black;">Modifier</a>
+                        </td>
+                    {% endif %}
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">Aucun instrument trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulaire création -->
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="instrument-form" id="instrument-form" style="display: none;">
+        <h2>Créer un instrument</h2>
+        <form action="{{ path('app_instrument_index') }}" method="post" enctype="multipart/form-data">
+            <label for="marque">Marque</label>
+            <select id="marque" name="marque" required>
+                <option value="" disabled selected>— Sélectionne une marque —</option>
+                {% for marque in marques %}
+                    <option value="{{ marque.id }}">{{ marque.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="type">Type d’instrument</label>
+            <select id="type" name="type" required>
+                <option value="" disabled selected>— Sélectionne un type —</option>
+                {% for typeInstrument in typeInstruments %}
+                    <option value="{{ typeInstrument.id }}">{{ typeInstrument.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="numSerie">Numéro de série</label>
+            <input type="text" id="numSerie" name="numSerie" placeholder="Ex: A12345" required>
+
+            <label for="dateAchat">Date d’achat</label>
+            <input type="date" id="dateAchat" name="dateAchat" required>
+
+            <label for="prixAchat">Prix (€)</label>
+            <input type="number" id="prixAchat" name="prixAchat" min="0" step="0.01" required>
+
+            <label for="utilisation">Utilisation</label>
+            <select id="utilisation" name="utilisation" required>
+                <option value="" disabled selected>— Sélectionnez l’utilisation —</option>
+                <option value="Prêts">Prêts</option>
+                <option value="Stage">Stage</option>
+                <option value="Cours">Cours</option>
+            </select>
+
+            <label for="photo">Image (optionnelle)</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+
+            <button type="submit" class="submit-btn">Créer l’instrument</button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+<style>
+.instrument-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+.toggle-btn-container {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.toggle-btn {
+    padding: 0.6rem 1.2rem;
+    margin: 0 0.5rem;
+    border: 2px solid #007bff;
+    border-radius: 30px;
+    background: white;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.toggle-btn.active, .toggle-btn:hover {
+    background: #007bff;
+    color: white;
+}
+.instrument-table, .instrument-form {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+.submit-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+}
+.submit-btn:hover {
+    background: #0056b3;
+}
+
+.instrument-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.instrument-form h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+
+.instrument-form label {
+    display: block;
+    margin: 0.8rem 0 0.3rem;
+    font-weight: 600;
+}
+
+.instrument-form input,
+.instrument-form select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.instrument-form input:focus,
+.instrument-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+</style>
+
+<script>
+{% verbatim %}
+// Toggle liste / formulaire
+const showListBtn = document.getElementById('show-list-btn');
+const showFormBtn = document.getElementById('show-form-btn');
+const instrumentList = document.getElementById('instrument-list');
+const instrumentForm = document.getElementById('instrument-form');
+
+showListBtn.addEventListener('click', () => {
+    instrumentList.style.display = 'block';
+    instrumentForm.style.display = 'none';
+    showListBtn.classList.add('active');
+    showFormBtn.classList.remove('active');
+});
+
+showFormBtn.addEventListener('click', () => {
+    instrumentList.style.display = 'none';
+    instrumentForm.style.display = 'block';
+    showFormBtn.classList.add('active');
+    showListBtn.classList.remove('active');
+});
+{% endverbatim %}
+</script>
 {% endblock %}

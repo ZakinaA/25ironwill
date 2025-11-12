@@ -117,7 +117,7 @@
         }
 
         table:hover {
-            transform: scale(1.01);
+            
         }
 
         th, td {
@@ -181,6 +181,109 @@
             letter-spacing: 0.5px;
             animation: fadeIn 1.5s ease;
         }
+
+        /* ---- Section de création d’instrument ---- */
+        .instrument-create-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        /* Bloc formulaire à droite */
+        .instrument-form-card {
+            flex: 1;
+            min-width: 320px;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: sticky;
+            top: 6rem;
+        }
+
+        .instrument-form-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        }
+
+        /* Titre du formulaire */
+        .instrument-form-card h2 {
+            color: #0056b3;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        /* Champs de formulaire */
+        .instrument-form-card form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        .instrument-form-card label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.3rem;
+        }
+
+        .instrument-form-card input[type="text"],
+        .instrument-form-card input[type="number"],
+        .instrument-form-card input[type="date"],
+        .instrument-form-card input[type="file"],
+        .instrument-form-card select {
+            padding: 0.7rem 1rem;
+            border: 2px solid #cfd8e3;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: #f9fbfd;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .instrument-form-card input:focus,
+        .instrument-form-card select:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0,123,255,0.15);
+        }
+
+        /* Bouton de création */
+        .instrument-form-card button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .instrument-form-card button:hover {
+            background: linear-gradient(135deg, #0056b3, #004099);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 900px) {
+            .instrument-create-container {
+                flex-direction: column;
+            }
+
+            .instrument-form-card {
+                position: static;
+                width: 100%;
+                margin-top: 2rem;
+            }
+        }
+
     </style>
     {% endblock %}
 
@@ -195,6 +298,7 @@
             <a href="{{ path('app_dashboard') }}">Tableau de bord</a>
             <a href="{{ path('app_inscription_cours') }}">Inscriptions</a>
             <a href="{{ path('app_paiment_index') }}">Paiements</a>
+            <a href="{{ path('app_instrument_index') }}">Instruments</a>
             <a>|</a>
             <a href="{{ path('app_logout') }}">Se déconnecter</a>
         </nav>

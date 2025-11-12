@@ -263,7 +263,8 @@
 
 <form method="post" class="inscription-form">
     <div class="form-grid">
-        {% if not is_granted('ROLE_USER') %}
+        {% if not is_granted('ROLE_ELEVE') %}
+            <!-- Section Élève -->
             <div class="form-section">
                 <div class="section-title">👤 Élève</div>
                 <input type="text" 
@@ -313,9 +314,14 @@
                     {% endfor %}
                 </select>
             </div>
-        {% else %}
-            <input type="hidden" name="eleve" value="{{ eleve.id }}">
-        {% endif %}
+            {% else %}
+                <!-- Si c'est un élève connecté -->
+                {% if eleve %}
+                    <input type="hidden" name="eleve" value="{{ eleve.id }}">
+                {% else %}
+                    <p style="color: red;">⚠️ Aucun élève associé à ce compte.</p>
+                {% endif %}
+            {% endif %}
 
 
             <div class="cours-section">
