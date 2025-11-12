@@ -172,7 +172,7 @@
 
         /* ---- Pied de page ---- */
         footer {
-            background: #343a40;
+            background: #403734ff;
             color: white;
             text-align: center;
             padding: 1rem;
@@ -191,10 +191,14 @@
     <header>
         <nav>
             <a href="{{ path('app_accueil') }}">Accueil</a>
+            <a>|</a>
             <a href="{{ path('app_dashboard') }}">Tableau de bord</a>
             <a href="{{ path('app_inscription_cours') }}">Inscriptions</a>
             <a href="{{ path('app_paiment_index') }}">Paiements</a>
+            <a>|</a>
+            <a href="{{ path('app_logout') }}">Se déconnecter</a>
         </nav>
+        
     </header>
 
     <main class="container">
@@ -210,8 +214,11 @@
         {% endblock %}
     </main>
 
-    <footer>
-        &copy; {{ "now"|date("Y") }} - Mon Application Symfony
+    <footer style="background: #007bff; color: white; text-align: center; padding: 1.5rem; font-weight: 500; margin-top: 3rem;">
+        &copy; {{ "now"|date("Y") }} - Emusic - Votre Passion Musicale 🎵
+        <br>
+        <a href="{{ path('app_mentions_legales') }}" style="color: white; text-decoration: underline; margin: 0 0.5rem;">Mentions légales</a> |
+        <a href="{{ path('app_cookies') }}" style="color: white; text-decoration: underline; margin: 0 0.5rem;">Cookies</a>
     </footer>
 
 </body>

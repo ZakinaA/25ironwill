@@ -1,0 +1,47 @@
+{% extends 'accueil/accueil.html.twig' %}
+
+{% block body %}
+    <h1>
+    {% if current_route == 'app_mentions_legales_accueil' %}
+    <h1>Mentions légales</h1>
+    <p>
+    Harmonie Club – Emusic<br>
+    Directeur de la publication : Jean Dupont<br>
+    Hébergeur du site : OVH
+    </p>
+
+    <h2>Propriété intellectuelle</h2>
+    <p>
+    Tout contenu présent sur ce site (textes, images, logos, vidéos) est la propriété exclusive de Harmonie Club – Emusic ou de ses partenaires. Toute reproduction, totale ou partielle, sans autorisation est interdite.
+    </p>
+
+    <h2>Responsabilité</h2>
+    <p>
+    Harmonie Club ne pourra être tenu responsable des dommages directs ou indirects résultant de l’accès ou de l’utilisation de ce site.
+    </p>
+    {% endif %}
+
+    </h1>
+
+    <p>
+    {% if current_route == 'app_cookies_accueil' %}
+    <h1>Politique de Cookies</h1>
+    <p>
+    Notre site utilise des cookies pour améliorer votre expérience utilisateur et analyser notre trafic. En poursuivant votre navigation, vous acceptez l'utilisation de ces cookies.
+    </p>
+
+    <h2>Types de cookies utilisés</h2>
+    <ul>
+        <li><strong>Cookies nécessaires :</strong> essentiels pour le fonctionnement du site.</li>
+        <li><strong>Cookies analytiques :</strong> nous permettent de comprendre comment le site est utilisé et d’améliorer son contenu.</li>
+        <li><strong>Cookies marketing :</strong> utilisés pour afficher des publicités ciblées.</li>
+    </ul>
+
+    <h2>Gestion des cookies</h2>
+    <p>
+    Vous pouvez configurer votre navigateur pour refuser certains cookies ou tous les cookies. Notez que certaines fonctionnalités du site pourraient ne pas fonctionner correctement si vous désactivez les cookies.
+    </p>
+    {% endif %}
+
+    </p>
+{% endblock %}

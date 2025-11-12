@@ -23,11 +23,10 @@ class AjoutPretInstrumentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // 4. Persister l'objet dans la base
+            
             $em->persist($contrat);
             $em->flush();
 
-            // 5. Rediriger ou afficher un message
             $this->addFlash('success', 'Contrat ajouté avec succès !');
 
             return $this->redirectToRoute('app_ajout_pret_instrument'); 

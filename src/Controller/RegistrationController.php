@@ -1,8 +1,9 @@
 <?php
-
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Entity\Eleve;
+use App\Entity\Responsable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,26 +20,86 @@ class RegistrationController extends AbstractController
         UserPasswordHasherInterface $passwordHasher
     ): Response {
         if ($request->isMethod('POST')) {
+            $nom = $request->request->get('nom');
+            $prenom = $request->request->get('prenom');
             $email = $request->request->get('email');
             $plainPassword = $request->request->get('password');
             $confirmPassword = $request->request->get('confirm_password');
+            $type = $request->request->get('type');
+
+            // Récupération des informations d'adresse
+            $numRue = $request->request->get('num_rue');
+            $rue = $request->request->get('rue');
+            $copos = $request->request->get('copos');
+            $ville = $request->request->get('ville');
+            $tel = $request->request->get('tel');
 
             // Vérification des mots de passe
             if ($plainPassword !== $confirmPassword) {
                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
                 return $this->redirectToRoute('app_register');
             }
+            
+            if (!in_array($type, ['eleve', 'responsable'])) {
+                $this->addFlash('error', 'Veuillez choisir un type de compte.');
+                return $this->redirectToRoute('app_register');
+            }
 
             // Création de l'utilisateur
             $user = new User();
             $user->setEmail($email);
-
-            // Hachage du mot de passe
+            $user->setNom($nom);
+            $user->setPrenom($prenom);
+            
+            // Attribution automatique du rôle selon le type choisi
+            if ($type === 'eleve') {
+                $user->setRoles(['ROLE_ELEVE']);
+            } elseif ($type === 'responsable') {
+                $user->setRoles(['ROLE_RESPONSABLE']);
+            }
+                        
+            // Hachage du mot de passe (AVANT de persister)
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
-            // Enregistrement en base
+            // Enregistrement de l'utilisateur en base
             $entityManager->persist($user);
+            $entityManager->flush();
+
+            if ($type === 'eleve') {
+                $eleve = new Eleve();
+                $eleve->setNom($nom);
+                $eleve->setPrenom($prenom);
+                $eleve->setMail($email);
+                $eleve->setUser($user);
+                
+                // Définir les valeurs avec des valeurs par défaut si null
+                $eleve->setRue($rue !== '' ? (string)$rue : null);
+                $eleve->setVille($ville !== '' ? (string)$ville: null);
+                $eleve->setNumRue($numRue !== '' ? (int)$numRue : null);
+                $eleve->setCopos($copos !== '' ? (int)$copos : null);
+                $eleve->setTel($tel !== '' ? (int)$tel : null);
+
+
+                
+                $entityManager->persist($eleve);
+            } elseif ($type === 'responsable') {
+                $responsable = new Responsable();
+                $responsable->setNom($nom);
+                $responsable->setPrenom($prenom);
+                $responsable->setUser($user);
+                $entityManager->persist($responsable);
+                $responsable->setMail($email);
+
+                $responsable->setNumRue($numRue !== '' ? (int)$numRue : null);
+                $responsable->setRue($rue !== '' ? $rue : null);
+                $responsable->setCopos($copos !== '' ? (int)$copos : null);
+                $responsable->setVille($ville !== '' ? $ville : null);
+                $responsable->setTel($tel !== '' ? (int)$tel : null);
+                    
+                $entityManager->persist($responsable);
+            }
+            
             $entityManager->flush();
 
             // Message de confirmation
