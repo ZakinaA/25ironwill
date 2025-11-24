@@ -117,7 +117,7 @@
         </thead>
         <tbody>
         {% for cour in cours %}
-        <tr onclick="window.location='{{ path('app_cours_show', {'id': cour.id}) }}'">
+        <tr onclick="window.location='{{ path('app_accueil_showCours', {'id': cour.id}) }}'">
             <td data-label="Cours">{{ cour.libelle }}</td>
             <td data-label="Âge Min">{{ cour.ageMini }}</td>
             <td data-label="Âge Max">{{ cour.ageMaxi }}</td>

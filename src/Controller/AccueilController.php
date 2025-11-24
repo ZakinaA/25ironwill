@@ -31,6 +31,13 @@ class AccueilController extends AbstractController
             'cours' => $coursRepository->findAll(),
         ]);
     }
+    #[Route('/{id}', name: 'app_accueil_showCours', methods: ['GET'])]
+    public function show(Cours $cour): Response
+    {
+        return $this->render('accueil/showCours.html.twig', [
+            'cour' => $cour,
+        ]);
+    }
     #[Route('/acceuil-contact', name: 'app_acceuil_contact')]
     public function contact(Request $request, EntityManagerInterface $em): Response
     {
