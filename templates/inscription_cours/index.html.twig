@@ -259,7 +259,7 @@
 
 <form method="post" class="inscription-form">
     <div class="form-grid">
-        {% if not is_granted('ROLE_ELEVE') %}
+        {% if is_granted('ROLE_ADMIN') %}
             <!-- Section Élève -->
             <div class="form-section">
                 <div class="section-title">👤 Élève</div>
@@ -427,5 +427,6 @@ document.querySelector('form').addEventListener('submit', function(e) {
     }
 });
 </script>
-
+<a href="{{ path('app_dashboard') }}" class="btn btn-primary">Revenir en arrière</a>
 {% endblock %}
+
