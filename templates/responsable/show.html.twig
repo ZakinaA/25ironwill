@@ -3,7 +3,7 @@
 {% block title %}Responsable{% endblock %}
 
 {% block body %}
-    <h1>Responsable</h1>
+    <h1>Responsable  {{ responsable.nom }}</h1>
 
     <table class="table">
         <tbody>
@@ -43,12 +43,28 @@
                 <th>Mail</th>
                 <td>{{ responsable.mail }}</td>
             </tr>
+            <tr>
+                <th>Élèves</th>
+                <td>
+                    {# Comme c'est ManyToMany, on doit faire une boucle #}
+                    {% for unEleve in responsable.eleve %}
+                        *{{ unEleve.prenom }} {{ unEleve.nom }}
+                        {# On ajoute une virgule si ce n'est pas le dernier #}
+                        {% if not loop.last %}, {% endif %}
+                    {% else %}
+                        Aucun élève associé
+                    {% endfor %}
+                </td>
+            </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_responsable_index') }}">back to list</a>
+   
 
-    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
+
+      <a href="{{ path('app_responsable_index') }}" class="btn btn-info">Retour à la liste</a>
+
+    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn btn-warning">Modifier</a>
 
     {{ include('responsable/_delete_form.html.twig') }}
 {% endblock %}
