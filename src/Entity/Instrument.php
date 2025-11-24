@@ -19,6 +19,9 @@ class Instrument
     #[ORM\Column]
     private ?string $numSerie = null;
 
+    #[ORM\Column]
+    private ?string $nom = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateAchat = null;
 
@@ -270,5 +273,19 @@ class Instrument
 
         return $this;
     }
+
+
+    public function getNom(): ?Nom
+    {
+        return $this->nom;
+    }
+
+    public function setNom(?Nom $nom): static
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
 
 }
