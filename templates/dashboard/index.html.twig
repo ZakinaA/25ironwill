@@ -9,10 +9,12 @@
             <p>ID de l'utilisateur : {{ app.user.id }}</p>
             <p>Rôle : Administrateur</p>
             
-            <div class="btn-group">
-                <a href="{{ path('app_paiment_index') }}" class="btn">💳 Gestion des paiements</a>
-                <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Gestion des instruments</a>
-            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+    <a href="{{ path('app_paiment_index') }}" class="btn" style="flex: 1 1 24%;">💳 Gestion des paiements</a>
+    <a href="{{ path('app_instrument_index') }}" class="btn" style="flex: 1 1 24%;">🎸 Gestion des instruments</a>
+    <a href="{{ path('app_responsable_index') }}" class="btn" style="flex: 1 1 24%;">👨‍👧 Gestion des Responsables</a>
+    <a href="{{ path('app_eleve_index') }}" class="btn" style="flex: 1 1 24%;">👨‍🎓 Gestion des Eleves</a>
+</div>
         </div>
         
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}

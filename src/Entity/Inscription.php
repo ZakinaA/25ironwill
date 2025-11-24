@@ -28,6 +28,9 @@ class Inscription
     #[ORM\OneToMany(targetEntity: Paiment::class, mappedBy: 'inscription')]
     private Collection $paiment;
 
+    #[ORM\Column(nullable: true)]
+    private ?float $montant_du = null;
+
     public function __construct()
     {
         $this->paiment = new ArrayCollection();
@@ -100,6 +103,18 @@ class Inscription
                 $paiment->setInscription(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMontantDu(): ?float
+    {
+        return $this->montant_du;
+    }
+
+    public function setMontantDu(?float $montant_du): static
+    {
+        $this->montant_du = $montant_du;
 
         return $this;
     }
