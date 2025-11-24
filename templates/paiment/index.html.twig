@@ -1,47 +1,67 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiment index{% endblock %}
+{% block title %}Mes Paiements{% endblock %}
 
 {% block body %}
-    <h1>Paiment index</h1>
+    <div class="container mt-4">
+        <h1>
+            {% if isAdmin %}
+                Gestion des Paiements (Admin)
+            {% elseif isResponsable|default(false) %}
+                Paiements de mes enfants
+            {% else %}
+                Mes Paiements
+            {% endif %}
+        </h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Montant</th>
-                {% if isAdmin %}
-                    <th>Eleve</th>
-                {% endif %}
-                <th>DatePaiment</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for paiment in paiments %}
-            <tr>
-                <td>{{ paiment.id }}</td>
-                <td>{{ paiment.montant }}</td>
-                {% if isAdmin %}
-                    <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
-                {% endif %}
-                <td>{{ paiment.datePaiment ? paiment.datePaiment|date('Y-m-d') : '' }}</td>
-                <td>
-                    <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}">show</a>
-                    {% if isAdmin %}
-                        <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}">edit</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Montant</th>
+                    {# On affiche la colonne Eleve si c'est un Admin OU un Responsable #}
+                    {% if isAdmin or isResponsable|default(false) %}
+                        <th>Élève Concerné</th>
                     {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="{{ isAdmin ? '5' : '4' }}">Pas de paiements à regularisé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                    
+                    <th>Date Paiement</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for paiment in paiments %}
+                <tr>
+                    <td>{{ paiment.id }}</td>
+                    <td>{{ paiment.montant }} €</td>
+                    
+                    {# Pareil ici : on affiche le nom seulement pour Admin ou Responsable #}
+                    {% if isAdmin or isResponsable|default(false) %}
+                        <td>
+                            {{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}
+                        </td>
+                    {% endif %}
+                    
+                    <td>{{ paiment.datePaiment ? paiment.datePaiment|date('d/m/Y') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}" class="btn btn-sm btn-info">Voir</a>
+                        
+                        {# Seul l'admin peut modifier #}
+                        {% if isAdmin %}
+                            <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}" class="btn btn-sm btn-warning">Modifier</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">Aucun paiement trouvé.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-    {% if isAdmin %}
-        <a href="{{ path('app_paiment_new') }}">Create new</a>
-    {% endif %}
+        {# Bouton de création visible seulement pour Admin ou Responsable #}
+        {% if isAdmin or isResponsable|default(false) %}
+            <a href="{{ path('app_paiment_new') }}" class="btn btn-primary">Nouveau Paiement</a>
+        {% endif %}
+    </div>
 {% endblock %}

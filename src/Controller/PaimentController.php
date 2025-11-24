@@ -3,47 +3,76 @@
 namespace App\Controller;
 
 use App\Entity\Paiment;
+use App\Entity\Eleve;
+use App\Entity\Responsable;
 use App\Form\PaimentType;
 use App\Repository\PaimentRepository;
+use App\Repository\TarifCoursRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Repository\TarifCoursRepository;
 
 #[Route('/paiment')]
 class PaimentController extends AbstractController
 {
     #[Route('/', name: 'app_paiment_index', methods: ['GET'])]
-    public function index(PaimentRepository $paimentRepository): Response
+    public function index(PaimentRepository $paimentRepository, EntityManagerInterface $em): Response
     {
         $user = $this->getUser();
+
         if (!$user) {
             return $this->redirectToRoute('app_login');
         }
 
-        // Vérifie si l'utilisateur est Admin ou Responsable
-        $isManager = $this->isGranted('ROLE_ADMIN') || $this->isGranted('ROLE_RESPONSABLE');
+        $paiments = [];
+        $isAdmin = $this->isGranted('ROLE_ADMIN');
+        $isResponsable = $this->isGranted('ROLE_RESPONSABLE');
 
-        if ($isManager) {
+        // --- CAS 1 : ADMIN (Voit tout) ---
+        if ($isAdmin) {
             $paiments = $paimentRepository->findAll();
-        } else {
-            // Pour l'élève connecté, on affiche ses paiements
-            $paiments = $paimentRepository->findBy(['eleve' => $user]);
+        } 
+        
+        // --- CAS 2 : RESPONSABLE (Voit ses enfants) ---
+        elseif ($isResponsable) {
+            // On récupère la fiche Responsable liée au User
+            $responsable = $em->getRepository(Responsable::class)->findOneBy(['user' => $user]);
+
+            if ($responsable) {
+                // On récupère la liste de SES élèves
+                $mesEleves = $responsable->getEleve()->toArray(); 
+                
+                if (!empty($mesEleves)) {
+                    // On cherche les paiements de ces élèves là uniquement
+                    $paiments = $paimentRepository->findBy(['eleve' => $mesEleves]);
+                }
+            }
+        } 
+        
+        // --- CAS 3 : ELEVE (Voit ses paiements) ---
+        else {
+            // On récupère la fiche Eleve liée au User
+            $eleve = $em->getRepository(Eleve::class)->findOneBy(['user' => $user]);
+
+            if ($eleve) {
+                $paiments = $paimentRepository->findBy(['eleve' => $eleve]);
+            }
         }
 
         return $this->render('paiment/index.html.twig', [
             'paiments' => $paiments,
-            'isAdmin' => $isManager,
+            'isAdmin' => $isAdmin,
+            'isResponsable' => $isResponsable,
         ]);
     }
 
     #[Route('/new', name: 'app_paiment_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, TarifCoursRepository $tarifCoursRepository): Response
     {
-        // CORRECTION SÉCURITÉ : On vérifie manuellement ici pour éviter l'erreur de syntaxe
+        // Sécurité : Seul Admin ou Responsable peut créer un paiement manuel
         if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_RESPONSABLE')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
@@ -54,38 +83,31 @@ class PaimentController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             
-            // 1. On récupère l'inscription choisie
             $inscription = $paiment->getInscription();
             
             if ($inscription) {
-                // On remplit automatiquement l'élève
+                // Liaison automatique de l'élève
                 $eleve = $inscription->getEleve();
                 $paiment->setEleve($eleve);
 
                 // --- CALCUL AUTOMATIQUE DU PRIX ---
-                // On ne calcule que si le montant n'a pas été forcé manuellement
                 if ($paiment->getMontant() === null) {
                     
-                    // A. On récupère LE responsable (le premier trouvé dans la liste)
-                    // Note: Compatible avec ta relation ManyToMany (Collection)
+                    // On récupère le responsable de l'élève (le premier trouvé)
                     $responsable = $eleve->getResponsables()->first();
 
                     if ($responsable) {
-                        // On récupère son quotient
                         $quotient = $responsable->getQuotient();
                         
                         if ($quotient) {
-                            $paiment->setQuotient($quotient); // On enregistre le quotient utilisé
+                            $paiment->setQuotient($quotient); // Sauvegarde du quotient
 
-                            // B. On récupère le cours et son TYPE
                             $cours = $inscription->getCours();
                             
-                            // HYPOTHÈSE : Ton entité Cours a une méthode getType()
-                            // Si cette méthode n'existe pas, cela affichera une erreur claire.
+                            // Vérification méthode getType() sur Cours
                             if (method_exists($cours, 'getType')) {
                                 $typeCours = $cours->getType(); 
 
-                                // C. On cherche le tarif dans la grille
                                 $tarifOfficiel = $tarifCoursRepository->findOneBy([
                                     'tranche_quotient_id' => $quotient,
                                     'cours_id' => $typeCours 
@@ -99,9 +121,8 @@ class PaimentController extends AbstractController
                                     $this->addFlash('warning', 'Aucun tarif trouvé pour ce cours et ce quotient.');
                                 }
                             } else {
-                                // Sécurité si la méthode getType n'est pas trouvée
                                 $paiment->setMontant(0);
-                                $this->addFlash('danger', 'Erreur technique : Impossible de récupérer le Type du cours (méthode getType introuvable).');
+                                $this->addFlash('danger', 'Erreur technique : Méthode getType introuvable sur l\'entité Cours.');
                             }
 
                         } else {
@@ -138,7 +159,6 @@ class PaimentController extends AbstractController
     #[Route('/{id}/edit', name: 'app_paiment_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Paiment $paiment, EntityManagerInterface $entityManager): Response
     {
-        // CORRECTION SÉCURITÉ : Vérification manuelle
         if (!$this->isGranted('ROLE_ADMIN') && !$this->isGranted('ROLE_RESPONSABLE')) {
             throw $this->createAccessDeniedException('Accès refusé.');
         }
@@ -159,7 +179,7 @@ class PaimentController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_paiment_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_ADMIN')] // Seul l'admin peut supprimer
+    #[IsGranted('ROLE_ADMIN')]
     public function delete(Request $request, Paiment $paiment, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$paiment->getId(), $request->request->get('_token'))) {
