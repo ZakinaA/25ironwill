@@ -3,9 +3,12 @@
 {% block title %}Paiment index{% endblock %}
 
 {% block body %}
-    <h1>Paiment index</h1>
+    <h1>Paiments</h1>
 
-    <table class="table">
+    {# 1. On initialise la variable total à 0 avant de commencer #}
+    {% set totalGeneral = 0 %}
+
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id</th>
@@ -14,18 +17,25 @@
                     <th>Eleve</th>
                 {% endif %}
                 <th>DatePaiment</th>
+                {# J'ai supprimé la colonne "Total" ici car elle ne va pas dans l'en-tête #}
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for paiment in paiments %}
+            {# 2. On ajoute le montant de cette ligne au total général #}
+            {% set totalGeneral = totalGeneral + paiment.montant %}
+
             <tr>
                 <td>{{ paiment.id }}</td>
-                <td>{{ paiment.montant }}</td>
+                <td>{{ paiment.montant }} €</td>
                 {% if isAdmin %}
                     <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
                 {% endif %}
                 <td>{{ paiment.datePaiment ? paiment.datePaiment|date('Y-m-d') : '' }}</td>
+                
+                {# J'ai supprimé le <td> ici car le total ne s'affiche pas ligne par ligne #}
+
                 <td>
                     <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}">show</a>
                     {% if isAdmin %}
@@ -39,9 +49,22 @@
             </tr>
         {% endfor %}
         </tbody>
+
+        {# 3. C'est ici qu'on affiche le TOTAL (dans le pied du tableau) #}
+        <tfoot>
+            <tr style="font-weight: bold; background-color: #f8f9fa;">
+                {# On fusionne les cellules pour aligner le mot Total #}
+                <td colspan="{{ isAdmin ? '3' : '2' }}" style="text-align: right;">TOTAL GÉNÉRAL :</td>
+                
+                {# On affiche la variable calculée #}
+                <td style="color: green;">{{ totalGeneral }} €</td>
+                
+                <td></td> {# Cellule vide pour la colonne actions #}
+            </tr>
+        </tfoot>
     </table>
 
     {% if isAdmin %}
-        <a href="{{ path('app_paiment_new') }}">Create new</a>
+        <a href="{{ path('app_paiment_new') }}" class="btn btn-primary">Create new</a>
     {% endif %}
 {% endblock %}
