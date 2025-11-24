@@ -1,0 +1,137 @@
+{% extends 'accueil/accueil.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <style>
+        /* Container style */
+        .table-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* Titre */
+        .table-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #007bff;
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .table-title::after {
+            content: '';
+            display: block;
+            width: 70px;
+            height: 4px;
+            background: #007bff;
+            margin: 8px auto 0 auto;
+            border-radius: 2px;
+        }
+
+        /* Tableau stylisé */
+        .table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-family: 'Inter', sans-serif;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+        }
+
+        th {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            width: 30%;
+            font-weight: 700;
+        }
+
+        td {
+            padding: 1rem;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.95rem;
+        }
+
+        tr:nth-child(even) td {
+            background: #f9f9fb;
+        }
+
+        tr:hover td {
+            background: #e9f2ff;
+            transition: 0.3s;
+        }
+
+        /* Bouton retour */
+        .btn-back {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.7rem 1.5rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            font-weight: 600;
+            border-radius: 30px;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #0056b3, #00408a);
+            transform: translateY(-2px);
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="table-container">
+    <h2 class="table-title">Détails du cours</h2>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Libellé</th>
+                <td>{{ cour.libelle }}</td>
+            </tr>
+            <tr>
+                <th>Âge minimum</th>
+                <td>{{ cour.ageMini }}</td>
+            </tr>
+            <tr>
+                <th>Âge maximum</th>
+                <td>{{ cour.ageMaxi }}</td>
+            </tr>
+            <tr>
+                <th>Jour</th>
+                <td>{{ cour.jour ? cour.jour.libelle : '-' }}</td>
+            </tr>
+            <tr>
+                <th>Heure début</th>
+                <td>{{ cour.heureDebut ? cour.heureDebut|date('H:i') : '-' }}</td>
+            </tr>
+            <tr>
+                <th>Heure fin</th>
+                <td>{{ cour.heureFin ? cour.heureFin|date('H:i') : '-' }}</td>
+            </tr>
+            <tr>
+                <th>Places disponibles</th>
+                <td>{{ cour.nbPlaces }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align:center;">
+        <a href="{{ path('app_accueil_cours') }}" class="btn-back">Retour à la liste</a>
+    </div>
+</div>
+{% endblock %}
