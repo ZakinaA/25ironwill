@@ -1,0 +1,226 @@
+{% extends 'accueil/accueil.html.twig' %}
+
+
+{% block body %}
+
+<div class="instrument-container">
+
+    <!-- Boutons bascule -->
+
+    <!-- Liste des instruments -->
+    <div class="instrument-form" id="instrument-list">
+        <h2 style="text-align:center; color:#007bff;">Liste des instruments</h2>
+        <table class="instrument-table">
+            <thead>
+                <tr>
+                   
+                    <th></th>
+                    <th>Marque</th>
+                    <th>Prix (€)</th>
+                    
+                    
+                </tr>
+            </thead>
+            <tbody>
+                {% for instrument in instruments %}
+                <tr>
+                    <td>
+                        {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
+                        <img src="{{ asset(photo) }}" alt="Instrument {{ instrument.id }}" class="instrument-img">
+                    </td>
+                    <td>{{ instrument.marque.libelle }}</td>
+                    <td>{{ instrument.prixAchat }}</td>
+
+                    
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">Aucun instrument trouvé</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Formulaire création -->
+    {% if is_granted('ROLE_ADMIN') %}
+    <div class="instrument-form" id="instrument-form" style="display:none;">
+        <h2>Créer un instrument</h2>
+        <form action="{{ path('app_instrument_index') }}" method="post" enctype="multipart/form-data">
+            <label for="marque">Marque</label>
+            <select id="marque" name="marque" required>
+                <option value="" disabled selected>— Sélectionne une marque —</option>
+                {% for marque in marques %}
+                    <option value="{{ marque.id }}">{{ marque.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="type">Type d’instrument</label>
+            <select id="type" name="type" required>
+                <option value="" disabled selected>— Sélectionne un type —</option>
+                {% for typeInstrument in typeInstruments %}
+                    <option value="{{ typeInstrument.id }}">{{ typeInstrument.libelle }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="numSerie">Numéro de série</label>
+            <input type="text" id="numSerie" name="numSerie" placeholder="Ex: A12345" required>
+
+            <label for="dateAchat">Date d’achat</label>
+            <input type="date" id="dateAchat" name="dateAchat" required>
+
+            <label for="prixAchat">Prix (€)</label>
+            <input type="number" id="prixAchat" name="prixAchat" min="0" step="0.01" required>
+
+            <label for="utilisation">Utilisation</label>
+            <select id="utilisation" name="utilisation" required>
+                <option value="" disabled selected>— Sélectionnez l’utilisation —</option>
+                <option value="Prêts">Prêts</option>
+                <option value="Stage">Stage</option>
+                <option value="Cours">Cours</option>
+            </select>
+
+            <label for="photo">Image (optionnelle)</label>
+            <input type="file" id="photo" name="photo" accept="image/*">
+
+            <button type="submit" class="submit-btn">Créer l’instrument</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+/* Conteneur principal */
+.instrument-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+/* Toggle boutons */
+.toggle-btn-container {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.toggle-btn {
+    padding: 0.6rem 1.5rem;
+    margin: 0 0.5rem;
+    border: 2px solid #007bff;
+    border-radius: 30px;
+    background: white;
+    color: #007bff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.toggle-btn.active, .toggle-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* Tableau et formulaire */
+.instrument-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+.instrument-table th, .instrument-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: center;
+}
+.instrument-table th {
+    background: #007bff;
+    color: white;
+    font-weight: 600;
+}
+.instrument-img {
+    width: 80px;
+    border-radius: 8px;
+}
+
+.instrument-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    max-width: 900px;
+    margin: 1.5rem auto;
+}
+.instrument-form h2 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 1.5rem;
+}
+.instrument-form label {
+    display: block;
+    margin: 0.8rem 0 0.3rem;
+    font-weight: 600;
+}
+.instrument-form input,
+.instrument-form select {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    border: 1.5px solid #ccc;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+.instrument-form input:focus,
+.instrument-form select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+}
+
+/* Boutons */
+.submit-btn {
+    margin-top: 1rem;
+    padding: 0.8rem 2rem;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+.submit-btn:hover {
+    background: #0056b3;
+}
+.edit-btn {
+    background: #ffc107 !important;
+    color: black !important;
+    border-radius: 20px;
+    padding: 0.4rem 1rem;
+    text-decoration: none;
+}
+.edit-btn:hover {
+    background: #e0a800 !important;
+}
+</style>
+
+<script>
+{% verbatim %}
+// Toggle liste / formulaire
+const showListBtn = document.getElementById('show-list-btn');
+const showFormBtn = document.getElementById('show-form-btn');
+const instrumentList = document.getElementById('instrument-list');
+const instrumentForm = document.getElementById('instrument-form');
+
+showListBtn.addEventListener('click', () => {
+    instrumentList.style.display = 'block';
+    instrumentForm.style.display = 'none';
+    showListBtn.classList.add('active');
+    showFormBtn.classList.remove('active');
+});
+
+showFormBtn.addEventListener('click', () => {
+    instrumentList.style.display = 'none';
+    instrumentForm.style.display = 'block';
+    showFormBtn.classList.add('active');
+    showListBtn.classList.remove('active');
+});
+{% endverbatim %}
+</script>
+{% endblock %}
