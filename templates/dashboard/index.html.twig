@@ -12,6 +12,7 @@
             <div class="btn-group">
                 <a href="{{ path('app_paiment_index') }}" class="btn">💳 Gestion des paiements</a>
                 <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Gestion des instruments</a>
+                <a href="{{ path('app_inscription_cours') }}" class="btn">Gestion des cours</a>
             </div>
         </div>
         
@@ -52,9 +53,7 @@
         </div>
         
         <div class="info-card">
-        <br>
-        <br>
-        <br>
+
             <h3>📚 Mes cours</h3>
             
             {% if coursList is not empty %}
@@ -83,9 +82,12 @@
                 <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
             {% else %}
                 <p>Aucun cours inscrit.</p>
+                <br>
                 <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
             {% endif %}
+            
         </div>
+        
         
     {% else %}
         <div class="info-card">
