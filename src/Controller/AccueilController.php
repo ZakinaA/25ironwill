@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Contact;
 use App\Form\ContactType;
+use App\Repository\InstrumentRepository;
+
 
 
 class AccueilController extends AbstractController
@@ -37,6 +39,16 @@ class AccueilController extends AbstractController
     {
         return $this->render('accueil/showCours.html.twig', [
             'cour' => $cour,
+        ]);
+    }
+
+
+    
+    #[Route('/accueil-instrument', name: 'app_accueil_instrument', methods: ['GET'])]
+    public function instrument(instrumentRepository $instrumentRepository): Response
+    {
+        return $this->render('accueil/instrument.html.twig', [
+            'instruments' => $instrumentRepository->findAll(),
         ]);
     }
 
