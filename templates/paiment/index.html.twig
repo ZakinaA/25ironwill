@@ -17,13 +17,13 @@
                     <th>Eleve</th>
                 {% endif %}
                 <th>DatePaiment</th>
-                {# J'ai supprimé la colonne "Total" ici car elle ne va pas dans l'en-tête #}
+                
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for paiment in paiments %}
-            {# 2. On ajoute le montant de cette ligne au total général #}
+
             {% set totalGeneral = totalGeneral + paiment.montant %}
 
             <tr>
@@ -50,7 +50,7 @@
         {% endfor %}
         </tbody>
 
-        {# 3. C'est ici qu'on affiche le TOTAL (dans le pied du tableau) #}
+       
         <tfoot>
             <tr style="font-weight: bold; background-color: #f8f9fa;">
                 {# On fusionne les cellules pour aligner le mot Total #}
