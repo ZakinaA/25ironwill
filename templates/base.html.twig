@@ -67,16 +67,6 @@
             transition: color 0.3s ease;
         }
 
-        nav a::after {
-            content: "";
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0%;
-            height: 2px;
-            background: white;
-            transition: width 0.3s ease;
-        }
 
         nav a:hover {
             color: #d4e2ff;
@@ -104,12 +94,26 @@
             color: #0056b3;
         }
 
+
+        .dashboard-table {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+        }
+
+        .dashboard-table table {
+            margin: 0;
+            box-shadow: none;
+}
+
         /* ---- Table ---- */
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 2rem 0;
-            background-color: #fff;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0,0,0,0.08);
@@ -140,25 +144,86 @@
             transition: background 0.3s ease;
         }
 
-        /* ---- Boutons ---- */
-        .btn {
+        /* === CARTE D'INFORMATION === */
+        .info-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            margin: 2rem 0;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+        }
+
+        .info-card h2, .info-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: #0056b3;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 0.5rem;
             display: inline-block;
-            padding: 0.6rem 1.3rem;
+        }
+
+        /* === BOUTONS AMÉLIORÉS === */
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin: 1.5rem 0;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem 1.8rem;
             background: linear-gradient(135deg, #007bff, #0056b3);
             color: white;
-            border-radius: 30px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: 600;
-            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            font-size: 0.95rem;
+            box-shadow: 0 4px 10px rgba(0,123,255,0.25);
             transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
-            background: linear-gradient(135deg, #0056b3, #004080);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+            background: linear-gradient(135deg, #0056b3, #003d82);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.35);
         }
 
+        .btn-primary {
+            background: linear-gradient(135deg, #28a745, #1e7e34);
+            box-shadow: 0 4px 10px rgba(40,167,69,0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1e7e34, #155724);
+            box-shadow: 0 6px 20px rgba(40,167,69,0.35);
+        }
+        
         .btn:active {
             transform: scale(0.97);
         }
@@ -284,6 +349,43 @@
             }
         }
 
+                .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-auth {
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .btn-login {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-login:hover {
+            background: white;
+            color: #007bff;
+        }
+
+        .btn-signup {
+            background: white;
+            color: #007bff;
+        }
+
+        .btn-signup:hover {
+            background: #f0f0f0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+
     </style>
     {% endblock %}
 
@@ -296,11 +398,17 @@
             <a href="{{ path('app_accueil') }}">Accueil</a>
             <a>|</a>
             <a href="{{ path('app_dashboard') }}">Tableau de bord</a>
-            <a href="{{ path('app_inscription_cours') }}">Inscriptions</a>
+            {% if is_granted('ROLE_ADMIN') %}
+                        <a href="{{ path('app_inscription_cours') }}">Inscriptions</a>
+                    {% endif %}
             <a href="{{ path('app_paiment_index') }}">Paiements</a>
             <a href="{{ path('app_instrument_index') }}">Instruments</a>
             <a>|</a>
-            <a href="{{ path('app_logout') }}">Se déconnecter</a>
+            <div class="auth-buttons">
+                    <a href="{{ path('app_logout') }}" class="btn-auth btn-login" >Déconnexion</a>
+
+            </div>
+        </div>
         </nav>
         
     </header>

@@ -255,11 +255,7 @@
     <h1 class="page-title">🎵 Inscription aux Cours</h1>
     <p class="page-subtitle">Sélectionnez un élève, les responsables et les cours souhaités</p>
 
-    {% for message in app.flashes('success') %}
-        <div class="alert-success">
-            ✓ {{ message }}
-        </div>
-    {% endfor %}
+
 
 <form method="post" class="inscription-form">
     <div class="form-grid">
@@ -315,12 +311,6 @@
                 </select>
             </div>
             {% else %}
-                <!-- Si c'est un élève connecté -->
-                {% if eleve %}
-                    <input type="hidden" name="eleve" value="{{ eleve.id }}">
-                {% else %}
-                    <p style="color: red;">⚠️ Aucun élève associé à ce compte.</p>
-                {% endif %}
             {% endif %}
 
 
