@@ -17,7 +17,7 @@ class Instrument
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?int $numSerie = null;
+    private ?string $numSerie = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateAchat = null;
@@ -63,12 +63,12 @@ class Instrument
         return $this->id;
     }
 
-    public function getNumSerie(): ?int
+    public function getNumSerie(): ?string
     {
         return $this->numSerie;
     }
 
-    public function setNumSerie(int $numSerie): static
+    public function setNumSerie(string $numSerie): static
     {
         $this->numSerie = $numSerie;
 

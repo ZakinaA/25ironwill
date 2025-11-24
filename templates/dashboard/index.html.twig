@@ -1,69 +1,97 @@
 {% extends 'base.html.twig' %}
 {% block title %}Accueil{% endblock %}
 {% block body %}
-    <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
     
     {% if is_granted('ROLE_ADMIN') %}
-        <p>Connecté en tant que : {{ app.user.nom }}</p>
-        <p>ID de l'utilisateur : {{ app.user.id }}</p>
-        <p>Rôle : Administrateur</p>
-        <a href="{{ path('app_paiment_index') }}" class="btn">Gestion des paiements</a>
-        <a href="{{ path('app_instrument_index') }}" class="btn">Gestion des instruments</a>
+        <div class="info-card">
+            <h2>👋 Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <p>Connecté en tant que : {{ app.user.nom }}</p>
+            <p>ID de l'utilisateur : {{ app.user.id }}</p>
+            <p>Rôle : Administrateur</p>
+            
+            <div class="btn-group">
+                <a href="{{ path('app_paiment_index') }}" class="btn">💳 Gestion des paiements</a>
+                <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Gestion des instruments</a>
+            </div>
+        </div>
         
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}
-        <p>Connecté en tant que gestionnaire</p>
-        <div>
-            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
-            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        <div class="info-card">
+            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <p>Connecté en tant que gestionnaire</p>
+            
+            <div class="btn-group">
+                <a href="{{ path('app_paiment_index') }}" class="btn">💳 Liste des paiements</a>
+                <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Parc instruments</a>
+            </div>
         </div>
         
     {% elseif is_granted('ROLE_RESPONSABLE') %}
-        <div>
-            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
-            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        <div class="info-card">
+            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            
+            <div class="btn-group">
+                <a href="{{ path('app_paiment_index') }}" class="btn">💳 Liste des paiements</a>
+                <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Parc instruments</a>
+            </div>
         </div>
-        <h3>Mes élèves :</h3>
-
-    
+        
+        <div class="info-card">
+            <h3>👨‍🎓 Mes élèves</h3>
+            <!-- Contenu à ajouter plus tard -->
+        </div>
         
     {% elseif is_granted('ROLE_ELEVE') %}
-        <div>
-            <a href="{{ path('app_paiment_index') }}" class="btn">Liste des paiements</a>
-            <a href="{{ path('app_instrument_index') }}" class="btn">Parc instruments</a>
+        <div class="info-card">
+            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            
+            <div class="btn-group">
+                <a href="{{ path('app_paiment_index') }}" class="btn">💳 Liste des paiements</a>
+                <a href="{{ path('app_instrument_index') }}" class="btn">🎸 Parc instruments</a>
+            </div>
         </div>
+        
+        <div class="info-card">
         <br>
-        <h3>Mes cours :</h3>  
-        {% if coursList is not empty %}
-            <table class="table" >
-                <thead>
-                    <tr>
-                        <th>Nom du cours</th>
-                        <th>Date</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for cour in coursList %}
-                        <tr>
-                            <td>{{ cour.libelle }}</td>
-                            <td>{{ cour.heureDebut|date('d/m/Y à H:i') }}</td>
-                            <td>
-                                <a href="{{ path('app_cours_show', {'id': cour.id}) }}">Voir</a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-
-            <a href="{{ path('app_inscription_cours') }}" class="btn">S'inscrire à un cours</a>
-        {% else %}
-            <p>Aucun cours inscrit.</p>
-        {% endif %}
+        <br>
+        <br>
+            <h3>📚 Mes cours</h3>
+            
+            {% if coursList is not empty %}
+                <div class="dashboard-table"> 
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Nom du cours</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cour in coursList %}
+                                <tr onclick="window.location='{{ path('app_cours_show', {'id': cour.id}) }}'"
+                                    style="cursor: pointer;">
+                                    <td>{{ cour.libelle }}</td>
+                                    <td>{{ cour.heureDebut|date('d/m/Y à H:i') }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <br>
+                
+                <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
+            {% else %}
+                <p>Aucun cours inscrit.</p>
+                <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
+            {% endif %}
+        </div>
         
     {% else %}
-        <p>Rôle non reconnu</p>
+        <div class="info-card">
+            <h2>⚠️ Erreur</h2>
+            <p>Rôle non reconnu</p>
+        </div>
     {% endif %}
     
-    <br><br><br><br>
-
 {% endblock %}
