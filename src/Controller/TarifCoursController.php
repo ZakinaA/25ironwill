@@ -20,7 +20,7 @@ class TarifCoursController extends AbstractController
         // 1. Récupérer toutes les tranches triées par quotient minimum
         // CORRECTION : Utiliser le nom de la propriété PHP (avec underscore)
         $tranches = $entityManager->getRepository(TrancheQuotient::class)
-            ->findBy([], ['quotient_min' => 'ASC']);
+            ->findBy([], ['quotientMin' => 'ASC']);
 
         // 2. Récupérer tous les tarifs
         $tarifs = $entityManager->getRepository(TarifCours::class)->findAll();
@@ -33,7 +33,7 @@ class TarifCoursController extends AbstractController
             $trancheId = $tranche->getId();
             
             $tarifsParTranche[$trancheId] = [
-                'nom' => $tranche->getNomTranche(),
+                'nom' => $tranche->getLibelle(),
                 'min' => $tranche->getQuotientMin(),
                 'max' => $tranche->getQuotientMax(),
                 'prix_individuel' => null,

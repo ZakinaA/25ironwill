@@ -174,4 +174,16 @@ class TrancheQuotient
 
         return $this;
     }
+
+    public function getNomTranche(): ?string
+{
+    return $this->nomTranche;
+}
+
+public function setNomTranche(string $nomTranche): static
+{
+    $this->nomTranche = $nomTranche;
+
+    return $this;
+}
 }
