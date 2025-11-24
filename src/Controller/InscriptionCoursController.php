@@ -9,38 +9,74 @@ use App\Entity\Eleve;
 use App\Entity\Cours;
 use App\Entity\Responsable;
 use App\Entity\Inscription;
+use App\Entity\Paiment; 
+use App\Repository\TarifCoursRepository; 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 class InscriptionCoursController extends AbstractController
 {
     #[Route('/inscription_cours', name: 'app_inscription_cours')]
-    public function index(Request $request, EntityManagerInterface $em): Response
+    public function index(Request $request, EntityManagerInterface $em, TarifCoursRepository $tarifCoursRepository): Response
     {
-        $user = $this->getUser(); // Récupère l'utilisateur connecté
-        $eleve = $em->getRepository(Eleve::class)->findOneBy(['user' => $user]);
+        $user = $this->getUser(); 
+        $eleveConnecte = $em->getRepository(Eleve::class)->findOneBy(['user' => $user]);
 
         $eleveId = $request->request->get('eleve');
         $coursIds = $request->request->all('cours');
-        $responsableIds = $request->request->all('responsable');
 
         if ($request->isMethod('POST') && $eleveId && !empty($coursIds)) {
-            $eleve = $em->getRepository(Eleve::class)->find($eleveId);
+            $eleveChoisi = $em->getRepository(Eleve::class)->find($eleveId);
 
-            if ($eleve) {
+            if ($eleveChoisi) {
                 foreach ($coursIds as $coursId) {
                     $cours = $em->getRepository(Cours::class)->find($coursId);
+                    
                     if ($cours) {
+                        // 1. Création de l'inscription
                         $inscription = new Inscription();
-                        $inscription->setEleve($eleve);
+                        $inscription->setEleve($eleveChoisi);
                         $inscription->setCours($cours);
                         $inscription->setDateInscription(new \DateTime());
                         $em->persist($inscription);
+
+                        // 2. Création du Paiement
+                        $paiment = new Paiment();
+                        $paiment->setInscription($inscription);
+                        $paiment->setEleve($eleveChoisi);
+                        $paiment->setDatePaiment(new \DateTime());
+                        
+                        // 3. Calcul du Montant et Enregistrement du Quotient
+                        $montantCalcule = 0;
+                        $responsable = $eleveChoisi->getResponsables()->first(); 
+
+                        if ($responsable) {
+                            $quotient = $responsable->getQuotient();
+                            
+                            if ($quotient) {
+                                // === C'EST ICI QU'IL MANQUAIT LA LIGNE ===
+                                $paiment->setQuotient($quotient); 
+
+                                if (method_exists($cours, 'getType')) {
+                                    $tarif = $tarifCoursRepository->findOneBy([
+                                        'tranche_quotient_id' => $quotient,
+                                        'cours_id' => $cours->getType()
+                                    ]);
+
+                                    if ($tarif) {
+                                        $montantCalcule = $tarif->getPrixFacture();
+                                    }
+                                }
+                            }
+                        }
+
+                        $paiment->setMontant((float)$montantCalcule);
+                        $em->persist($paiment);
                     }
                 }
 
                 $em->flush();
-                $this->addFlash('success', 'Inscriptions réussies !');
+                $this->addFlash('success', 'Inscriptions validées et paiements générés !');
 
                 return $this->redirectToRoute('app_inscription_cours');
             }
@@ -50,8 +86,7 @@ class InscriptionCoursController extends AbstractController
             'eleves' => $em->getRepository(Eleve::class)->findAll(),
             'cours' => $em->getRepository(Cours::class)->findAll(),
             'responsables' => $em->getRepository(Responsable::class)->findAll(),
-            'eleve' => $eleve, // 🧠 tu passes l'élève connecté ici
+            'eleve' => $eleveConnecte, 
         ]);
     }
-
 }

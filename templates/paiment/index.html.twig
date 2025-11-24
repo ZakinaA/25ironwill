@@ -10,7 +10,9 @@
             <tr>
                 <th>Id</th>
                 <th>Montant</th>
-                <th>Eleve</th>
+                {% if isAdmin %}
+                    <th>Eleve</th>
+                {% endif %}
                 <th>DatePaiment</th>
                 <th>actions</th>
             </tr>
@@ -20,20 +22,26 @@
             <tr>
                 <td>{{ paiment.id }}</td>
                 <td>{{ paiment.montant }}</td>
-                <td>{{ paiment.eleve.prenom ~ ' ' ~ paiment.eleve.nom }}</td>
+                {% if isAdmin %}
+                    <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
+                {% endif %}
                 <td>{{ paiment.datePaiment ? paiment.datePaiment|date('Y-m-d') : '' }}</td>
                 <td>
                     <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}">show</a>
-                    <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}">edit</a>
+                    {% if isAdmin %}
+                        <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}">edit</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="4">no records found</td>
+                <td colspan="{{ isAdmin ? '5' : '4' }}">Pas de paiements à regularisé</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <a href="{{ path('app_paiment_new') }}">Create new</a>
+    {% if isAdmin %}
+        <a href="{{ path('app_paiment_new') }}">Create new</a>
+    {% endif %}
 {% endblock %}
