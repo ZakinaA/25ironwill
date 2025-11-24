@@ -51,9 +51,7 @@ class AccueilController extends AbstractController
             'instruments' => $instrumentRepository->findAll(),
         ]);
     }
-
-
-    
+ 
     #[Route('/acceuil-contact', name: 'app_acceuil_contact')]
     public function contact(Request $request, EntityManagerInterface $em): Response
     {

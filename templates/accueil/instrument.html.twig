@@ -1,26 +1,11 @@
 {% extends 'accueil/accueil.html.twig' %}
 
-{% block title %}Gestion des instruments{% endblock %}
 
 {% block body %}
-<h1 style="text-align:center; margin-top:2rem; color:#0056b3;">Gestion des instruments</h1>
 
 <div class="instrument-container">
 
     <!-- Boutons bascule -->
-    {% if is_granted('ROLE_ADMIN') %}
-    <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Ajouter un instrument</button>
-    </div>
-    {% endif %}
-
-    {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
-    <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Louer un instrument</button>
-    </div>
-    {% endif %}
 
     <!-- Liste des instruments -->
     <div class="instrument-form" id="instrument-list">
@@ -28,33 +13,25 @@
         <table class="instrument-table">
             <thead>
                 <tr>
-                    {% if is_granted('ROLE_ADMIN') %}<th>Id</th>{% endif %}
-                    <th>Numéro de série</th>
-                    <th>Date d’achat</th>
+                   
+                    <th></th>
+                    <th>Marque</th>
                     <th>Prix (€)</th>
-                    <th>Utilisation</th>
-                    <th>Image</th>
-                    {% if is_granted('ROLE_ADMIN') %}<th>Actions</th>{% endif %}
+                    
+                    
                 </tr>
             </thead>
             <tbody>
                 {% for instrument in instruments %}
                 <tr>
-                    {% if is_granted('ROLE_ADMIN') %}<td>{{ instrument.id }}</td>{% endif %}
-                    <td>{{ instrument.numSerie }}</td>
-                    <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>
-                    <td>{{ instrument.prixAchat }}</td>
-                    <td>{{ instrument.utilisation }}</td>
                     <td>
                         {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
                         <img src="{{ asset(photo) }}" alt="Instrument {{ instrument.id }}" class="instrument-img">
                     </td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                    <td>
-                        <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-sm">Voir</a>
-                        <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-sm edit-btn">Modifier</a>
-                    </td>
-                    {% endif %}
+                    <td>{{ instrument.marque.libelle }}</td>
+                    <td>{{ instrument.prixAchat }}</td>
+
+                    
                 </tr>
                 {% else %}
                 <tr>
