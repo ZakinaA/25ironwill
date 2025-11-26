@@ -157,6 +157,21 @@
             grid-template-columns: 1fr;
         }
     }
+
+    .btn-retour {
+            display: inline-block;
+            padding: 0.6rem 1.3rem;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+            transition: all 0.9s ease;
+            margin-top: 1rem;
+            text-align: center;
+            justify-content: center;
+    }
 </style>
 
 <div class="register-card">
@@ -241,6 +256,7 @@
         <div class="form-footer">
             <p>Déjà un compte ? <a href="{{ path('app_login') }}">Connectez-vous ici</a></p>
         </div>
+        <a href="{{ path('app_accueil') }}" class="btn-retour" style="margin-left:160px">Retour à l'accueil</a>
     </form>
 </div>
 

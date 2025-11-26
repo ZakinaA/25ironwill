@@ -204,6 +204,8 @@
             box-shadow: 0 3px 6px rgba(0,0,0,0.1);
             transition: all 0.9s ease;
             margin-top: 1rem;
+            text-align: center;
+            justify-content: center;
         }
 
         .btn:hover {
@@ -256,8 +258,9 @@
             <a href="{{ path('app_accueil') }}">Accueil</a>
             <a href="{{ path('app_accueil_cours') }}">Cours</a>
             <a href="{{ path('app_accueil_instrument') }}">Instruments</a>
+            <a href="{{ path('app_accueil_tarif') }}">Tarif</a>
             <a href="{{ path('app_acceuil_contact') }}">Contact</a>
-            <a href="{{ path('app_tarif_cours') }}">Tarif</a>
+
 
             
         </nav>
@@ -281,7 +284,7 @@
         <section class="hero">
             <h2>Bienvenue chez Emusic</h2>
             <p>Votre destination pour apprendre la musique et trouver l'instrument parfait</p>
-            <a href="" class="btn">Rejoignez-nous maintenant</a>
+            <a href="{{ path('app_login') }}" class="btn">Rejoignez-nous maintenant</a>
         </section>
 
         <div class="container">
@@ -290,14 +293,14 @@
                     <div class="service-icon">🎸</div>
                     <h3>Cours de Musique</h3>
                     <p>Apprenez avec des professeurs passionnés. Piano, guitare, violon, batterie et plus encore !</p>
-                    <a href="" class="btn">Découvrir nos cours</a>
+                    <a href="{{ path('app_accueil_cours') }}" class="btn">Découvrir nos cours</a>
                 </div>
 
                 <div class="service-card">
                     <div class="service-icon">🎹</div>
                     <h3>Vente d'Instruments</h3>
                     <p>Large sélection d'instruments de qualité pour tous les niveaux et tous les budgets.</p>
-                    <a href="" class="btn">Voir nos instruments</a>
+                    <a href="{{ path('app_accueil_instrument') }}" class="btn">Voir nos instruments</a>
                 </div>
 
                 <div class="service-card">

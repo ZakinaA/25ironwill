@@ -1,117 +1,144 @@
-{% extends 'base.html.twig' %}
+{% extends 'accueil/accueil.html.twig' %}
 
 {% block title %}Barème des Tarifs des Cours{% endblock %}
 
 {% block body %}
     <style>
-        /* Styles mis à jour pour un meilleur design */
-        .example-wrapper { 
-            margin: 1em auto; 
+        /* Styles spécifiques à la page tarif uniquement */
+        .tarif-wrapper { 
+            margin: 2em auto; 
             max-width: 900px; 
             width: 95%; 
-            font: 18px/1.5 sans-serif; 
             padding: 20px;
+        }
+        
+        .tarif-container {
             background: #ffffff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 30px;
         }
-        h1 {
+        
+        .tarif-title {
             color: #1a73e8;
             text-align: center;
             margin-bottom: 25px;
+            font-size: 2rem;
+            font-weight: 600;
         }
+        
         .tarif-table { 
             width: 100%; 
             border-collapse: collapse; 
             margin-top: 20px; 
             border-radius: 8px;
-            overflow: hidden; /* Pour que les coins arrondis fonctionnent */
+            overflow: hidden;
         }
-        .tarif-table th, .tarif-table td { 
+        
+        .tarif-table th, 
+        .tarif-table td { 
             border: 1px solid #e0e0e0; 
             padding: 15px 10px; 
             text-align: center; 
         }
+        
         .tarif-table th { 
-            background-color: #e9efff; /* Teinte de bleu clair */
+            background-color: #e9efff;
             color: #1a73e8; 
             font-weight: 700; 
             text-transform: uppercase;
             font-size: 0.9em;
         }
+        
         .tarif-table td {
             font-size: 0.95em;
         }
+        
         .tarif-table tr:nth-child(even) { 
             background-color: #f7f7f7; 
         }
+        
         .tarif-table tr:hover { 
             background-color: #e9e9e9; 
             transition: background-color 0.3s;
         }
-        .text-left { 
+        
+        .tarif-table .text-left { 
             text-align: left; 
             font-weight: 600;
         }
-        .text-right {
+        
+        .tarif-table .text-right {
             color: #007bff;
             font-weight: bold;
         }
+        
+        .tarif-note {
+            text-align: center; 
+            margin-top: 30px; 
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
     </style>
 
-    <div class="example-wrapper">
-        <h1>Barème des Tarifs par Quotient Familial 💰</h1>
+    <div class="tarif-wrapper">
+        <div class="tarif-container">
+            <h1 class="tarif-title">Barème des Tarifs par Quotient Familial 💰</h1>
 
-        <table class="tarif-table">
-            <thead>
-                <tr>
-                    <th class="text-left">Catégorie</th>
-                    <th>Quotient Familial </th>
-                    <th>Cours Individuel </th>
-                    <th>Cours Collectif </th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for tranche_id, data in tarifs_par_tranche %}
+            <table class="tarif-table">
+                <thead>
                     <tr>
-                        {# Affiche le nom de la tranche #}
-                        <td class="text-left">{{ data.nom }}</td>
-                        
-                        {# Affiche la plage de quotient familial (Min - Max) #}
-                        <td>
-                            {% if data.min <= -9999 %}
-                                Moins de {{ data.max + 1 }}
-                            {% elseif data.max >= 999999 %}
-                                {{ data.min }} et +
-                            {% else %}
-                                {{ data.min }} à {{ data.max }}
-                            {% endif %}
-                        </td>
-                        
-                        {# Affiche le prix pour le cours Individuel  #}
-                        <td class="text-right">
-                            {% if data.prix_individuel is not null %}
-                                {{ data.prix_individuel|number_format(2, ',', ' ') }} €
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
-                        
-                        {# Affiche le prix pour le cours Collectif  #}
-                        <td class="text-right">
-                            {% if data.prix_collectif is not null %}
-                                {{ data.prix_collectif|number_format(2, ',', ' ') }} €
-                            {% else %}
-                                N/A
-                            {% endif %}
-                        </td>
+                        <th class="text-left">Catégorie</th>
+                        <th>Quotient Familial</th>
+                        <th>Cours Individuel</th>
+                        <th>Cours Collectif</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        
-        <p style="text-align: center; margin-top: 30px; color: #666;">
-            Les montants sont calculés en fonction de votre quotient familial et du type de cours choisi.
-        </p>
+                </thead>
+                <tbody>
+                    {% for tranche_id, data in tarifs_par_tranche %}
+                        <tr>
+                            {# Affiche le nom de la tranche #}
+                            <td class="text-left">{{ data.nom }}</td>
+                            
+                            {# Affiche la plage de quotient familial (Min - Max) #}
+                            <td>
+                                {% if data.min <= -9999 %}
+                                    Moins de {{ data.max + 1 }}
+                                {% elseif data.max >= 999999 %}
+                                    {{ data.min }} et +
+                                {% else %}
+                                    {{ data.min }} à {{ data.max }}
+                                {% endif %}
+                            </td>
+                            
+                            {# Affiche le prix pour le cours Individuel #}
+                            <td class="text-right">
+                                {% if data.prix_individuel is not null %}
+                                    {{ data.prix_individuel|number_format(2, ',', ' ') }} €
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                            
+                            {# Affiche le prix pour le cours Collectif #}
+                            <td class="text-right">
+                                {% if data.prix_collectif is not null %}
+                                    {{ data.prix_collectif|number_format(2, ',', ' ') }} €
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            
+            <p class="tarif-note">
+                Les montants sont calculés en fonction de votre quotient familial et du type de cours choisi.
+            </p>
+            <a href="{{ path('app_accueil') }}" class="btn" style="margin-left:300px;">Revenir à l'accueil</a>
+        </div>
     </div>
 {% endblock %}
