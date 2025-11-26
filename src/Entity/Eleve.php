@@ -45,9 +45,13 @@ class Eleve
     #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
     private Collection $responsables;
 
-
     #[ORM\OneToMany(targetEntity: Inscription::class, mappedBy: 'eleve')]
     private Collection $inscriptions;
+
+    /* --- AJOUT ICI : La propriété pour les paiements --- */
+    #[ORM\OneToMany(targetEntity: Paiment::class, mappedBy: 'eleve')]
+    private Collection $paiments;
+    /* -------------------------------------------------- */
 
     #[ORM\OneToOne(targetEntity: User::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
@@ -61,6 +65,10 @@ class Eleve
         $this->contratPrets = new ArrayCollection();
         $this->responsables = new ArrayCollection();
         $this->inscriptions = new ArrayCollection();
+        
+        /* --- AJOUT ICI : Initialisation de la collection --- */
+        $this->paiments = new ArrayCollection();
+        /* --------------------------------------------------- */
     }
 
     public function getId(): ?int
@@ -251,4 +259,14 @@ class Eleve
 
         return $this;
     }
+
+
+    /**
+     * @return Collection<int, Paiment>
+     */
+    public function getPaiments(): Collection
+    {
+        return $this->paiments;
+    }
+
 }

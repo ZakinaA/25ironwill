@@ -51,13 +51,36 @@
                             {{ unEleve.prenom }} {{ unEleve.nom }}
                         </a>
                         
-                        {# On ajoute une virgule si ce n'est pas le dernier #}
+                        
                         {% if not loop.last %}, {% endif %}
                     {% else %}
                         Aucun unEleve associé
                     {% endfor %}
                     </td>
             </tr>
+
+            <tr>
+                <th>Montant Paiement Total</th>
+                <td>
+                    {% set totalCalcul = 0 %}
+
+                    {# 1. On parcourt tous les élèves du responsable #}
+                    {% for unEleve in responsable.eleve %}
+                        
+                        {# 2. On récupère les paiments de chaque élève #}
+                        {# Cela fonctionne car on a ajouté getPaiments() dans l'entité #}
+                        {% for unPaiment in unEleve.paiments %}
+                            {% set totalCalcul = totalCalcul + unPaiment.montant %}
+                        {% endfor %}
+
+                    {% endfor %}
+
+                    
+                    <strong>{{ totalCalcul }} €</strong>
+                </td>
+            </tr>
+
+            
         </tbody>
     </table>
 
@@ -70,3 +93,6 @@
 
     {{ include('responsable/_delete_form.html.twig') }}
 {% endblock %}
+
+
+
