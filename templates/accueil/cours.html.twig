@@ -117,7 +117,9 @@
         </thead>
         <tbody>
         {% for cour in cours %}
-        <tr onclick="window.location='{{ path('app_cours_show_accueil', {'id': cour.id}) }}'">
+mEleveResp
+        <tr onclick="window.location='{{ path('app_cours_show', {'id': cour.id}) }} style="cursor: pointer;'">
+
             <td data-label="Cours">{{ cour.libelle }}</td>
             <td data-label="Âge Min">{{ cour.ageMini }}</td>
             <td data-label="Âge Max">{{ cour.ageMaxi }}</td>

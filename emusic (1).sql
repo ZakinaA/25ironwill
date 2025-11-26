@@ -198,4 +198,3 @@ INSERT INTO `contrat_pret` (`eleve_id`, `instrument_id`, `date_debut`, `date_fin
 -- 4. RÉACTIVER LES CONTRÔLES DE CLÉS ÉTRANGÈRES
 SET FOREIGN_KEY_CHECKS = 1;
 
--- FIN DU SCRIPT DE RESTAURATION DES DONNÉES

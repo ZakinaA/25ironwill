@@ -3,7 +3,7 @@
 {% block title %}Eleve - {{ eleve.nom }} {{ eleve.prenom }}{% endblock %}
 
 {% block body %}
-    <h1>Détails de l'élève</h1>
+    <h1>Détails de {{ eleve.prenom }} {{ eleve.nom }}</h1>
 
     <table class="table">
         <tbody>
@@ -44,17 +44,17 @@
                 <td>{{ eleve.mail }}</td>
             </tr>
             
-            {# --- NOUVELLE LIGNE POUR AFFICHER LES COURS --- #}
+            
             <tr>
                 <th>Cours Inscrits</th>
                 <td>
-                    {# Nous itérons sur la collection d'inscriptions de l'élève #}
+                    
                     {% for inscription in eleve.inscriptions %}
                         
-                        {# On vérifie si l'inscription est bien liée à un cours (non null) #}
+                        
                         {% if inscription.cours is not null %}
                             {# On affiche le libellé du cours #}
-                            *{{ inscription.cours.libelle }} {# Optionnel : Afficher la date d'inscription ou d'autres infos de la table Inscription #}
+                            *{{ inscription.cours.libelle }} le {{ inscription.cours.jour.libelle }}  à : {{ inscription.cours.heureDebut|date('H:i') }}
                             {# {% if inscription.dateInscription is defined %}
                                 (Depuis le {{ inscription.dateInscription|date('d/m/Y') }})
                             {% endif %} #}
@@ -70,7 +70,22 @@
                     {% endfor %}
                 </td>
             </tr>
-            {# --------------------------------------------- #}
+            <tr>
+                <th>responsable</th>
+                <td>
+                    {% for unResponsable in eleve.responsables %}
+                        <a href="{{ path('app_responsable_show', {'id': unResponsable.id}) }}">
+                            {{ unResponsable.prenom }} {{ unResponsable.nom }}
+                        </a>
+                        
+                        {# On ajoute une virgule si ce n'est pas le dernier #}
+                        {% if not loop.last %}, {% endif %}
+                    {% else %}
+                        Aucun responsable associé
+                    {% endfor %}
+</td>
+            </tr>
+           
             
         </tbody>
     </table>

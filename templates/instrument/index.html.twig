@@ -46,6 +46,7 @@
             </thead>
             <tbody>
                 {% for instrument in instruments %}
+                <tr onclick="window.location='{{ path('app_instrument_show', {'id': instrument.id}) }}'" style="cursor: pointer;">
                 <tr>
                     <td>{{ instrument.type.libelle }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
