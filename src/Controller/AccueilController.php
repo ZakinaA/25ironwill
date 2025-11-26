@@ -34,6 +34,14 @@ class AccueilController extends AbstractController
         ]);
     }
 
+    #[Route('/accueil-tarif', name: 'app_accueil_tarif', methods: ['GET'])]
+    public function tarif(tarifRepository $tarifRepository): Response
+    {
+        return $this->render('accueil/tarif.html.twig', [
+            'tarif' => $tarifRepository->findAll(),
+        ]);
+    }
+
     #[Route('/{id}', name: 'app_cours_show_accueil', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(Cours $cour): Response
     {
