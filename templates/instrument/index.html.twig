@@ -1,11 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des instruments{% endblock %}
+{% block title %}Instruments{% endblock %}
 
 {% block body %}
-<h1 style="text-align:center">Gestion des instruments</h1>
+{% if is_granted('ROLE_ADMIN') %}
+    <h1 style="margin-left:500px">Gestion des instruments</h1>
+ {% endif %}
 
-<div class="instrument-container">
+ {% if not is_granted('ROLE_ADMIN') %}
+    <h1 style="margin-left:650px">Instruments</h1>
+ {% endif %}
+
+<div class="instrument-container" style="margin-left:400px">
 
     <!-- Bouton pour basculer -->
     {% if is_granted('ROLE_ADMIN') %}
