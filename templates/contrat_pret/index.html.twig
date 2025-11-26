@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Locations{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 text-primary fw-bold">Gestion des Locations</h1>
+        <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
+            <i class="fa fa-plus-circle"></i> Nouvelle Location
+        </a>
+        <a href="{{ path('app_instrument_index') }}" class="btn btn-secondary">
+            <i class="fa fa-plus-circle"></i> Revenir au instrument
+        </a>
+    </div>
+
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th class="py-3 ps-4">Id</th>
+                            <th class="py-3">Élève</th>
+                            <th class="py-3">Instrument</th>
+                            <th class="py-3">Dates</th>
+                            <th class="py-3">Assurance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for contrat in contrat_prets %}
+                        <tr>
+                            <td class="ps-4 fw-bold">#{{ contrat.id }}</td>
+                            <td>{{ contrat.eleve.nom }} {{ contrat.eleve.prenom }}</td>
+                            <td>
+                                <span class="badge bg-info text-dark">
+                                    {{ contrat.instrument.marque.libelle }}
+                                </span>
+                                <small class="text-muted">{{ contrat.instrument.numSerie }}</small>
+                            </td>
+                            <td>
+                                {{ contrat.dateDebut ? contrat.dateDebut|date('d/m/Y') : '' }}
+                            </td>
+                            <td>
+                                {% if contrat.attestationAssurance %}
+                                    <a href="{{ asset('uploads/attestations/' ~ contrat.attestationAssurance) }}" target="_blank" class="btn btn-sm btn-outline-secondary">
+                                        Voir PDF
+                                    </a>
+                                {% else %}
+                                    <span class="text-muted small">Non fournie</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">Aucune location.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
