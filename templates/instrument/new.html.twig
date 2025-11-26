@@ -1,11 +1,70 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Instrument{% endblock %}
+{% block title %}Louer un Instrument{% endblock %}
 
 {% block body %}
-    <h1>Create new Instrument</h1>
+<div class="min-vh-100 d-flex align-items-center py-5" style="background-color: #f0f8ff;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body p-5">
+                        
+                        <h1 class="h3 text-center text-primary fw-bold mb-4">
+                            Nouveau Contrat de Location
+                        </h1>
 
-    {{ include('instrument/_form.html.twig') }}
+                        {{ form_start(form) }}
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_row(form.eleve, {'attr': {'class': 'form-select'}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.instrument, {'attr': {'class': 'form-select'}}) }}
+                                </div>
+                            </div>
 
-    <a href="{{ path('app_instrument_index') }}">back to list</a>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    {{ form_row(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                <div class="col-md-6">
+                                    {{ form_row(form.dateFin, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_row(form.etatDetailleDebut, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Neuf, ou légère éraflure...'}}) }}
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="p-3 bg-light border rounded-3">
+                                    {{ form_row(form.attestationAssurance, {'attr': {'class': 'form-control'}}) }}
+                                    <div class="form-text small">Formats acceptés : PDF, JPG, PNG. Max 2Mo.</div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button class="btn btn-primary py-2 rounded-3 fw-bold shadow-sm">
+                                    Valider la location
+                                </button>
+                            </div>
+
+                        {{ form_end(form) }}
+
+                        <div class="text-center mt-3">
+                            <a href="{{ path('app_contrat_pret_index') }}" class="text-decoration-none text-muted small">
+                                <i class="fa fa-arrow-left"></i> Annuler
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

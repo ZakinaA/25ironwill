@@ -17,8 +17,13 @@
 
     {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
     <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Instrument Louer</button>
+        
+        <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
+    Louer un Instrument
+</a>
+<a href="{{ path('app_contrat_pret_index') }}" class="btn btn-secondary">
+    Voir les locations
+</a>
     </div>
     {% endif %}
 
