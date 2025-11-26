@@ -28,6 +28,7 @@
         <table>
             <thead>
                 <tr>
+                <th>Nom</th>
                     {% if is_granted('ROLE_ADMIN') %}
                         <th>Id</th>
                     {% endif %}
@@ -46,6 +47,7 @@
             <tbody>
                 {% for instrument in instruments %}
                 <tr>
+                    <td>{{ instrument.type.libelle }}</td>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>{{ instrument.id }}</td>
                     {% endif %}

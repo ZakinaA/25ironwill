@@ -28,6 +28,7 @@ class InstrumentController extends AbstractController
             $dateAchat = $request->request->get('dateAchat');
             $prixAchat = $request->request->get('prixAchat');
             $utilisation = $request->request->get('utilisation');
+            
 
             $photoFile = $request->files->get('photo');
 

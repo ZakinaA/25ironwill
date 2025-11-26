@@ -13,8 +13,8 @@
         <table class="instrument-table">
             <thead>
                 <tr>
-                   
                     <th></th>
+                    <th>Nom</th>
                     <th>Marque</th>
                     <th>Prix (€)</th>
                     
@@ -28,6 +28,7 @@
                         {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
                         <img src="{{ asset(photo) }}" alt="Instrument {{ instrument.id }}" class="instrument-img">
                     </td>
+                    <td>{{ instrument.type.libelle }}</td>
                     <td>{{ instrument.marque.libelle }}</td>
                     <td>{{ instrument.prixAchat }}</td>
 
