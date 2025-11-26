@@ -3,41 +3,49 @@
 {% block title %}Cours{% endblock %}
 
 {% block body %}
-    <h1>Cours</h1>
+    <div class="container">
 
-    <table class="table">
-        <tbody>
-            
-            <tr>
-                <th>Libelle</th>
-                <td>{{ cour.libelle }}</td>
-            </tr>
-            <tr>
-                <th>AgeMini</th>
-                <td>{{ cour.ageMini }}</td>
-            </tr>
-            <tr>
-                <th>HeureDebut</th>
-                <td>{{ cour.heureDebut ? cour.heureDebut|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>HeureFin</th>
-                <td>{{ cour.heureFin ? cour.heureFin|date('H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>NbPlaces</th>
-                <td>{{ cour.nbPlaces }}</td>
-            </tr>
-            <tr>
-                <th>AgeMaxi</th>
-                <td>{{ cour.AgeMaxi }}</td>
-            </tr>
-        </tbody>
-    </table>
+        <div class="info-card">
+            <h2>📚 Détails du cours : {{ cour.libelle }}</h2>
 
-    <a href="{{ path('app_dashboard') }}">back to list</a>
+            <div class="dashboard-table">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Libellé</th>
+                            <td>{{ cour.libelle }}</td>
+                        </tr>
+                        <tr>
+                            <th>Âge minimum</th>
+                            <td>{{ cour.ageMini }}</td>
+                        </tr>
+                        <tr>
+                            <th>Âge maximum</th>
+                            <td>{{ cour.AgeMaxi }}</td>
+                        </tr>
+                        <tr>
+                            <th>Heure de début</th>
+                            <td>{{ cour.heureDebut ? cour.heureDebut|date('Y-m-d H:i') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Heure de fin</th>
+                            <td>{{ cour.heureFin ? cour.heureFin|date('H:i') : '' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre de places</th>
+                            <td>{{ cour.nbPlaces }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}">edit</a>
-
-    {{ include('cours/_delete_form.html.twig') }}
+            <div class="btn-group">
+                <a href="{{ path('app_dashboard') }}" class="btn btn-primary">Retour au Tableau de bord</a>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_cours_edit', {'id': cour.id}) }}" class="btn">✏️ Modifier le cours</a>
+                    {{ include('cours/_delete_form.html.twig') }}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 {% endblock %}
