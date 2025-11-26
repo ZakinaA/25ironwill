@@ -44,7 +44,7 @@
                 <td>{{ eleve.mail }}</td>
             </tr>
             
-            {# --- NOUVELLE LIGNE POUR AFFICHER LES COURS --- #}
+            
             <tr>
                 <th>Cours Inscrits</th>
                 <td>
@@ -70,7 +70,22 @@
                     {% endfor %}
                 </td>
             </tr>
-            {# --------------------------------------------- #}
+            <tr>
+                <th>responsable</th>
+                <td>
+                    {% for unResponsable in eleve.responsables %}
+                        <a href="{{ path('app_responsable_show', {'id': unResponsable.id}) }}">
+                            {{ unResponsable.prenom }} {{ unResponsable.nom }}
+                        </a>
+                        
+                        {# On ajoute une virgule si ce n'est pas le dernier #}
+                        {% if not loop.last %}, {% endif %}
+                    {% else %}
+                        Aucun responsable associé
+                    {% endfor %}
+</td>
+            </tr>
+           
             
         </tbody>
     </table>

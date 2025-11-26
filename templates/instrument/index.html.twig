@@ -43,6 +43,7 @@
             </thead>
             <tbody>
                 {% for instrument in instruments %}
+                <tr onclick="window.location='{{ path('app_instrument_show', {'id': instrument.id}) }}'" style="cursor: pointer;">
                 <tr>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>{{ instrument.id }}</td>

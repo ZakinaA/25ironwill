@@ -46,15 +46,17 @@
             <tr>
                 <th>Élèves</th>
                 <td>
-                    {# Comme c'est ManyToMany, on doit faire une boucle #}
                     {% for unEleve in responsable.eleve %}
-                        *{{ unEleve.prenom }} {{ unEleve.nom }}
+                        <a href="{{ path('app_eleve_show', {'id': unEleve.id}) }}">
+                            {{ unEleve.prenom }} {{ unEleve.nom }}
+                        </a>
+                        
                         {# On ajoute une virgule si ce n'est pas le dernier #}
                         {% if not loop.last %}, {% endif %}
                     {% else %}
-                        Aucun élève associé
+                        Aucun unEleve associé
                     {% endfor %}
-                </td>
+                    </td>
             </tr>
         </tbody>
     </table>
