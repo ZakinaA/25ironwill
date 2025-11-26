@@ -19,6 +19,7 @@ class Instrument
     #[ORM\Column]
     private ?string $numSerie = null;
 
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $dateAchat = null;
 
@@ -48,6 +49,8 @@ class Instrument
 
     #[ORM\OneToMany(targetEntity: Accessoire::class, mappedBy: 'instrument')]
     private Collection $accessoires;
+
+
 
     public function __construct()
     {
@@ -270,5 +273,7 @@ class Instrument
 
         return $this;
     }
+
+
 
 }

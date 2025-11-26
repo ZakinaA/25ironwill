@@ -9,12 +9,14 @@
             <p>ID de l'utilisateur : {{ app.user.id }}</p>
             <p>Rôle : Administrateur</p>
             
+ mEleveResp
             <div style="display: flex; flex-wrap: wrap; gap: 10px;">
     <a href="{{ path('app_paiment_index') }}" class="btn" style="flex: 1 1 24%;">💳 Gestion des paiements</a>
     <a href="{{ path('app_instrument_index') }}" class="btn" style="flex: 1 1 24%;">🎸 Gestion des instruments</a>
     <a href="{{ path('app_responsable_index') }}" class="btn" style="flex: 1 1 24%;">👨‍👧 Gestion des Responsables</a>
     <a href="{{ path('app_eleve_index') }}" class="btn" style="flex: 1 1 24%;">👨‍🎓 Gestion des Eleves</a>
 </div>
+
         </div>
         
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}
@@ -54,9 +56,7 @@
         </div>
         
         <div class="info-card">
-        <br>
-        <br>
-        <br>
+
             <h3>📚 Mes cours</h3>
             
             {% if coursList is not empty %}
@@ -85,9 +85,12 @@
                 <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
             {% else %}
                 <p>Aucun cours inscrit.</p>
+                <br>
                 <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">➕ S'inscrire à un cours</a>
             {% endif %}
+            
         </div>
+        
         
     {% else %}
         <div class="info-card">

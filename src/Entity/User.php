@@ -33,7 +33,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $prenom = null;
 
-    #[ORM\Column()]
+    #[ORM\Column(nullable: true)]
     private ?int $numRue = null;
 
     #[ORM\OneToOne(mappedBy: 'user', targetEntity: Eleve::class)]

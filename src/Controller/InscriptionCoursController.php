@@ -23,7 +23,7 @@ class InscriptionCoursController extends AbstractController
         $eleveConnecte = $em->getRepository(Eleve::class)->findOneBy(['user' => $user]);
 
         $eleveId = $request->request->get('eleve');
-        $coursIds = $request->request->all('cours');
+        $coursIds = $request->request->all('cours', []);
 
         if ($request->isMethod('POST') && $eleveId && !empty($coursIds)) {
             $eleveChoisi = $em->getRepository(Eleve::class)->find($eleveId);
