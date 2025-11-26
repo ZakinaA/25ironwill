@@ -13,6 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Contact;
 use App\Form\ContactType;
 use App\Repository\InstrumentRepository;
+use App\Repository\TarifCoursRepository;
+use App\Entity\TrancheQuotient;
+use App\Entity\TarifCours;
 
 
 
@@ -35,10 +38,52 @@ class AccueilController extends AbstractController
     }
 
     #[Route('/accueil-tarif', name: 'app_accueil_tarif', methods: ['GET'])]
-    public function tarif(tarifRepository $tarifRepository): Response
+    public function tarif(TarifCoursRepository $tarifCoursRepository, EntityManagerInterface $entityManager): Response
     {
+
+        $tranches = $entityManager->getRepository(TrancheQuotient::class)
+            ->findBy([], ['quotientMin' => 'ASC']);
+
+
+        $tarifs = $entityManager->getRepository(TarifCours::class)->findAll();
+
+        $tarifsParTranche = [];
+
+        foreach ($tranches as $tranche) {
+            $trancheId = $tranche->getId();
+            
+            $tarifsParTranche[$trancheId] = [
+                'nom' => $tranche->getLibelle(),
+                'min' => $tranche->getQuotientMin(),
+                'max' => $tranche->getQuotientMax(),
+                'prix_individuel' => null,
+                'prix_collectif' => null,
+            ];
+        }
+
+
+        foreach ($tarifs as $tarif) {
+            $tranche = $tarif->getTrancheQuotientId(); // Basé sur votre entité TarifCours
+            $cours = $tarif->getCoursId(); // À adapter selon votre entité TarifCours
+            
+            if ($tranche && $cours) {
+                $trancheId = $tranche->getId();
+                $coursId = $cours->getId();
+                $prix = $tarif->getPrixFacture();
+
+                if (isset($tarifsParTranche[$trancheId])) {
+                    if ($coursId == 1) { // Cours Individuel
+                        $tarifsParTranche[$trancheId]['prix_individuel'] = $prix;
+                    } elseif ($coursId == 2) { // Cours Collectif
+                        $tarifsParTranche[$trancheId]['prix_collectif'] = $prix;
+                    }
+                }
+            }
+        }
+
         return $this->render('accueil/tarif.html.twig', [
-            'tarif' => $tarifRepository->findAll(),
+            'controller_name' => 'TarifCoursController',
+            'tarifs_par_tranche' => $tarifsParTranche,
         ]);
     }
 

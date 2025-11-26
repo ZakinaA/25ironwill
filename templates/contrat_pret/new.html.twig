@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Louer un Instrument{% endblock %}
+
+{% block body %}
+
+{# --- CSS POUR AVOIR 2 BOUTONS BLEUS (IMAGE 1) --- #}
+<style>
+    .btn-style-image1 {
+        /* 1. La Forme */
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 150px;        /* Largeur fixe */
+        height: 45px;        /* Hauteur fixe */
+        border-radius: 8px;  /* Coins arrondis */
+        border: none;
+        cursor: pointer;
+        text-decoration: none !important;
+        transition: all 0.3s ease;
+
+        /* 2. La Couleur (Dégradé Bleu) */
+        background: linear-gradient(180deg, #0d6efd, #0a58ca);
+        color: white !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.2); /* L'ombre portée */
+
+        /* 3. Le Texte (Gras et Italique comme sur l'image) */
+        font-weight: 700;
+        font-style: italic; /* C'est ça qui fait le style de ton image 1 */
+        font-size: 1rem;
+    }
+
+    .btn-style-image1:hover {
+        transform: translateY(-2px); /* Petit mouvement au survol */
+        box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        background: linear-gradient(180deg, #0b5ed7, #084298);
+    }
+</style>
+
+<div class="min-vh-100 d-flex align-items-center py-5" style="background-color: #f0f8ff;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body p-5">
+                        
+                        <h1 class="h3 text-center text-primary fw-bold mb-4">
+                            Nouveau Contrat de Location
+                        </h1>
+
+                        {{ form_start(form) }}
+                            
+                            <div class="row mb-3">
+                                <div class="col-md-6">{{ form_row(form.eleve, {'attr': {'class': 'form-select'}}) }}</div>
+                                <div class="col-md-6">{{ form_row(form.instrument, {'attr': {'class': 'form-select'}}) }}</div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">{{ form_row(form.dateDebut, {'attr': {'class': 'form-control'}}) }}</div>
+                                <div class="col-md-6">{{ form_row(form.dateFin, {'attr': {'class': 'form-control'}}) }}</div>
+                            </div>
+
+                            <div class="mb-3">
+                                {{ form_row(form.etatDetailleDebut, {'attr': {'class': 'form-control'}}) }}
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="p-3 bg-light border rounded-3">
+                                    {{ form_row(form.attestationAssurance, {'attr': {'class': 'form-control'}}) }}
+                                    <div class="form-text small">Formats acceptés : PDF, JPG, PNG. Max 2Mo.</div>
+                                </div>
+                            </div>
+
+                            
+                            <div class="d-flex justify-content-between w-100 mt-5">
+                                
+                                
+                                <a href="{{ path('app_contrat_pret_index') }}" class="btn-style-image1">
+                                    Annuler
+                                </a>
+
+                               
+                                <button type="submit" class="btn-style-image1">
+                                    Valider
+                                </button>
+
+                            </div>
+                            
+
+                        {{ form_end(form) }}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

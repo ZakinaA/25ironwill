@@ -30,8 +30,6 @@ class TypeInstrument
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'classeInstrument')]
     private Collection $typeInstruments;
 
-    #[ORM\ManyToOne(inversedBy: 'typeInstruments')]
-    private ?classeInstrument $classeinstrument = null;
 
     #[ORM\OneToMany(targetEntity: Cours::class, mappedBy: 'typeInstrument')]
     private Collection $cours;

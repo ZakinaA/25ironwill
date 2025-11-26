@@ -8,11 +8,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Nom</th>
                 <th>Prenom</th>
-                <th>NumRue</th>
-                <th>Rue</th>
                 <th>Copos</th>
                 <th>Ville</th>
                 <th>Tel</th>
@@ -21,35 +18,33 @@
                 <th>actions</th>
             </tr>
         </thead>
-        <tbody>
+     <tbody>
         {% for responsable in responsables %}
-            <tr>
-                <td>{{ responsable.id }}</td>
-                <td>{{ responsable.nom }}</td>
-                <td>{{ responsable.prenom }}</td>
-                <td>{{ responsable.numRue }}</td>
-                <td>{{ responsable.rue }}</td>
-                <td>{{ responsable.copos }}</td>
-                <td>{{ responsable.ville }}</td>
-                <td>{{ responsable.tel }}</td>
-                <td>{{ responsable.mail }}</td>
+        {# On applique le onclick sur la balise TR unique #}
+        <tr onclick="window.location='{{ path('app_responsable_show', {'id': responsable.id}) }}'" style="cursor: pointer;">
+            <td>{{ responsable.nom }}</td>
+            <td>{{ responsable.prenom }}</td>
+            <td>{{ responsable.copos }}</td>
+            <td>{{ responsable.ville }}</td>
+            <td>{{ responsable.tel }}</td>
+            <td>{{ responsable.mail }}</td>
+            
+            {# Affichage sécurisé du quotient #}
+            <td>{{ responsable.quotient ? responsable.quotient.libelle : '' }}</td>
+            
+            <td>
                 
-                {# --- MODIFICATION ICI --- #}
-                {# Ajout de '?' pour ne pas planter si 'quotient' est null #}
-                <td>{{ responsable.quotient ? responsable.quotient.libelle : '' }}</td>
-                
-                <td>
-                    <a href="{{ path('app_responsable_show', {'id': responsable.id}) }}">show</a>
-                    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
-                </td>
-            </tr>
+                <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn btn-sm btn-warning">edit</a>
+            </td>
+        </tr>
         {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
+        <tr>
+            {# Ajusté à 8 colonnes pour correspondre à votre tableau #}
+            <td colspan="8">no records found</td>
+        </tr>
         {% endfor %}
-        </tbody>
+    </tbody>
     </table>
 
-    <a href="{{ path('app_responsable_new') }}">Create new</a>
+   
 {% endblock %}

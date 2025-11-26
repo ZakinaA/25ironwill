@@ -1,11 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Gestion des instruments{% endblock %}
+{% block title %}Instruments{% endblock %}
 
 {% block body %}
-<h1 style="text-align:center">Gestion des instruments</h1>
+{% if is_granted('ROLE_ADMIN') %}
+    <h1 style="margin-left:500px">Gestion des instruments</h1>
+ {% endif %}
 
-<div class="instrument-container">
+ {% if not is_granted('ROLE_ADMIN') %}
+    <h1 style="margin-left:650px">Instruments</h1>
+ {% endif %}
+
+<div class="instrument-container" style="margin-left:400px">
 
     <!-- Boutons toggle -->
     {% if is_granted('ROLE_ADMIN') %}
@@ -15,8 +21,13 @@
     </div>
     {% elseif is_granted('ROLE_ELEVE') %}
     <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Instrument Louer</button>
+        
+        <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
+    Louer un Instrument
+</a>
+<a href="{{ path('app_contrat_pret_index') }}" class="btn btn-secondary">
+    Voir les locations
+</a>
     </div>
     {% endif %}
 
@@ -72,6 +83,7 @@
             </thead>
             <tbody id="tableBody">
                 {% for instrument in instruments %}
+                <tr onclick="window.location='{{ path('app_instrument_show', {'id': instrument.id}) }}'" style="cursor: pointer;">
                 <tr>
                     <td>{{ instrument.type.libelle }}</td>
                     {% if is_granted('ROLE_ADMIN') %}<td>{{ instrument.id }}</td>{% endif %}

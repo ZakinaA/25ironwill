@@ -3,7 +3,7 @@
 {% block title %}Responsable{% endblock %}
 
 {% block body %}
-    <h1>Responsable</h1>
+    <h1>Responsable  {{ responsable.nom }}</h1>
 
     <table class="table">
         <tbody>
@@ -43,12 +43,56 @@
                 <th>Mail</th>
                 <td>{{ responsable.mail }}</td>
             </tr>
+            <tr>
+                <th>Élèves</th>
+                <td>
+                    {% for unEleve in responsable.eleve %}
+                        <a href="{{ path('app_eleve_show', {'id': unEleve.id}) }}">
+                            {{ unEleve.prenom }} {{ unEleve.nom }}
+                        </a>
+                        
+                        
+                        {% if not loop.last %}, {% endif %}
+                    {% else %}
+                        Aucun unEleve associé
+                    {% endfor %}
+                    </td>
+            </tr>
+
+            <tr>
+                <th>Montant Paiement Total</th>
+                <td>
+                    {% set totalCalcul = 0 %}
+
+                    {# 1. On parcourt tous les élèves du responsable #}
+                    {% for unEleve in responsable.eleve %}
+                        
+                        {# 2. On récupère les paiments de chaque élève #}
+                        {# Cela fonctionne car on a ajouté getPaiments() dans l'entité #}
+                        {% for unPaiment in unEleve.paiments %}
+                            {% set totalCalcul = totalCalcul + unPaiment.montant %}
+                        {% endfor %}
+
+                    {% endfor %}
+
+                    
+                    <strong>{{ totalCalcul }} €</strong>
+                </td>
+            </tr>
+
+            
         </tbody>
     </table>
 
-    <a href="{{ path('app_responsable_index') }}">back to list</a>
+   
 
-    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}">edit</a>
+
+      <a href="{{ path('app_responsable_index') }}" class="btn btn-info">Retour à la liste</a>
+
+    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn btn-warning">Modifier</a>
 
     {{ include('responsable/_delete_form.html.twig') }}
 {% endblock %}
+
+
+

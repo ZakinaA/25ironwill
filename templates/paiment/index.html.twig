@@ -1,70 +1,69 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Paiment index{% endblock %}
+{% block title %}Paiements{% endblock %}
 
 {% block body %}
-    <h1>Paiments</h1>
+<div class="container">
 
-    {# 1. On initialise la variable total à 0 avant de commencer #}
-    {% set totalGeneral = 0 %}
+    <!-- Carte d'accueil / résumé -->
+    <div class="info-card">
+        <h2>💰 Paiements générale</h2>
 
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Montant</th>
-                {% if isAdmin %}
-                    <th>Eleve</th>
-                {% endif %}
-                <th>DatePaiment</th>
-                
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for paiment in paiments %}
+        
+        {% if isAdmin %}
+            <div class="btn-group">
+                <a href="{{ path('app_paiment_new') }}" class="btn btn-primary">➕ Créer un paiement</a>
+            </div>
+        {% endif %}
+    </div>
 
-            {% set totalGeneral = totalGeneral + paiment.montant %}
-
-            <tr>
-                <td>{{ paiment.id }}</td>
-                <td>{{ paiment.montant }} €</td>
-                {% if isAdmin %}
-                    <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
-                {% endif %}
-                <td>{{ paiment.datePaiment ? paiment.datePaiment|date('Y-m-d') : '' }}</td>
-                
-                {# J'ai supprimé le <td> ici car le total ne s'affiche pas ligne par ligne #}
-
-                <td>
-                    <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}">show</a>
+    <!-- Tableau Dashboard -->
+    <div class="dashboard-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Montant</th>
                     {% if isAdmin %}
-                        <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}">edit</a>
+                        <th>Élève</th>
                     {% endif %}
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="{{ isAdmin ? '5' : '4' }}">Pas de paiements à regularisé</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-
-       
-        <tfoot>
-            <tr style="font-weight: bold; background-color: #f8f9fa;">
-                {# On fusionne les cellules pour aligner le mot Total #}
-                <td colspan="{{ isAdmin ? '3' : '2' }}" style="text-align: right;">TOTAL GÉNÉRAL :</td>
-                
-                {# On affiche la variable calculée #}
-                <td style="color: green;">{{ totalGeneral }} €</td>
-                
-                <td></td> {# Cellule vide pour la colonne actions #}
-            </tr>
-        </tfoot>
-    </table>
-
-    {% if isAdmin %}
-        <a href="{{ path('app_paiment_new') }}" class="btn btn-primary">Create new</a>
-    {% endif %}
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% set totalGeneral = 0 %}
+                {% for paiment in paiments %}
+                    {% set totalGeneral = totalGeneral + paiment.montant %}
+                    <tr>
+                        <td>{{ paiment.id }}</td>
+                        <td>{{ paiment.montant }} €</td>
+                        {% if isAdmin %}
+                            <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
+                        {% endif %}
+                        <td>{{ paiment.datePaiment ? paiment.datePaiment|date('d/m/Y') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_paiment_show', {'id': paiment.id}) }}" class="btn btn-small">Voir</a>
+                            {% if isAdmin %}
+                                <a href="{{ path('app_paiment_edit', {'id': paiment.id}) }}" class="btn btn-small btn-primary">Éditer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="{{ isAdmin ? '5' : '4' }}" style="text-align:center; color:#666;">Pas de paiements à régulariser</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr style="font-weight: bold; background-color: #f1f3f5;">
+                    <td colspan="{{ isAdmin ? '3' : '2' }}" style="text-align:right;">TOTAL GÉNÉRAL :</td>
+                    <td style="color: green;">{{ totalGeneral }} €</td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <a href="{{ path('app_dashboard') }}" class="btn btn-primary">Revenir au Tableau de bord</a>
+</div>
 {% endblock %}

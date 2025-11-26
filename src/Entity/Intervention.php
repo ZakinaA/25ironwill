@@ -29,7 +29,7 @@ class Intervention
     #[ORM\Column]
     private ?int $quotite = null;
 
-    #[ORM\ManyToOne(inversedBy: 'interventions')]
+    #[ORM\ManyToOne(targetEntity: Professionnel::class)]
     private ?professionnel $professionnel = null;
 
     #[ORM\ManyToOne(inversedBy: 'interventions')]
