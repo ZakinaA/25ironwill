@@ -1,57 +1,54 @@
+{# templates/contact_cours/index.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Demandes de Cours{% endblock %}
+{% block title %}Liste des demandes de contact{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h2 text-primary fw-bold">Demandes de Contact (Cours)</h1>
-    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4">Gestion des Demandes de Contact</h1>
 
-    <div class="card shadow border-0 rounded-4">
-        <div class="card-body p-0">
-            <div class="table-responsive">
-                <table class="table table-hover table-striped mb-0 align-middle">
-                    <thead class="bg-primary text-white">
-                        <tr>
-                            <th class="py-3 ps-4">Id</th>
-                            <th class="py-3">Nom</th>
-                            <th class="py-3">Email</th>
-                            <th class="py-3">Message</th>
-                            <th class="py-3 text-end pe-4">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {# ATTENTION : On utilise bien 'demandes_cours' envoyé par le Controller #}
-                    {% for demande in demandes_cours %}
-                        <tr>
-                            <td class="ps-4 fw-bold">#{{ demande.id }}</td>
-                            <td>{{ demande.nom }}</td> 
-                            <td>
-                                <a href="mailto:{{ demande.email }}" class="text-decoration-none">
-                                    {{ demande.email }}
-                                </a>
-                            </td>
-                            <td>
-                                {{ demande.message|length > 50 ? demande.message|slice(0, 50) ~ '...' : demande.message }}
-                            </td>
-                            <td class="text-end pe-4">
-                                <a href="{{ path('app_contact_cours_show', {'id': demande.id}) }}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fa fa-eye"></i> Voir
-                                </a>
-                            </td>
-                        </tr>
-                    {% else %}
-                        <tr>
-                            <td colspan="5" class="text-center py-5 text-muted">
-                                Aucune demande.
-                            </td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+
+        
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {# On boucle sur la variable 'demandes_cours' passée par le contrôleur #}
+                {% for contact in demandes_cours %}
+                    <tr>
+                        <td>{{ contact.id }}</td>
+                        
+                        {# On utilise les propriétés comme dans votre exemple #}
+                        <td>{{ contact.Nom }}</td>
+                        <td>{{ contact.Email }}</td>
+                        
+                        {# Affiche les 50 premiers caractères du message pour la prévisualisation #}
+                        <td>{{ contact.Message|slice(0, 50) }}...</td> 
+                        
+                        <td>
+                            {# Lien pour voir le message complet (show) #}
+                            <a href="{{ path('app_contact_cours_show', {'id': contact.id}) }}" class="btn btn-sm btn-info text-white">Voir</a>
+                            
+                            
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">Aucune demande de contact trouvée.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+        
     </div>
-</div>
 {% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ContactCours{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
+                <h1 class="h3 mb-0">Détails de la demande #{{ contact_cours.id }}</h1>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th style="width: 200px;">Id</th>
+                            <td>{{ contact_cours.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Nom</th>
+                            {# Attention à la majuscule selon votre Entité (Nom ou nom) #}
+                            <td>{{ contact_cours.Nom }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ contact_cours.Email }}</td>
+                        </tr>
+                        <tr>
+                            <th>Message</th>
+                            <td>{{ contact_cours.Message|nl2br }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{{ path('app_contact_cours_index') }}" class="btn btn-secondary">
+                        ← Retour à la liste
+                    </a>
+
+                    <div>
+                        <a href="{{ path('app_contact_cours_edit', {'id': contact_cours.id}) }}" class="btn btn-warning">
+                            Modifier
+                        </a>
+                        
+                        {# Bouton supprimer (formulaire pour la sécurité CSRF) #}
+                        <form method="post" action="{{ path('app_contact_cours_delete', {'id': contact_cours.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce message ?');" style="display: inline-block;">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ contact_cours.id) }}">
+                            <button class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

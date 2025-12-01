@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
+
 {% block title %}Accueil{% endblock %}
+
 {% block body %}
     
+    {# --- ADMINISTRATEUR --- #}
     {% if is_granted('ROLE_ADMIN') %}
         <div class="info-card">
             <h2>👋 Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
@@ -14,9 +17,13 @@
                 <a href="{{ path('app_paiment_index') }}" class="btn btn-outline-primary">💳 Gestion des paiements</a>
                 <a href="{{ path('app_instrument_index') }}" class="btn btn-outline-primary">🎸 Gestion des instruments</a>
                 <a href="{{ path('app_inscription_cours') }}" class="btn btn-outline-primary">Gestion des cours</a>
+                
+                {# NOUVEAU BOUTON : Voir les demandes de contact/inscription #}
+                <a href="{{ path('app_contact_cours_index') }}" class="btn btn-outline-primary">📩 Demandes d'inscription</a>
             </div>
         </div>
         
+    {# --- GESTIONNAIRE --- #}
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}
         <div class="info-card">
             <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
@@ -26,9 +33,14 @@
             <div class="btn-group">
                 <a href="{{ path('app_paiment_index') }}" class="btn btn-outline-primary">💳 Liste des paiements</a>
                 <a href="{{ path('app_instrument_index') }}" class="btn btn-outline-primary">🎸 Parc instruments</a>
+                <a href="{{ path('app_inscription_cours') }}" class="btn btn-outline-primary">Gestion des cours</a>
+
+                {# NOUVEAU BOUTON : Voir les demandes de contact/inscription #}
+                <a href="{{ path('app_contact_cours_index') }}" class="btn btn-outline-primary">📩 Demandes d'inscription</a>
             </div>
         </div>
         
+    {# --- RESPONSABLE --- #}
     {% elseif is_granted('ROLE_RESPONSABLE') %}
         <div class="info-card">
             <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
@@ -42,9 +54,13 @@
         
         <div class="info-card">
             <h3>👨‍🎓 Mes élèves</h3>
-            <!-- Contenu à ajouter plus tard -->
+            <br>
+            
+            {# Bouton pour s'inscrire (Formulaire de contact) #}
+            <a href="{{ path('app_contact_cours_new') }}" class="btn btn-primary">S'inscrire à un cours</a>
         </div>
         
+    {# --- ELEVE --- #}
     {% elseif is_granted('ROLE_ELEVE') %}
         <div class="info-card">
             <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
@@ -66,7 +82,6 @@
                             <tr>
                                 <th>Nom du cours</th>
                                 <th>Date</th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,23 +96,17 @@
                     </table>
                 </div>
                 <br>
-                
-                <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">S'inscrire à un cours</a>
             {% else %}
                 <p>Aucun cours inscrit.</p>
                 <br>
-                <a href="{{ path('app_inscription_cours') }}" class="btn btn-primary">S'inscrire à un cours</a>
             {% endif %}
+            
+            {# Bouton pour s'inscrire (Formulaire de contact) #}
+            <a href="{{ path('app_contact_cours_new') }}" class="btn btn-primary">S'inscrire à un cours</a>
             
         </div>
         
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        
+        <br><br><br><br><br><br>
         
     {% else %}
         <div class="info-card">
