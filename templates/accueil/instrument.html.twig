@@ -5,28 +5,12 @@
 
 <div class="instrument-container" style="margin-left:400px">
 
-    <!-- Boutons toggle -->
-    {% if is_granted('ROLE_ADMIN') %}
-    <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Ajouter un instrument</button>
-    </div>
-    {% elseif is_granted('ROLE_ELEVE') %}
-    <div class="toggle-btn-container">
-        
-        <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
-    Louer un Instrument
-</a>
-<a href="{{ path('app_contrat_pret_index') }}" class="btn btn-secondary">
-    Voir les locations
-</a>
-    </div>
-    {% endif %}
 
 
 
     <!-- Tableau des instruments -->
     <div class="instrument-form" id="instrument-list" style="max-width: 900px;">
+    
         <h2 style="text-align:center">Liste des instruments</h2>
             <!-- 🔍 Recherche et filtre à l'intérieur du cadre blanc -->
         <div style="text-align:center; margin-bottom: 1rem;">
