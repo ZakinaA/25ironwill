@@ -5,12 +5,16 @@
 {% block body %}
 <div class="container mt-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
+    {% if is_granted('ROLE_ADMIN') %}
         <h1 class="h2 text-primary fw-bold">Gestion des Locations</h1>
+    {% elseif is_granted('ROLE_ELEVE') %}
+        <h1 class="h2 text-primary fw-bold">Mes Locations</h1>
+    {% endif %}
         <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
             <i class="fa fa-plus-circle"></i> Nouvelle Location
         </a>
         <a href="{{ path('app_instrument_index') }}" class="btn btn-secondary">
-            <i class="fa fa-plus-circle"></i> Revenir au instrument
+            <i></i> Revenir au instrument
         </a>
     </div>
 
