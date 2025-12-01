@@ -112,7 +112,7 @@ class AccueilController extends AbstractController
         return $this->render('accueil/instrument.html.twig', [
             'instruments' => $instrumentRepository->findAll(),
  modifVisuel
-            'marques' => $marqueRepository->findAll()
+            'marques' => $marqueRepository->findAll(),
 
              'marques' => $marques, 
              'typeInstruments'=> $typeInstruments, main
