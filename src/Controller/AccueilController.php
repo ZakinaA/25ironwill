@@ -3,8 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Cours;
+use App\Entity\Marque;
 use App\Form\CoursType;
+use App\Form\TypeInstrument;
+use App\Repository\TypeInstrumentRepository;
 use App\Repository\CoursRepository;
+use App\Repository\MarqueRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -99,11 +103,20 @@ class AccueilController extends AbstractController
 
     
     #[Route('/accueil-instrument', name: 'app_accueil_instrument', methods: ['GET'])]
-    public function instrument(instrumentRepository $instrumentRepository , marqueRepository $marqueRepository): Response
+
+    public function instrument(instrumentRepository $instrumentRepository, MarqueRepository $marqueRepository, TypeInstrumentRepository $typeInstrumentRepository): Response
+main
     {
+        $marques = $marqueRepository->findAll();
+        $typeInstruments = $typeInstrumentRepository->findAll();
+        
         return $this->render('accueil/instrument.html.twig', [
             'instruments' => $instrumentRepository->findAll(),
+ modifVisuel
             'marques' => $marqueRepository->findAll()
+
+             'marques' => $marques, 
+             'typeInstruments'=> $typeInstruments, main
         ]);
     }
     

@@ -7,7 +7,7 @@
     {# --- ADMINISTRATEUR --- #}
     {% if is_granted('ROLE_ADMIN') %}
         <div class="info-card">
-            <h2>👋 Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
             <br>
             <p>Connecté en tant que : {{ app.user.nom }}</p>
             <p>ID de l'utilisateur : {{ app.user.id }}</p>
@@ -63,7 +63,8 @@
     {# --- ELEVE --- #}
     {% elseif is_granted('ROLE_ELEVE') %}
         <div class="info-card">
-            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <h1>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
+            <br>
             <br>
             
             <div class="btn-group">

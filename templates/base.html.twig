@@ -310,10 +310,20 @@ footer{
     padding-right: 2rem;
 }
 
+h1 {
+    display: inline-block;
+    background: linear-gradient(to left, rgba(69, 126, 163, 1), rgba(212, 67, 123, 1));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 
 
 </style>
 {% endblock %}
+
+
 
 </head>
 
@@ -367,7 +377,9 @@ footer{
 
 </header>
 
-<!-- CONTENU -->
+
+
+
 <main class="container">
 {% block body %}
     <h2>Bienvenue sur votre site Symfony ✨</h2>
