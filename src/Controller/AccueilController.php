@@ -20,7 +20,7 @@ use App\Repository\InstrumentRepository;
 use App\Repository\TarifCoursRepository;
 use App\Entity\TrancheQuotient;
 use App\Entity\TarifCours;
-use App\Repository\MarqueRepository;
+
 
 
 
@@ -114,7 +114,7 @@ class AccueilController extends AbstractController
             'marques' => $marqueRepository->findAll(),
 
              'marques' => $marques, 
-             'typeInstruments'=> $typeInstruments, main
+             'typeInstruments'=> $typeInstruments,
         ]);
     }
     
