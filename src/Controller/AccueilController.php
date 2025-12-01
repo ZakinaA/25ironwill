@@ -105,7 +105,6 @@ class AccueilController extends AbstractController
     #[Route('/accueil-instrument', name: 'app_accueil_instrument', methods: ['GET'])]
 
     public function instrument(instrumentRepository $instrumentRepository, MarqueRepository $marqueRepository, TypeInstrumentRepository $typeInstrumentRepository): Response
-main
     {
         $marques = $marqueRepository->findAll();
         $typeInstruments = $typeInstrumentRepository->findAll();
