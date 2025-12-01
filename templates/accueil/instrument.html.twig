@@ -1,13 +1,7 @@
 {% extends 'accueil/accueil.html.twig' %}
 
 {% block body %}
-{% if is_granted('ROLE_ADMIN') %}
-    <h1 style="margin-left:500px">Gestion des instruments</h1>
- {% endif %}
 
- {% if not is_granted('ROLE_ADMIN') %}
-    <h1 style="margin-left:650px">Instruments</h1>
- {% endif %}
 
 <div class="instrument-container" style="margin-left:400px">
 
