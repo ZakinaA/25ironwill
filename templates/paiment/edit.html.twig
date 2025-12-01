@@ -1,13 +1,96 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Paiment{% endblock %}
+{% block title %}Modifier le Paiement{% endblock %}
 
 {% block body %}
-    <h1>Edit Paiment</h1>
+    <div class="form-wrapper">
+        <h1>Modifier le Paiement</h1>
 
-    {{ include('paiment/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('paiment/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 
-    <a href="{{ path('app_paiment_index') }}">back to list</a>
+        <div style="text-align: center; margin-top: 20px;">
+            <a href="{{ path('app_paiment_index') }}" class="btn-back">
+                &larr; Retour à la liste
+            </a>
+        </div>
 
-    {{ include('paiment/_delete_form.html.twig') }}
+        <div style="margin-top: 20px;">
+            {{ include('paiment/_delete_form.html.twig') }}
+        </div>
+    </div>
+
+    <style>
+        .form-wrapper { 
+            margin: 2em auto; 
+            max-width: 600px; 
+            padding: 30px; 
+            background: #fff; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15); 
+        }
+        h1 {
+            color: #1a73e8;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2em;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #444;
+        }
+        .form-control, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus, select:focus {
+            border-color: #1a73e8;
+            box-shadow: 0 0 5px rgba(26, 115, 232, 0.5);
+            outline: none;
+        }
+        .btn-submit {
+            background-color: #28a745;
+            color: white;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            display: block;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #218838;
+        }
+        .btn-back {
+            color: #1a73e8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        .btn-back:hover {
+            color: #0d47a1;
+        }
+        .alert-info {
+            background-color: #e9efff;
+            border: 1px solid #b8cffb;
+            color: #1a73e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .loading-indicator {
+            color: #ff9800;
+            font-weight: bold;
+        }
+    </style>
 {% endblock %}
