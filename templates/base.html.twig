@@ -354,6 +354,8 @@ h1 {
 
         {% if is_granted('ROLE_ADMIN') %}
             <a href="{{ path('app_inscription_cours') }}"><i class="fas fa-user-plus"></i><span>Inscriptions</span></a>
+            <a href="{{ path('app_eleve_index') }}"><i class="fas fa-user-plus"></i><span>Eleves</span></a>
+            <a href="{{ path('app_responsable_index') }}"><i class="fas fa-user-plus"></i><span>Responsables</span></a>
         {% endif %}
 
         <div class="sidebar-spacer"></div>
