@@ -7,7 +7,7 @@
 
     <!-- Carte d'accueil / résumé -->
     <div class="info-card">
-        <h2>💰 Paiements générale</h2>
+        <h1>💰 Paiements générale</h1>
 
         
         {% if isAdmin %}
@@ -22,7 +22,12 @@
         <table>
             <thead>
                 <tr>
-                    <th>Id</th>
+                    {% if is_granted('ROLE_ELEVE') %}
+                        <th></th>
+                    {% endif %}
+                    {% if isAdmin %}
+                        <th>Id</th>
+                    {% endif %}
                     <th>Montant</th>
                     {% if isAdmin %}
                         <th>Élève</th>
@@ -36,7 +41,12 @@
                 {% for paiment in paiments %}
                     {% set totalGeneral = totalGeneral + paiment.montant %}
                     <tr>
-                        <td>{{ paiment.id }}</td>
+                        {% if is_granted('ROLE_ELEVE') %}
+                            <td></td>
+                        {% endif %}
+                        {% if isAdmin %}
+                            <td>{{ paiment.id }}</td>
+                        {% endif %}
                         <td>{{ paiment.montant }} €</td>
                         {% if isAdmin %}
                             <td>{{ paiment.eleve.prenom }} {{ paiment.eleve.nom }}</td>
