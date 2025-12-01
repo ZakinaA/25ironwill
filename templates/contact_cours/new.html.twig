@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Contact Cours{% endblock %}
+
+{% block body %}
+<div class="min-vh-100 d-flex align-items-center py-5" style="background-color: #f0f8ff;">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                
+                <div class="card border-0 shadow-lg rounded-4">
+                    <div class="card-body p-5">
+                        
+                        <h1 class="h3 text-center text-primary fw-bold mb-4">
+                            Contact pour un Cours
+                        </h1>
+
+                        {{ form_start(form) }}
+                            
+                            {# Adapte les champs selon ton entité ContactCours #}
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-secondary">Votre Nom</label>
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Jean Dupont'}}) }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label fw-bold small text-secondary">Votre Email</label>
+                                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': 'exemple@email.com'}}) }}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-bold small text-secondary">Votre Message</label>
+                                {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': '5', 'placeholder': 'Bonjour, je souhaiterais des informations sur...'}}) }}
+                            </div>
+
+                            {# ZONE DES BOUTONS #}
+                            <div class="d-flex justify-content-between w-100 mt-5">
+                                
+                                {# Bouton Annuler #}
+                                <a href="{{ path('app_contact_cours_index') }}" class="btn btn-light border py-2" style="width: 150px;">
+                                    <i class="fa fa-arrow-left me-2"></i> Annuler
+                                </a>
+
+                                {# Bouton Valider #}
+                                <button type="submit" class="btn btn-primary py-2 fw-bold shadow-sm" style="width: 150px;">
+                                    Envoyer
+                                </button>
+
+                            </div>
+
+                        {{ form_end(form) }}
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

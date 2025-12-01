@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Demandes de Cours{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h2 text-primary fw-bold">Demandes de Contact (Cours)</h1>
+    </div>
+
+    <div class="card shadow border-0 rounded-4">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover table-striped mb-0 align-middle">
+                    <thead class="bg-primary text-white">
+                        <tr>
+                            <th class="py-3 ps-4">Id</th>
+                            <th class="py-3">Nom</th>
+                            <th class="py-3">Email</th>
+                            <th class="py-3">Message</th>
+                            <th class="py-3 text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {# ATTENTION : On utilise bien 'demandes_cours' envoyé par le Controller #}
+                    {% for demande in demandes_cours %}
+                        <tr>
+                            <td class="ps-4 fw-bold">#{{ demande.id }}</td>
+                            <td>{{ demande.nom }}</td> 
+                            <td>
+                                <a href="mailto:{{ demande.email }}" class="text-decoration-none">
+                                    {{ demande.email }}
+                                </a>
+                            </td>
+                            <td>
+                                {{ demande.message|length > 50 ? demande.message|slice(0, 50) ~ '...' : demande.message }}
+                            </td>
+                            <td class="text-end pe-4">
+                                <a href="{{ path('app_contact_cours_show', {'id': demande.id}) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fa fa-eye"></i> Voir
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5 text-muted">
+                                Aucune demande.
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
