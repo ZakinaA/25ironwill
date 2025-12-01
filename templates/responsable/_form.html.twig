@@ -1,0 +1,62 @@
+{{ form_start(form) }}
+
+<div class="mb-3">
+    {{ form_label(form.nom) }}
+    {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.nom) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.prenom) }}
+    {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.prenom) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.numRue) }}
+    {{ form_widget(form.numRue, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.numRue) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.rue) }}
+    {{ form_widget(form.rue, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.rue) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.copos) }}
+    {{ form_widget(form.copos, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.copos) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.ville) }}
+    {{ form_widget(form.ville, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.ville) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.tel) }}
+    {{ form_widget(form.tel, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.tel) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.mail) }}
+    {{ form_widget(form.mail, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.mail) }}
+</div>
+
+<div class="mb-3">
+    {{ form_label(form.eleve) }}
+    {{ form_widget(form.eleve, {
+        'attr': {'class': 'form-select', 'size': 5}  # size = nombre de lignes visibles
+    }) }}
+    {{ form_errors(form.eleve) }}
+</div>
+
+
+<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}
