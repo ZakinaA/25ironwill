@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contactez-nous{% endblock %}
+
+{% block body %}
+<div class="container d-flex justify-content-center">
+    <div class="card p-4 shadow-lg" style="max-width: 500px; width: 100%; margin-top: 50px; background-color: #ffffff; border-radius: 8px;">
+
+        <h1 class="text-center mb-4">Contactez-nous</h1>
+        
+        <p class="text-center mb-4 text-muted">
+            Vous pouvez nous appeler au <span class="fw-bold text-dark">+33 6 12 34 56 78</span> ou remplir le formulaire ci-dessous :
+        </p>
+
+        {# Début du formulaire #}
+        {{ form_start(form) }}
+
+        <div class="mb-3">
+            <label class="form-label" for="contact_cours_nom">Nom</label>
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.nom) }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="contact_cours_email">Email</label>
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div class="mb-4">
+            <label class="form-label" for="contact_cours_message">Message</label>
+            {{ form_widget(form.message, {'attr': {'class': 'form-control', 'rows': 5}}) }}
+            {{ form_errors(form.message) }}
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 mb-3" style="background-color: #007bff; border-color: #007bff;">
+            Envoyer
+        </button>
+        
+        {{ form_end(form) }}
+
+        {# Lien pour revenir à la liste (optionnel pour l'utilisateur final, utile pour le dev) #}
+        <div class="text-center">
+             <a href="{{ path('app_dashboard') }}" class="btn btn-secondary w-100" style="background-color: #007bff; border-color: #007bff; margin-top: 10px;">
+                Revenir à l'accueil
+            </a>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

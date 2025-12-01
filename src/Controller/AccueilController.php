@@ -20,6 +20,7 @@ use App\Repository\InstrumentRepository;
 use App\Repository\TarifCoursRepository;
 use App\Entity\TrancheQuotient;
 use App\Entity\TarifCours;
+use App\Repository\MarqueRepository;
 
 
 
@@ -102,17 +103,23 @@ class AccueilController extends AbstractController
 
     
     #[Route('/accueil-instrument', name: 'app_accueil_instrument', methods: ['GET'])]
+
     public function instrument(instrumentRepository $instrumentRepository, MarqueRepository $marqueRepository, TypeInstrumentRepository $typeInstrumentRepository): Response
+main
     {
         $marques = $marqueRepository->findAll();
         $typeInstruments = $typeInstrumentRepository->findAll();
         
         return $this->render('accueil/instrument.html.twig', [
             'instruments' => $instrumentRepository->findAll(),
+ modifVisuel
+            'marques' => $marqueRepository->findAll()
+
              'marques' => $marques, 
-             'typeInstruments'=> $typeInstruments,
+             'typeInstruments'=> $typeInstruments, main
         ]);
     }
+    
  
     #[Route('/acceuil-contact', name: 'app_acceuil_contact')]
     public function contact(Request $request, EntityManagerInterface $em): Response

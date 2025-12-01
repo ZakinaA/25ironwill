@@ -8,7 +8,6 @@
 
 <div class="instrument-container" style="margin-left:400px">
 
-    <!-- Boutons toggle -->
     {% if is_granted('ROLE_ADMIN') %}
     <div class="toggle-btn-container">
         
@@ -33,15 +32,12 @@
 
 
 
-    <!-- Tableau des instruments -->
     <div class="instrument-form" id="instrument-list" style="max-width: 900px;">
         <h2 style="text-align:center">Liste des instruments</h2>
-            <!-- 🔍 Recherche et filtre à l'intérieur du cadre blanc -->
-        <div style="text-align:center; margin-bottom: 1rem;">
+            <div style="text-align:center; margin-bottom: 1rem;">
             <input type="text" id="searchInput" placeholder="Rechercher..."
                 style="width: 60%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
 
-            <!-- Filtre Marque -->
             <select id="brandFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
                 <option value="" selected>Toutes les marques</option>
                 {% for marque in marques %}
@@ -49,7 +45,6 @@
                 {% endfor %}
             </select>
 
-            <!-- Filtre Type -->
             <select id="typeFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
                 <option value="" selected>Tous les types</option>
                 {% for typeInstrument in typeInstruments %}
@@ -113,13 +108,11 @@
         </table>
     </div>
 
-    <!-- Formulaire création -->
     {% if is_granted('ROLE_ADMIN') %}
     <div class="instrument-form" id="instrument-form" style="display: none;">
         <h2>Créer un instrument</h2>
         <form action="{{ path('app_instrument_index') }}" method="post" enctype="multipart/form-data">
             <label for="marque">Marque</label>
-            <!-- Filtre Marque -->
             <select id="brandFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
                 <option value="" selected>Toutes les marques</option>
                 {% for marque in marques %}
@@ -127,7 +120,6 @@
                 {% endfor %}
             </select>
 
-            <!-- Filtre Type -->
             <select id="typeFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
                 <option value="" selected>Tous les types</option>
                 {% for typeInstrument in typeInstruments %}
@@ -163,10 +155,8 @@
 
 </div>
 
-<!-- Bootstrap Icons CDN -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-<!-- Styles -->
 <style>
 .instrument-container { max-width: 1200px; margin: 2rem auto; }
 .toggle-btn-container { text-align: center; margin-bottom: 1.5rem; }
@@ -179,10 +169,86 @@
 .instrument-form input:focus, .instrument-form select:focus { outline:none; border-color:#007bff; box-shadow:0 0 0 3px rgba(0,123,255,0.1); }
 .submit-btn { margin-top:1rem; padding:0.8rem 2rem; border:none; background:#007bff; color:white; border-radius:30px; cursor:pointer; font-weight:600; }
 .submit-btn:hover { background:#0056b3; }
+
+/* Styles du tableau améliorés pour un look professionnel */
+table {
+    width: 100%;
+    border-collapse: separate; /* Permet d'arrondir les coins */
+    border-spacing: 0;
+    margin-top: 1.5rem;
+    overflow: hidden; /* Important pour les coins arrondis */
+    border: 1px solid #e0e0e0; /* Bordure générale pour l'encadrement */
+    border-radius: 10px; /* Coins légèrement arrondis pour le tableau */
+}
+
+/* En-têtes (Nom, Marque, Prix, etc.) */
+thead th {
+    background-color: #f8f9fa; /* Fond très léger */
+    color: #343a40; /* Couleur du texte */
+    font-weight: 700;
+    padding: 1rem 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid #e0e0e0;
+    cursor: pointer; /* Indique qu'on peut trier */
+}
+/* Aligner spécifiquement les colonnes de données numériques/images/actions */
+td:nth-child(5), /* Prix (€) */
+td:nth-child(6), /* Image */
+td:nth-child(7), /* Actions (pour admin) */
+td:nth-child(8) { /* Louer (pour élève) */
+    text-align: center;
+}
+th:nth-child(5), /* Prix (€) */
+th:nth-child(6), /* Image */
+th:nth-child(7), /* Actions (pour admin) */
+th:nth-child(8) { /* Louer (pour élève) */
+    text-align: center;
+}
+
+/* Corps du tableau (lignes de données) */
+tbody tr {
+    transition: background-color 0.2s ease;
+}
+tbody tr:hover {
+    background-color: #f1f7fe; /* Surbrillance au passage de la souris */
+}
+
+/* Cellules de données */
+tbody td {
+    padding: 0.75rem 0.75rem;
+    border-bottom: 1px solid #ebebeb;
+    vertical-align: middle; /* Alignement vertical centré */
+    color: #495057; /* Couleur du texte légèrement plus foncée */
+}
+
+/* Dernière ligne: retire la bordure du bas pour la propreté */
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Boutons d'action dans le tableau */
+td a.btn {
+    display: inline-block;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    margin: 2px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+td a.btn-sm { /* Styles par défaut des boutons */
+    background-color: #007bff;
+    color: white;
+}
+td a.btn-sm:hover {
+    opacity: 0.8;
+}
+
+/* Styles pour les icônes de tri */
 th i.sort-icon { margin-left:5px; font-size:0.8rem; }
+
 </style>
 
-<!-- Scripts -->
 <script>
 {% verbatim %}
 // Toggle Liste / Formulaire
