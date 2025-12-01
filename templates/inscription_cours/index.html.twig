@@ -5,7 +5,6 @@
 {% block body %}
 <style>
     .inscription-container {
-        max-width: 1200px;
         margin: auto;
 
     }
@@ -252,12 +251,12 @@
 </style>
 
 <div class="inscription-container" >
-    <h1 class="page-title" style=" margin-left:500px;">🎵 Inscription aux Cours</h1>
-    <p class="page-subtitle" style=" margin-left:500px;">Sélectionnez un élève, les responsables et les cours souhaités</p>
+    <h1 class="page-title" style=" margin-left:440px;">🎵 Inscription aux Cours</h1>
+    <p class="page-subtitle" >Sélectionnez un élève, les responsables et les cours souhaités</p>
 
 
 
-<form method="post" class="inscription-form" style=" margin-left:500px;">
+<form method="post" class="inscription-form">
     <div class="form-grid">
         {% if is_granted('ROLE_ADMIN') %}
             <!-- Section Élève -->
