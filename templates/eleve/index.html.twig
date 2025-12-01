@@ -5,6 +5,25 @@
 {% block body %}
     <h1 class="page-title">Liste des élèves</h1>
 
+    <br>
+    <br>
+
+<form method="get" action="" style="margin-bottom:20px; display:flex; gap:10px;">
+    <input 
+        type="text"
+        name="q"
+        placeholder="Rechercher..."
+        value="{{ app.request.get('q') }}"
+        class="form-control"
+        style="max-width:300px;"
+    >
+    <button type="submit" class="btn btn-primary">
+        Rechercher
+    </button>
+</form>
+
+
+
     <table class="table">
         <thead>
             <tr>
@@ -21,6 +40,7 @@
             </tr>
         </thead>
         <tbody>
+        
         {% for eleve in eleves %}
             {# On met le onclick directement sur la balise TR unique #}
             <tr onclick="window.location='{{ path('app_eleve_show', {'id': eleve.id}) }}'" style="cursor: pointer;">

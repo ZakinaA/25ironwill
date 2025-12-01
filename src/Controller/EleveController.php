@@ -15,10 +15,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class EleveController extends AbstractController
 {
     #[Route('/', name: 'app_eleve_index', methods: ['GET'])]
-    public function index(EleveRepository $eleveRepository): Response
+    public function index(Request $request, EleveRepository $eleveRepository): Response
     {
+
+        $q = $request->query->get('q');
+
+        if ($q) {
+            $eleves = $eleveRepository->search($q);
+        } else {
+            $eleves = $eleveRepository->findAll();
+        }
+
         return $this->render('eleve/index.html.twig', [
-            'eleves' => $eleveRepository->findAll(),
+            'eleves' => $eleves,
            
         ]);
     }
