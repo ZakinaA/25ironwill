@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Contact index{% endblock %}
+{% block title %}Message{% endblock %}
 
 {% block body %}
-    <h1>Contact index</h1>
+    <h1 class="page-title">Messages</h1>
 
     <table class="table">
         <thead>
@@ -23,8 +23,22 @@
                 <td>{{ contact.Email }}</td>
                 <td>{{ contact.Message }}</td>
                 <td>
-                    <a href="{{ path('app_contact_show', {'id': contact.id}) }}">show</a>
-                    <a href="{{ path('app_contact_edit', {'id': contact.id}) }}">edit</a>
+                    <a class="btn btn-small" href="{{ path('app_contact_show', {'id': contact.id}) }}">Voir</a>
+                    
+                    <a href="#" class="btn btn-danger"
+                        onclick="event.preventDefault(); 
+                                    if(confirm('Supprimer ce message ?')) { 
+                                        document.getElementById('delete-form-{{ contact.id }}').submit(); 
+                                    }">
+                            Supprimer
+                    </a>
+
+                    <form id="delete-form-{{ contact.id }}" method="post"
+                        action="{{ path('app_contact_delete', {'id': contact.id}) }}"
+                        style="display:none;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ contact.id) }}">
+                    </form>
+
                 </td>
             </tr>
         {% else %}
@@ -35,5 +49,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_contact_new') }}">Create new</a>
+    <a class="btn btn-success" href="{{ path('app_contact_new') }}">Créer un nouveau message</a>
 {% endblock %}

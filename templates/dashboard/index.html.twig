@@ -7,7 +7,7 @@
     {# --- ADMINISTRATEUR --- #}
     {% if is_granted('ROLE_ADMIN') %}
         <div class="info-card">
-            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <h1 class="page-title">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
             <br>
             <p>Connecté en tant que : {{ app.user.nom }}</p>
             <p>ID de l'utilisateur : {{ app.user.id }}</p>
@@ -26,7 +26,7 @@
     {# --- GESTIONNAIRE --- #}
     {% elseif is_granted('ROLE_GESTIONNAIRE') %}
         <div class="info-card">
-            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <h1 class="page-title">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
             <br>
             <p>Connecté en tant que gestionnaire</p>
             
@@ -43,7 +43,7 @@
     {# --- RESPONSABLE --- #}
     {% elseif is_granted('ROLE_RESPONSABLE') %}
         <div class="info-card">
-            <h2>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h2>
+            <h1 class="page-title">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
             <br>
             
             <div class="btn-group">
@@ -63,7 +63,7 @@
     {# --- ELEVE --- #}
     {% elseif is_granted('ROLE_ELEVE') %}
         <div class="info-card">
-            <h1>Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
+            <h1 class="page-title">Bienvenue {{ app.user.prenom }} {{ app.user.nom }}</h1>
             <br>
             <br>
             
