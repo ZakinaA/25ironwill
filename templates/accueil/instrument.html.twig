@@ -1,268 +1,307 @@
 {% extends 'accueil/accueil.html.twig' %}
 
+{% block title %}Instruments{% endblock %}
+
 {% block body %}
 
+<div class="main-content" style="padding: 20px;">
 
-<div class="instrument-container" style="margin-left:400px">
-
-    <!-- Boutons toggle -->
-    {% if is_granted('ROLE_ADMIN') %}
-    <div class="toggle-btn-container">
-        <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
-        <button id="show-form-btn" class="toggle-btn">Ajouter un instrument</button>
+    <div class="text-center mb-5">
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="toggle-btn-container">
+                <button id="show-list-btn" class="toggle-btn active">Liste des instruments</button>
+                <button id="show-form-btn" class="toggle-btn">Ajouter un instrument</button>
+            </div>
+        {% elseif is_granted('ROLE_ELEVE') %}
+            <div class="toggle-btn-container">
+                <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-music-note-beamed"></i> Louer un Instrument
+                </a>
+                <a href="{{ path('app_contrat_pret_index') }}" class="btn btn-outline-primary rounded-pill px-4 shadow-sm ms-2">
+                    <i class="bi bi-eye"></i> Voir mes locations
+                </a>
+            </div>
+        {% endif %}
     </div>
-    {% elseif is_granted('ROLE_ELEVE') %}
-    <div class="toggle-btn-container">
+
+    <div id="instrument-list">
         
-        <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-secondary">
-    Louer un Instrument
-</a>
-<a href="{{ path('app_contrat_pret_index') }}" class="btn btn-secondary">
-    Voir les locations
-</a>
-    </div>
-    {% endif %}
+        <h1 class="page-title">Liste des instruments</h1>
 
+        <div class="filters-container">
+            <input type="text" id="searchInput" class="custom-input search-bar" placeholder="Rechercher...">
+            
+            <div class="select-group">
+                <select id="brandFilter" class="custom-input">
+                    <option value="" selected>Toutes les marques</option>
+                    {% for marque in marques %}
+                        <option value="{{ marque.libelle }}">{{ marque.libelle }}</option>
+                    {% endfor %}
+                </select>
 
-
-    <!-- Tableau des instruments -->
-    <div class="instrument-form" id="instrument-list" style="max-width: 900px;">
-        <h2 style="text-align:center">Liste des instruments</h2>
-            <!-- 🔍 Recherche et filtre à l'intérieur du cadre blanc -->
-        <div style="text-align:center; margin-bottom: 1rem;">
-            <input type="text" id="searchInput" placeholder="Rechercher..."
-                style="width: 60%; padding: 10px; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
-
-            <!-- Filtre Marque -->
-            <select id="brandFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
-                <option value="" selected>Toutes les marques</option>
-                {% for marque in marques %}
-                    <option value="{{ marque.libelle }}">{{ marque.libelle }}</option>
-                {% endfor %}
-            </select>
-
-            <!-- Filtre Type -->
-            <select id="typeFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
-                <option value="" selected>Tous les types</option>
-                {% for typeInstrument in typeInstruments %}
-                    <option value="{{ typeInstrument.libelle }}">{{ typeInstrument.libelle }}</option>
-                {% endfor %}
-            </select>
+                <select id="typeFilter" class="custom-input">
+                    <option value="" selected>Tous les types</option>
+                    {% for typeInstrument in typeInstruments %}
+                        <option value="{{ typeInstrument.libelle }}">{{ typeInstrument.libelle }}</option>
+                    {% endfor %}
+                </select>
+            </div>
         </div>
 
-
-        <table>
-            <thead>
-                <tr>
-                
-                    <th data-key="type">Nom</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th data-key="id">Id</th>
-                    {% endif %}
-                    <th data-key="marque">Marque</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th data-key="dateAchat">Date d’achat</th>
-                    {% endif %}
-                    <th data-key="prixAchat">Prix (€)</th>
-                    <th>Image</th>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <th>Actions</th>
-                    {% endif %}
-                    {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
-                        <th>Louer</th>
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                {% for instrument in instruments %}
-                <tr onclick="window.location='{{ path('app_instrument_show', {'id': instrument.id}) }}'" style="cursor: pointer;">
-                <tr>
-                    <td>{{ instrument.type.libelle }}</td>
-                    {% if is_granted('ROLE_ADMIN') %}<td>{{ instrument.id }}</td>{% endif %}
-                    <td>{{ instrument.marque.libelle }}</td>
-                    {% if is_granted('ROLE_ADMIN') %}<td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '' }}</td>{% endif %}
-                    <td>{{ instrument.prixAchat }}</td>
-                    <td>
-                        {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
-                        <img src="{{ asset(photo) }}" alt="Image instrument {{ instrument.id }}" style="width: 80px; border-radius: 8px;">
-                    </td>
-                    {% if is_granted('ROLE_ADMIN') %}
-                        <td>
-                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-sm">Voir</a>
-                            <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-sm" style="background: #ffc107; color: black;">Modifier</a>
-                        </td>
-                    {% endif %}
-                    {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
-                        <td><a href="{{ path('app_instrument_new', {'id': instrument.id}) }}" class="btn btn-sm">Louer</a></td>
-                    {% endif %}
-                </tr>
-                {% else %}
-                <tr>
-                    <td colspan="7" class="text-center text-muted">Aucun instrument trouvé</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="custom-table">
+                    <thead>
+                        <tr>
+                            <th data-key="type" style="width: 25%;">Nom</th>
+                            
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <th data-key="id" style="width: 10%;">Id</th>
+                            {% endif %}
+                            
+                            <th data-key="marque" style="width: 25%;">Marque</th>
+                            
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <th data-key="dateAchat" style="width: 15%;">Date d'achat</th>
+                            {% endif %}
+                            
+                            <th data-key="prixAchat" style="width: 15%;">Prix (€)</th>
+                            <th style="width: 20%;">Image</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        {% for instrument in instruments %}
+                        <tr>
+                            <td class="fw-bold text-dark">{{ instrument.type.libelle }}</td>
+                            
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>{{ instrument.id }}</td>
+                            {% endif %}
+                            
+                            <td>{{ instrument.marque.libelle }}</td>
+                            
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <td>{{ instrument.dateAchat ? instrument.dateAchat|date('Y-m-d') : '-' }}</td>
+                            {% endif %}
+                            
+                            <td>{{ instrument.prixAchat }}</td>
+                            
+                            <td>
+                                {% set photo = 'images/instrument/' ~ instrument.id ~ '.jpg' %}
+                                <img src="{{ asset(photo) }}" alt="Instrument" class="instrument-img"
+                                     onerror="this.src='https://via.placeholder.com/60?text=Instr.'">
+                            </td>
+                            
+                            </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center p-4 text-muted">
+                                Aucun instrument trouvé
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
-    <!-- Formulaire création -->
     {% if is_granted('ROLE_ADMIN') %}
-    <div class="instrument-form" id="instrument-form" style="display: none;">
-        <h2>Créer un instrument</h2>
+    <div id="instrument-form" class="table-card mt-4 p-5" style="display: none; max-width: 800px; margin: 0 auto;">
+        <h2 class="text-primary text-center mb-4">Créer un instrument</h2>
+        
         <form action="{{ path('app_instrument_index') }}" method="post" enctype="multipart/form-data">
-            <label for="marque">Marque</label>
-            <!-- Filtre Marque -->
-            <select id="brandFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
-                <option value="" selected>Toutes les marques</option>
-                {% for marque in marques %}
-                    <option value="{{ marque.libelle }}">{{ marque.libelle }}</option>
-                {% endfor %}
-            </select>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Marque</label>
+                    <select name="marque" class="custom-input w-100" required>
+                        <option value="" disabled selected>Choisir...</option>
+                        {% for marque in marques %}
+                            <option value="{{ marque.id }}">{{ marque.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
-            <!-- Filtre Type -->
-            <select id="typeFilter" style="width: 35%; padding: 10px; margin-left: 5%; margin-bottom: 15px; border-radius: 8px; border: 1px solid #aaa;">
-                <option value="" selected>Tous les types</option>
-                {% for typeInstrument in typeInstruments %}
-                    <option value="{{ typeInstrument.libelle }}">{{ typeInstrument.libelle }}</option>
-                {% endfor %}
-            </select>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Type</label>
+                    <select name="type" class="custom-input w-100" required>
+                        <option value="" disabled selected>Choisir...</option>
+                        {% for type in typeInstruments %}
+                            <option value="{{ type.id }}">{{ type.libelle }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
 
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Numéro de série</label>
+                    <input type="text" name="numSerie" class="custom-input w-100" required>
+                </div>
 
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Prix (€)</label>
+                    <input type="number" name="prixAchat" class="custom-input w-100" step="0.01" required>
+                </div>
 
-            <label for="numSerie">Numéro de série</label>
-            <input type="text" id="numSerie" name="numSerie" required>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Date d'achat</label>
+                    <input type="date" name="dateAchat" class="custom-input w-100" required>
+                </div>
 
-            <label for="dateAchat">Date d’achat</label>
-            <input type="date" id="dateAchat" name="dateAchat" required>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Utilisation</label>
+                    <select name="utilisation" class="custom-input w-100">
+                        <option value="Prêts">Prêts</option>
+                        <option value="Cours">Cours</option>
+                        <option value="Stage">Stage</option>
+                    </select>
+                </div>
 
-            <label for="prixAchat">Prix (€)</label>
-            <input type="number" id="prixAchat" name="prixAchat" min="0" step="0.01" required>
+                <div class="col-12">
+                     <label class="form-label fw-bold">Image</label>
+                     <input type="file" name="photo" class="custom-input w-100" accept="image/*">
+                </div>
+            </div>
 
-            <label for="utilisation">Utilisation</label>
-            <select id="utilisation" name="utilisation" required>
-                <option value="Prêts">Prêts</option>
-                <option value="Stage">Stage</option>
-                <option value="Cours">Cours</option>
-            </select>
-
-            <label for="photo">Image (optionnelle)</label>
-            <input type="file" id="photo" name="photo" accept="image/*">
-
-            <button type="submit" class="submit-btn">Créer l’instrument</button>
+            <button type="submit" class="btn-custom btn-voir w-100 mt-4 py-2" style="font-size: 16px;">Enregistrer l'instrument</button>
         </form>
     </div>
     {% endif %}
 
 </div>
 
-<!-- Bootstrap Icons CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
-<!-- Styles -->
 <style>
-.instrument-container { max-width: 1200px; margin: 2rem auto; }
-.toggle-btn-container { text-align: center; margin-bottom: 1.5rem; }
-.toggle-btn { padding: 0.6rem 1.2rem; margin: 0 0.5rem; border: 2px solid #007bff; border-radius: 30px; background: white; color: #007bff; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
-.toggle-btn.active, .toggle-btn:hover { background: #007bff; color: white; }
-.instrument-form { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.1); transition: all 0.3s ease; max-width: 900px; margin: 0 auto; }
-.instrument-form h2 { text-align:center; color: #007bff; margin-bottom: 1.5rem; }
-.instrument-form label { display:block; margin:0.8rem 0 0.3rem; font-weight:600; }
-.instrument-form input, .instrument-form select { width:100%; padding:0.6rem 0.8rem; border-radius:8px; border:1.5px solid #ccc; margin-bottom:1rem; transition: all 0.3s ease; }
-.instrument-form input:focus, .instrument-form select:focus { outline:none; border-color:#007bff; box-shadow:0 0 0 3px rgba(0,123,255,0.1); }
-.submit-btn { margin-top:1rem; padding:0.8rem 2rem; border:none; background:#007bff; color:white; border-radius:30px; cursor:pointer; font-weight:600; }
-.submit-btn:hover { background:#0056b3; }
-th i.sort-icon { margin-left:5px; font-size:0.8rem; }
+    .page-title {
+        color: #0d6efd !important;
+        text-align: center;
+        font-weight: 500;
+        margin-bottom: 30px;
+        font-size: 2.5rem;
+    }
+    .toggle-btn-container { margin-bottom: 2rem; }
+    .toggle-btn { padding: 0.6rem 1.5rem; margin: 0 0.5rem; border: 2px solid #0d6efd; border-radius: 30px; background: white; color: #0d6efd; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .toggle-btn.active, .toggle-btn:hover { background: #0d6efd; color: white; }
+
+    .filters-container {
+        max-width: 800px;
+        margin: 0 auto 30px auto;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    .custom-input {
+        padding: 10px 15px;
+        border-radius: 8px;
+        border: 1px solid #ced4da;
+        color: #495057;
+        background-color: #fff;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+    .custom-input:focus { border-color: #86b7fe; box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25); }
+    .search-bar { width: 100%; max-width: 500px; }
+    .select-group { display: flex; gap: 20px; width: 100%; max-width: 500px; justify-content: space-between; }
+    .select-group select { width: 48%; }
+
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e9ecef;
+        padding: 0;
+        max-width: 950px;
+        margin: 0 auto;
+        overflow: hidden;
+    }
+    .table-responsive { width: 100%; overflow-x: auto; }
+
+    .custom-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+    
+    .custom-table thead th {
+        background-color: #fff;
+        color: #495057;
+        font-weight: 600;
+        padding: 20px;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+        cursor: pointer;
+        white-space: nowrap;
+    }
+    .custom-table tbody td {
+        padding: 15px 20px;
+        vertical-align: middle;
+        border-bottom: 1px solid #f1f3f5;
+        color: #495057;
+    }
+    .instrument-img { width: 80px; height: auto; object-fit: contain; }
+
+    .btn-custom {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 6px 0;
+        font-size: 14px;
+        font-weight: 500;
+        text-decoration: none;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        width: 90px;
+    }
+    .btn-custom:hover { opacity: 0.9; color: white; }
+    .btn-voir { background-color: #0d6efd; color: white; }
+    .btn-modifier { background-color: #ffc107; color: black; }
 </style>
 
-<!-- Scripts -->
 <script>
-{% verbatim %}
-// Toggle Liste / Formulaire
-const showListBtn = document.getElementById('show-list-btn');
-const showFormBtn = document.getElementById('show-form-btn');
-const instrumentList = document.getElementById('instrument-list');
-const instrumentForm = document.getElementById('instrument-form');
+    const showListBtn = document.getElementById('show-list-btn');
+    const showFormBtn = document.getElementById('show-form-btn');
+    const instrumentList = document.getElementById('instrument-list');
+    const instrumentForm = document.getElementById('instrument-form');
 
-if(showListBtn && showFormBtn) {
-    showListBtn.addEventListener('click', () => {
-        instrumentList.style.display = 'block';
-        if(instrumentForm) instrumentForm.style.display = 'none';
-        showListBtn.classList.add('active');
-        showFormBtn.classList.remove('active');
-    });
-
-    showFormBtn.addEventListener('click', () => {
-        instrumentList.style.display = 'none';
-        if(instrumentForm) instrumentForm.style.display = 'block';
-        showFormBtn.classList.add('active');
-        showListBtn.classList.remove('active');
-    });
-}
-
-// Filtrage recherche + marque + nom
-const searchInput = document.getElementById("searchInput");
-const brandFilter = document.getElementById("brandFilter");
-const typeFilter = document.getElementById("typeFilter");
-const tableBody = document.getElementById("tableBody");
-const tableRows = Array.from(tableBody.querySelectorAll("tr"));
-const headers = document.querySelectorAll("th[data-key]");
-
-function filterTable() {
-    const searchValue = searchInput.value.toLowerCase();
-    const brandValue = brandFilter.value.toLowerCase();
-    const typeValue = typeFilter.value.toLowerCase();
-
-    tableRows.forEach(row => {
-        const cells = row.querySelectorAll("td");
-        let brandText = "";
-        let typeText = "";
-        cells.forEach((cell, idx) => {
-            if(headers[idx] && headers[idx].dataset.key === 'marque') brandText = cell.innerText.toLowerCase();
-            if(headers[idx] && headers[idx].dataset.key === 'type') typeText = cell.innerText.toLowerCase();
-        });
-        const rowText = row.innerText.toLowerCase();
-        row.style.display = (rowText.includes(searchValue) &&
-                             (!brandValue || brandText.includes(brandValue)) &&
-                             (!typeValue || typeText.includes(typeValue))) ? "" : "none";
-    });
-}
-
-typeFilter.addEventListener("change", filterTable);
-searchInput.addEventListener("input", filterTable);
-brandFilter.addEventListener("change", filterTable);
-
-// Tri colonnes avec flèches
-let sortConfig = { key: null, direction: 'ascending' };
-
-headers.forEach(header => {
-    header.addEventListener("click", () => {
-        const key = header.dataset.key;
-        const idx = [...header.parentNode.children].indexOf(header);
-
-        if(sortConfig.key === key) sortConfig.direction = sortConfig.direction==='ascending'?'descending':'ascending';
-        else { sortConfig.key = key; sortConfig.direction = 'ascending'; }
-
-        const direction = sortConfig.direction === 'ascending' ? 1 : -1;
-
-        const rowsArray = Array.from(tableRows);
-        rowsArray.sort((a,b) => {
-            let A = a.children[idx].innerText.trim();
-            let B = b.children[idx].innerText.trim();
-            if(!isNaN(parseFloat(A)) && !isNaN(parseFloat(B))) return (parseFloat(A)-parseFloat(B))*direction;
-            return A.localeCompare(B)*direction;
+    if(showListBtn && showFormBtn) {
+        showListBtn.addEventListener('click', () => {
+            instrumentList.style.display = 'block';
+            if(instrumentForm) instrumentForm.style.display = 'none';
+            showListBtn.classList.add('active');
+            showFormBtn.classList.remove('active');
         });
 
-        rowsArray.forEach(row => tableBody.appendChild(row));
+        showFormBtn.addEventListener('click', () => {
+            instrumentList.style.display = 'none';
+            if(instrumentForm) instrumentForm.style.display = 'block';
+            showFormBtn.classList.add('active');
+            showListBtn.classList.remove('active');
+        });
+    }
 
-        // Flèches
-        headers.forEach(h => { const icon = h.querySelector('i.sort-icon'); if(icon) icon.remove(); });
-        const sortIcon = document.createElement('i');
-        sortIcon.classList.add('bi','sort-icon');
-        sortIcon.classList.add(sortConfig.direction==='ascending'?'bi-arrow-up':'bi-arrow-down');
-        header.appendChild(sortIcon);
-    });
-});
-{% endverbatim %}
+    const searchInput = document.getElementById("searchInput");
+    const brandFilter = document.getElementById("brandFilter");
+    const typeFilter = document.getElementById("typeFilter");
+    const tableBody = document.getElementById("tableBody");
+    const tableRows = Array.from(tableBody.querySelectorAll("tr"));
+
+    function filterTable() {
+        const searchValue = searchInput.value.toLowerCase();
+        const brandValue = brandFilter.value.toLowerCase();
+        const typeValue = typeFilter.value.toLowerCase();
+
+        tableRows.forEach(row => {
+            if(row.cells.length < 2) return;
+            const rowText = row.innerText.toLowerCase();
+            const matchesSearch = rowText.includes(searchValue);
+            const matchesBrand = !brandValue || rowText.includes(brandValue);
+            const matchesType = !typeValue || rowText.includes(typeValue);
+            row.style.display = (matchesSearch && matchesBrand && matchesType) ? "" : "none";
+        });
+    }
+
+    if(searchInput) searchInput.addEventListener("input", filterTable);
+    if(brandFilter) brandFilter.addEventListener("change", filterTable);
+    if(typeFilter) typeFilter.addEventListener("change", filterTable);
 </script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
 {% endblock %}
