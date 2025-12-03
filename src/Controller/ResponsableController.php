@@ -15,8 +15,20 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResponsableController extends AbstractController
 {
     #[Route('/', name: 'app_responsable_index', methods: ['GET'])]
-    public function index(ResponsableRepository $responsableRepository): Response
+    public function index(ResponsableRepository $responsableRepository, Request $request): Response
     {
+        $q = $request->query->get('q');
+
+    if ($q) {
+        $responsables = $responsableRepository->search($q);
+    } else {
+        $responsables = $responsableRepository->findAll();
+    }
+
+        return $this->render('responsable/index.html.twig', [
+            'responsables' => $responsables,
+        ]);
+
         return $this->render('responsable/index.html.twig', [
             'responsables' => $responsableRepository->findAll(),
         ]);

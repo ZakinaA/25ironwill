@@ -3,7 +3,25 @@
 {% block title %}Responsable index{% endblock %}
 
 {% block body %}
-    <h1>Responsable index</h1>
+    <h1 class="page-title">Liste des responsables</h1>
+
+    <br>
+    <br>
+
+    <form method="get" action="" style="margin-bottom:20px; display:flex; gap:10px;">
+        <input 
+            type="text"
+            name="q"
+            placeholder="Rechercher..."
+            value="{{ app.request.get('q') }}"
+            class="form-control"
+            style="max-width:300px;"
+        >
+        <button type="submit" class="btn btn-primary">
+            Rechercher
+        </button>
+    </form>
+
 
     <table class="table">
         <thead>
@@ -15,7 +33,7 @@
                 <th>Tel</th>
                 <th>Mail</th>
                 <th>Quotient</th>
-                <th>actions</th>
+                <th>Actions</th>
             </tr>
         </thead>
      <tbody>
@@ -34,7 +52,8 @@
             
             <td>
                 
-                <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn btn-sm btn-warning">edit</a>
+                <a href="{{ path('app_responsable_show', {'id': responsable.id}) }}" class="btn btn-small">Voir</a>
+                    <a href="{{ path('app_responsable_edit', {'id': responsable.id}) }}" class="btn btn-sm btn-primary">Editer</a>
             </td>
         </tr>
         {% else %}
