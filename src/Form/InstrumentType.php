@@ -23,16 +23,17 @@ class InstrumentType extends AbstractType
             ->add('cheminImage')
             ->add('marque', EntityType::class, [
                 'class' => Marque::class,
-'choice_label' => 'id',
+'choice_label' => 'libelle',
             ])
             ->add('type', EntityType::class, [
                 'class' => TypeInstrument::class,
-'choice_label' => 'id',
+'choice_label' => 'libelle',
             ])
             ->add('couleurs', EntityType::class, [
                 'class' => Couleur::class,
-'choice_label' => 'id',
+'choice_label' => 'nom',
 'multiple' => true,
+
             ])
         ;
     }
