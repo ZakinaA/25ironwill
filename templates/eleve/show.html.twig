@@ -71,7 +71,7 @@
                 </td>
             </tr>
             <tr>
-                <th>responsable</th>
+                <th>Responsable</th>
                 <td>
                     {% for unResponsable in eleve.responsables %}
                         <a href="{{ path('app_responsable_show', {'id': unResponsable.id}) }}">
@@ -90,9 +90,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_eleve_index') }}" class="btn btn-info">Retour à la liste</a>
+    <a href="{{ path('app_eleve_index') }}" class="btn btn-primary">Retour à la liste</a>
 
-    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-warning">Modifier</a>
-
+    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-dark">Modifier</a>
+    
     {{ include('eleve/_delete_form.html.twig') }}
 {% endblock %}
