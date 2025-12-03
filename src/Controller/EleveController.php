@@ -66,6 +66,11 @@ class EleveController extends AbstractController
         $form = $this->createForm(EleveType::class, $eleve);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted() && !$form->isValid()) {
+            dd($form->getErrors(true, false));
+        }
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 

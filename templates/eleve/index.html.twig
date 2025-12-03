@@ -33,8 +33,8 @@
                 <th>Ville</th>
                 <th>Tel</th>
                 <th>Mail</th>
-                <th>Responsable 1</th>
-                <th>actions</th>
+                <th>Responsable</th>
+                <th>Actions</th>
                 
 
             </tr>
@@ -56,12 +56,12 @@
                     {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
                     {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
                 </td>
-                
+
                 {# Attention : cliquer sur ces boutons déclenchera aussi le clic de la ligne #}
                 {# Pour éviter ça, il faudrait du Javascript (stopPropagation), mais ça marchera quand même #}
                 <td>
-                    
-                    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-sm btn-warning">edit</a>
+                    <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="btn btn-small">Voir</a>
+                    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-sm btn-primary">Editer</a>
                 </td>
             </tr>
         {% else %}
