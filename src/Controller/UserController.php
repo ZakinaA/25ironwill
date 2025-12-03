@@ -57,6 +57,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $roles = $form->get('roles')->getData();
+            // On force la mise à jour de l'utilisateur
+            $user->setRoles($roles);
+            // --------------------------------
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);

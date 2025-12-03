@@ -17,13 +17,14 @@ class UserType extends AbstractType
             ->add('email')
             ->add('roles', ChoiceType::class, [
                 'choices' => [
-                    'Utilisateur' => 'ROLE_USER',
+                    'Eleve' => 'ROLE_ELEVE',
+                    'Responsable' => 'ROLE_RESPONSABLE',
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
                 'multiple' => true,
                 'expanded' => true, // cases à cocher
             ])
-            ->add('password')
+            
             ->add('nom')
             ->add('prenom')
             ->add('numRue')
@@ -31,10 +32,7 @@ class UserType extends AbstractType
             ->add('copos')
             ->add('ville')
             ->add('tel')
-            ->add('eleve', EntityType::class, [
-                'class' => Eleve::class,
-'choice_label' => 'id',
-            ])
+            
         ;
     }
 
