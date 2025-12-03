@@ -1,4 +1,94 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div class="card p-4 shadow-sm" style="max-width: 800px; margin: auto;">
+    
+    <h3 class="text-center mb-4" style="color: #007bff;">
+        <i class="fas fa-guitar"></i> Gestion Instrument
+    </h3>
+
+    <div class="row g-3">
+        
+        {# --- LIGNE 1 : IDENTIFICATION --- #}
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.type, 'Type d\'instrument') }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.type) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.marque, 'Marque') }}
+                {{ form_widget(form.marque, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.marque) }}
+            </div>
+        </div>
+
+        {# --- LIGNE 2 : SÉRIE --- #}
+        <div class="col-12">
+            <div class="mb-3">
+                {{ form_label(form.numSerie, 'Numéro de Série') }}
+                {{ form_widget(form.numSerie, {'attr': {'class': 'form-control', 'placeholder': 'Ex: SN-123456789'}}) }}
+                {{ form_errors(form.numSerie) }}
+            </div>
+        </div>
+
+        {# --- LIGNE 3 : ACHAT & UTILISATION --- #}
+        <div class="col-md-4">
+            <div class="mb-3">
+                {{ form_label(form.dateAchat, 'Date d\'achat') }}
+                {# Si ton champ date s'affiche bizarrement, ajoute 'widget' => 'single_text' dans ton PHP #}
+                {{ form_widget(form.dateAchat, {'attr': {'class': 'form-control'}}) }} 
+                {{ form_errors(form.dateAchat) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                {{ form_label(form.prixAchat, 'Prix (€)') }}
+                <div class="input-group">
+                    {{ form_widget(form.prixAchat, {'attr': {'class': 'form-control'}}) }}
+                    <span class="input-group-text">€</span>
+                </div>
+                {{ form_errors(form.prixAchat) }}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="mb-3">
+                {{ form_label(form.utilisation, 'Utilisation') }}
+                {{ form_widget(form.utilisation, {'attr': {'class': 'form-control'}}) }}
+                {{ form_errors(form.utilisation) }}
+            </div>
+        </div>
+
+        
+        <div class="col-md-12">
+            <div class="mb-3">
+                {{ form_label(form.couleurs, 'Couleurs') }}
+                {# expanded: false = liste déroulante multiple (Ctrl+Click) #}
+                {# expanded: true = cases à cocher (si configuré dans le PHP) #}
+                {{ form_widget(form.couleurs, {'attr': {'class': 'form-select', 'style': 'height: 100px;'}}) }}
+                <div class="form-text text-muted">Maintenez Ctrl pour sélectionner plusieurs couleurs.</div>
+                {{ form_errors(form.couleurs) }}
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="mb-3">
+                {{ form_label(form.cheminImage, 'Chemin de l\'image / URL') }}
+                {{ form_widget(form.cheminImage, {'attr': {'class': 'form-control', 'placeholder': 'Ex: guitare_fender.jpg'}}) }}
+                {{ form_errors(form.cheminImage) }}
+            </div>
+        </div>
+
+    </div> {# Fin row #}
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg px-5">
+            <i class="fas fa-save me-2"></i> {{ button_label|default('Enregistrer') }}
+        </button>
+
+    </div>
+
+</div>
+
 {{ form_end(form) }}
