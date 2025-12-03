@@ -55,6 +55,12 @@
     }) }}
     {{ form_errors(form.eleve) }}
 </div>
+<div class="mb-3">
+    {# On cible uniquement le champ quotient #}
+    {{ form_label(form.quotient) }}
+    {{ form_widget(form.quotient, {'attr': {'class': 'form-control'}}) }}
+    {{ form_errors(form.quotient) }}
+</div>
 
 
 <button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>

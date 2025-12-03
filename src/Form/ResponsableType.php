@@ -9,6 +9,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use App\Entity\TrancheQuotient;
+
+
+// ...
+
 
 class ResponsableType extends AbstractType
 {
@@ -31,10 +36,15 @@ class ResponsableType extends AbstractType
                 'by_reference' => false,
                 'required' => false,
             ])
+           ->add('quotient', EntityType::class, [
+    'class' => TrancheQuotient::class,
+    
+    'choice_label' => 'libelle', 
+        ]);
 
 
             
-        ;
+        
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -43,4 +53,7 @@ class ResponsableType extends AbstractType
             'data_class' => Responsable::class,
         ]);
     }
+
+
+
 }

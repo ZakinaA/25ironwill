@@ -186,4 +186,11 @@ public function setNomTranche(string $nomTranche): static
 
     return $this;
 }
+
+public function __toString(): string
+{
+
+    return $this->libelle; 
+}
+
 }
