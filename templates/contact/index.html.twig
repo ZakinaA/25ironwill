@@ -23,7 +23,7 @@
                 <td>{{ contact.Email }}</td>
                 <td>{{ contact.Message }}</td>
                 <td>
-                    <a class="btn btn-small" href="{{ path('app_contact_show', {'id': contact.id}) }}">Voir</a>
+                    <a class="btn btn-info" href="{{ path('app_contact_show', {'id': contact.id}) }}">Voir</a>
                     
                     <a href="#" class="btn btn-danger"
                         onclick="event.preventDefault(); 
@@ -49,5 +49,5 @@
         </tbody>
     </table>
 
-    <a class="btn btn-success" href="{{ path('app_contact_new') }}">Créer un nouveau message</a>
+    <a class="btn btn-info" href="{{ path('app_contact_new') }}">Créer un nouveau message</a>
 {% endblock %}
