@@ -3,7 +3,7 @@
 {% block title %}Edit Responsable{% endblock %}
 
 {% block body %}
-    <h1>Edit Responsable</h1>
+    <h1>Edit {{ responsable.prenom }} {{ responsable.nom }}</h1>
 
     {{ include('responsable/_form.html.twig', {'button_label': 'Mette à jour'}) }}
 
