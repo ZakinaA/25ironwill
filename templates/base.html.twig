@@ -19,6 +19,11 @@
         background:linear-gradient(135deg,#e0f2ff,#f4f6f9);
         color:#333;
         overflow-x:hidden;
+
+
+        display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     }
 
     /* ================= SIDEBAR ================= */
@@ -141,6 +146,8 @@
         margin-top:90px;
         padding:0 1rem;
         transition:margin-left 0.3s ease;
+
+        flex: 1;
     }
 
     #nav-toggle:checked ~ .top-header + main.container{
@@ -148,14 +155,25 @@
     }
 
     /* ================= FOOTER ================= */
-    footer{
-        background:#007bff;
-        color:white;
-        text-align:center;
-        padding:1.5rem;
-        font-weight:500;
-        margin-top:3rem;
-    }
+   /* Remplace ton bloc footer par celui-ci */
+footer {
+    background: #007bff;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    font-weight: 500;
+    margin-top: 3rem;
+    
+    /* --- AJOUT --- */
+    /* Pour ne pas que le footer soit caché derrière la barre latérale */
+    margin-left: 240px; 
+    transition: margin-left 0.3s ease;
+}
+
+/* Ajoute ceci juste après le CSS du footer pour gérer le repli du menu */
+#nav-toggle:checked ~ footer {
+    margin-left: 80px;
+}
 
     /* ================= RESPONSIVE ================= */
     @media (max-width:900px){
@@ -381,7 +399,7 @@
             <a href="{{ path('app_inscription_cours') }}"><i class="fa-solid fa-book"></i><span>Inscriptions Cours</span></a>
             
             <a href="{{ path('app_contact_index') }}"><i class="bi bi-send-fill"></i><span>Reçus</span></a>
-
+            <a href="{{ path('app_contact_cours_index') }}"><i class="bi bi-send-fill"></i><span>Demande Inscription</span></a>
         {% endif %}
 
         <div class="sidebar-spacer"></div>
