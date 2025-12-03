@@ -1,9 +1,3 @@
-Compris ! Je m'assure qu'il ne reste aucune balise, référence ou marqueur dans le document final.
-
-Voici la version ultime de ton README.md, épurée et prête à être publiée sur GitHub :
-
-Markdown
-
 # 🎵 e-Music : Gestion d'École de Musique
 
 ![Symfony](https://img.shields.io/badge/Symfony-6.0-black?style=flat&logo=symfony) ![PHP](https://img.shields.io/badge/PHP-8.0-blue) ![MariaDB](https://img.shields.io/badge/Database-MariaDB-orange) ![License](https://img.shields.io/badge/License-MIT-green)
