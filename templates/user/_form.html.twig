@@ -1,9 +1,10 @@
 {{ form_start(form) }}
 
 <div class="card p-4 shadow-sm" style="max-width: 700px; margin: auto;">
-    <h2 class="mb-4 text-center">Créer / Modifier un utilisateur</h2>
-
+    
+    {# On ouvre la grille principale ici #}
     <div class="row g-3">
+        
         <div class="col-md-6">
             <div class="mb-3">
                 {{ form_label(form.nom) }}
@@ -64,16 +65,22 @@
             </div>
         </div>
 
-        </div>
-        <div class="col-md-6">
-            <div class="mb-3">
-                {{ form_label(form.password) }}
-                {{ form_widget(form.password ,{'attr': {'class': 'form-control'}}) }}
-                {{ form_errors(form.password ) }}
-            </div>
-        </div>
+        
+        {% if app.request.attributes.get('_route') == 'app_user_new' %}
+            {% if form.plainPassword is defined %}
+                {# On utilise col-12 pour prendre toute la largeur, mais on reste DANS la row principale #}
+                <div class="col-12">
+                    <div class="mb-3">
+                        {{ form_label(form.plainPassword, 'Mot de passe') }}
+                        {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'placeholder': 'Définir un mot de passe'}}) }}
+                        {{ form_errors(form.plainPassword) }}
+                    </div>
+                </div>
+            {% endif %}
+        {% endif %}
+       
 
-        <div class="col-md-12">
+        <div class="col-12">
             <div class="mb-3">
                 {{ form_label(form.roles) }}
                 {{ form_widget(form.roles, {'attr': {'class': 'form-select'}}) }}
@@ -81,18 +88,12 @@
             </div>
         </div>
 
-        <div class="col-md-12">
-            <div class="mb-3">
-                {{ form_label(form.eleve) }}
-                {{ form_widget(form.eleve, {'attr': {'class': 'form-select'}}) }}
-                {{ form_errors(form.eleve) }}
-            </div>
-        </div>
-    </div>
+    </div> {# Fermeture de la <div class="row g-3"> #}
 
     <div class="text-center mt-4">
         <button class="btn btn-success btn-lg">{{ button_label|default('Enregistrer') }}</button>
     </div>
-</div>
+
+</div> {# Fermeture de la card #}
 
 {{ form_end(form) }}

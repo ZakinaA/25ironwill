@@ -3,6 +3,7 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
+
 <div>
     <h1 style="color:#e91e63; margin-bottom: 20px; font-weight: 600;">Liste des utilisateurs</h1>
 
@@ -22,6 +23,13 @@
             Rechercher
         </button>
     </form>
+
+    <h1 style="color:#e91e63; margin-bottom: 20px; font-weight: 600;">Liste des utilisateurs</h1>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+            Créer un utilisateur
+        </a>
+    </div>
 
 
     <table class="table">

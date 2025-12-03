@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[Route('/user')]
 class UserController extends AbstractController
@@ -36,13 +37,27 @@ class UserController extends AbstractController
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $plainPassword = $form->get('plainPassword')->getData();
+
+        if ($plainPassword) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $plainPassword
+                )
+            );
+        } else {
+            // Si aucun mot de passe n'est mis, on en met un par défaut pour éviter le crash
+            $user->setPassword($userPasswordHasher->hashPassword($user, '123456'));
+        }
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -70,6 +85,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $roles = $form->get('roles')->getData();
+            // On force la mise à jour de l'utilisateur
+            $user->setRoles($roles);
+            // --------------------------------
             $entityManager->flush();
 
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
