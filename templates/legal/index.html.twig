@@ -1,47 +1,92 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>
+    {#
+        Ce bloc centralise l'affichage des Mentions Légales et de la Politique de Cookies
+        en fonction de la route actuelle (current_route est présumé être défini par votre contrôleur).
+    #}
+
     {% if current_route == 'app_mentions_legales' %}
-    <h1>Mentions légales</h1>
-    <p>
-    Harmonie Club – Emusic<br>
-    Directeur de la publication : Jean Dupont<br>
-    Hébergeur du site : OVH
-    </p>
+        
+        <h1 class="page-title">Mentions Légales</h1>
+        
+        <div class="card card-body">
 
-    <h2>Propriété intellectuelle</h2>
-    <p>
-    Tout contenu présent sur ce site (textes, images, logos, vidéos) est la propriété exclusive de Harmonie Club – Emusic ou de ses partenaires. Toute reproduction, totale ou partielle, sans autorisation est interdite.
-    </p>
+            <h2>1. Éditeur du Site (Propriétaire)</h2>
+            <p>
+                <strong>Nom du site :</strong> e-Music<br>
+                <strong>Statut :</strong> École de Musique Municipale<br>
+                <strong>Entité responsable :</strong> Mairie d'Ifs [cite: 28, 146]<br>
+                <strong>Adresse :</strong> [À COMPLÉTER : Adresse légale de la Mairie d'Ifs]<br>
+                <strong>Téléphone :</strong> [À COMPLÉTER : Numéro de la Mairie / DSI]<br>
+                <strong>Directeur de la publication :</strong> [À COMPLÉTER : ex. Le responsable de la DSI ou le Maire]
+            </p>
 
-    <h2>Responsabilité</h2>
-    <p>
-    Harmonie Club ne pourra être tenu responsable des dommages directs ou indirects résultant de l’accès ou de l’utilisation de ce site.
-    </p>
+            <hr>
+
+            <h2>2. Hébergement</h2>
+            <p>
+                L'application est mise en production dans le cadre du projet BTS SIO du Lycée Rostand.<br>
+                <strong>Hébergeur :</strong> Lycée Jean Rostand Caen (Infrastructure de production VM) [cite: 94, 117]<br>
+                <strong>Environnement :</strong> Solution Linux/Apache/MariaDB [cite: 93, 94, 117]
+            </p>
+
+            <hr>
+
+            <h2>3. Propriété Intellectuelle</h2>
+            <p>
+                L'ensemble du projet (code source, documentation, architecture) est développé en PHP avec le framework Symfony 6 [cite: 91] par la DSI de la Mairie d'Ifs [cite: 146] et est historisé via Git sur GitHub[cite: 96]. Tout le contenu (textes, images, données) présent sur ce site est la propriété de l'École de Musique Municipale d'Ifs ou de ses partenaires. Toute reproduction sans autorisation est interdite.
+            </p>
+
+            <hr>
+
+            <h2>4. Données Personnelles (RGPD)</h2>
+            <p>
+                L'application e-Music gère les inscriptions, les paiements et les prêts d'instruments[cite: 39, 40]. Le traitement des données personnelles doit en tous points respecter la législation européenne en vigueur, notamment le **RGPD**[cite: 114].
+                <ul>
+                    <li>**Finalités :** Gestion des inscriptions, des paiements, organisation des cours (emploi du temps individualisé) et gestion du parc d'instruments[cite: 40, 58, 60].</li>
+                    <li>**Données concernées :** Informations sur les élèves (nom, prénom, date de naissance) et sur les responsables (coordonnées, quotient familial)[cite: 162, 168].</li>
+                </ul>
+                Pour exercer vos droits (accès, rectification, effacement), veuillez contacter : [À COMPLÉTER : Contact DPO de la Mairie d'Ifs].
+            </p>
+
+        </div>
+
+    {% elseif current_route == 'app_cookies' %}
+        
+        <h1 class="page-title">Politique de Cookies</h1>
+        
+        <div class="card card-body">
+
+            <p>
+                Notre site e-Music utilise des cookies pour garantir le bon fonctionnement de l'application et vous offrir une expérience sécurisée et personnalisée. L'application intègre notamment la librairie **Jquery** pour les interfaces graphiques[cite: 98].
+            </p>
+
+            <h2>Types de cookies utilisés</h2>
+            <ul>
+                <li>
+                    <strong>Cookies Nécessaires (Fonctionnels) :</strong> 
+                    Essentiels pour l'authentification préalable nécessaire à l'accès au contenu sécurisé [cite: 87] et pour le maintien de votre session de navigation. La désactivation de ces cookies peut empêcher l'accès aux fonctionnalités de gestion (inscriptions, élèves, paiements).
+                </li>
+                <li>
+                    <strong>Cookies de Préférences (Ergonomie) :</strong> 
+                    Utilisés pour mémoriser vos choix d'affichage ou vos préférences (par exemple, l'état ouvert/fermé de la barre latérale). L'application utilise un framework de présentation [cite: 98] qui peut s'appuyer sur des cookies.
+                </li>
+                <li>
+                    <strong>Cookies Analytiques :</strong> 
+                    Actuellement, l'application est destinée à la gestion interne[cite: 39]. Si des outils d'analyse de trafic sont ajoutés ultérieurement, ils seront répertoriés ici.
+                </li>
+            </ul>
+
+            <h2>Gestion et Consentement</h2>
+            <p>
+                En utilisant les fonctionnalités sécurisées du site, vous consentez à l'utilisation des cookies nécessaires à son fonctionnement. Vous pouvez configurer votre navigateur pour refuser les cookies, mais cela pourrait affecter l'accès et l'utilisation de certaines parties de l'application.
+            </p>
+        </div>
+
+    {% else %}
+        {# Gère le cas où la route n'est ni mentions légales, ni cookies #}
+        <p>Contenu par défaut pour cette page.</p>
     {% endif %}
 
-    </h1>
-
-    <p>
-    {% if current_route == 'app_cookies' %}
-    <h1>Politique de Cookies</h1>
-    <p>
-    Notre site utilise des cookies pour améliorer votre expérience utilisateur et analyser notre trafic. En poursuivant votre navigation, vous acceptez l'utilisation de ces cookies.
-    </p>
-
-    <h2>Types de cookies utilisés</h2>
-    <ul>
-        <li><strong>Cookies nécessaires :</strong> essentiels pour le fonctionnement du site.</li>
-        <li><strong>Cookies analytiques :</strong> nous permettent de comprendre comment le site est utilisé et d’améliorer son contenu.</li>
-        <li><strong>Cookies marketing :</strong> utilisés pour afficher des publicités ciblées.</li>
-    </ul>
-
-    <h2>Gestion des cookies</h2>
-    <p>
-    Vous pouvez configurer votre navigateur pour refuser certains cookies ou tous les cookies. Notez que certaines fonctionnalités du site pourraient ne pas fonctionner correctement si vous désactivez les cookies.
-    </p>
-    {% endif %}
-
-    </p>
 {% endblock %}
