@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+<div class="table-wrapper" style="max-width: 1200px; margin: 2em auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
+
+
+    <h1 style="color:#e91e63; margin-bottom: 20px; font-weight: 600;">Liste des utilisateurs</h1>
+
+    <table class="styled-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
+        <thead style="background-color: #2196f3; color: white; text-align: left;">
+            <tr>
+                <th style="padding: 12px 15px;">Id</th>
+                <th style="padding: 12px 15px;">Email</th>
+                <th style="padding: 12px 15px;">Rôles</th>
+                <th style="padding: 12px 15px;">Nom</th>
+                <th style="padding: 12px 15px;">Prénom</th>
+                <th style="padding: 12px 15px;">Adresse</th>
+                <th style="padding: 12px 15px;">Téléphone</th>
+                <th style="padding: 12px 15px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr style="border-bottom: 1px solid #ddd; background-color: {% if loop.index is even %}#f9f9f9{% else %}white{% endif %};">
+                <td style="padding: 12px 15px;">{{ user.id }}</td>
+                <td style="padding: 12px 15px;">{{ user.email }}</td>
+                <td style="padding: 12px 15px;">
+                    {% for role in user.roles %}
+                        {{ role|replace({'ROLE_': ''})|capitalize }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                </td>
+                <td style="padding: 12px 15px;">{{ user.nom }}</td>
+                <td style="padding: 12px 15px;">{{ user.prenom }}</td>
+                <td class="address" style="padding: 12px 15px; max-width: 250px; white-space: normal; word-wrap: break-word;">
+                    <div>{{ user.numRue }} {{ user.rue }}</div>
+                    <div>{{ user.copos }} {{ user.ville }}</div>
+                </td>
+                <td style="padding: 12px 15px;">{{ user.tel }}</td>
+                <td style="padding: 12px 15px;">
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn-action btn-show" style="background-color: #17a2b8; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9em; margin-right: 5px;">Voir</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn-action btn-edit" style="background-color: #ffc107; color: black; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9em;">Modifier</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center; padding: 20px; font-style: italic; color: #666;">Aucun utilisateur trouvé</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    /* Responsive */
+    @media (max-width: 768px) {
+        .table-wrapper {
+            padding: 10px;
+            margin: 1em;
+        }
+        .styled-table thead {
+            display: none;
+        }
+        .styled-table, .styled-table tbody, .styled-table tr, .styled-table td {
+            display: block;
+            width: 100%;
+        }
+        .styled-table tr {
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ddd;
+            background-color: white !important;
+        }
+        .styled-table td {
+            padding-left: 50%;
+            position: relative;
+            text-align: left !important;
+        }
+        .styled-table td::before {
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            width: 45%;
+            white-space: nowrap;
+            font-weight: 700;
+            color: #2196f3;
+        }
+        .styled-table td:nth-of-type(1)::before { content: "Id"; }
+        .styled-table td:nth-of-type(2)::before { content: "Email"; }
+        .styled-table td:nth-of-type(3)::before { content: "Rôles"; }
+        .styled-table td:nth-of-type(4)::before { content: "Nom"; }
+        .styled-table td:nth-of-type(5)::before { content: "Prénom"; }
+        .styled-table td:nth-of-type(6)::before { content: "Adresse"; }
+        .styled-table td:nth-of-type(7)::before { content: "Téléphone"; }
+        .styled-table td:nth-of-type(8)::before { content: "Actions"; }
+    }
+</style>
+
+{% endblock %}

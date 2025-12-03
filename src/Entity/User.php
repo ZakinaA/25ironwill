@@ -154,12 +154,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getNumRue(): ?string
+    public function getNumRue(): ?int
     {
         return $this->numRue;
     }
 
-    public function setNumRue(string $numRue): static
+    public function setNumRue(int $numRue): static
     {
         $this->numRue = $numRue;
 
