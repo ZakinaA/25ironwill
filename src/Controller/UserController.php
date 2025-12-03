@@ -15,8 +15,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends AbstractController
 {
     #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository, Request $request): Response
     {
+ 
+        $q = $request->query->get('q');
+
+        if ($q) {
+            $users = $userRepository->search($q);
+        } else {
+            $users = $userRepository->findAll();
+        }
+
+        return $this->render('user/index.html.twig', [
+            'users' => $users,
+        ]);
+
         return $this->render('user/index.html.twig', [
             'users' => $userRepository->findAll(),
         ]);

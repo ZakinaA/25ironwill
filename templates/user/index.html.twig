@@ -3,13 +3,29 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
-<div class="table-wrapper" style="max-width: 1200px; margin: 2em auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
-
-
+<div>
     <h1 style="color:#e91e63; margin-bottom: 20px; font-weight: 600;">Liste des utilisateurs</h1>
 
-    <table class="styled-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
-        <thead style="background-color: #2196f3; color: white; text-align: left;">
+    <br>
+    <br>
+
+    <form method="get" action="" style="margin-bottom:20px; display:flex; gap:10px;">
+        <input 
+            type="text"
+            name="q"
+            placeholder="Rechercher..."
+            value="{{ app.request.get('q') }}"
+            class="form-control"
+            style="max-width:300px;"
+        >
+        <button type="submit" class="btn btn-primary">
+            Rechercher
+        </button>
+    </form>
+
+
+    <table class="table">
+        <thead >
             <tr>
                 <th style="padding: 12px 15px;">Id</th>
                 <th style="padding: 12px 15px;">Email</th>
@@ -23,7 +39,7 @@
         </thead>
         <tbody>
         {% for user in users %}
-            <tr style="border-bottom: 1px solid #ddd; background-color: {% if loop.index is even %}#f9f9f9{% else %}white{% endif %};">
+            <tr >
                 <td style="padding: 12px 15px;">{{ user.id }}</td>
                 <td style="padding: 12px 15px;">{{ user.email }}</td>
                 <td style="padding: 12px 15px;">
@@ -39,8 +55,8 @@
                 </td>
                 <td style="padding: 12px 15px;">{{ user.tel }}</td>
                 <td style="padding: 12px 15px;">
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn-action btn-show" style="background-color: #17a2b8; color: white; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9em; margin-right: 5px;">Voir</a>
-                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn-action btn-edit" style="background-color: #ffc107; color: black; padding: 6px 12px; border-radius: 6px; text-decoration: none; font-size: 0.9em;">Modifier</a>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="btn btn-small">Voir</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-primary">Editer</a>
                 </td>
             </tr>
         {% else %}

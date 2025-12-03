@@ -45,4 +45,16 @@ class ResponsableRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function search(string $q): array
+{
+    return $this->createQueryBuilder('r')
+        ->where('r.nom LIKE :q')
+        ->orWhere('r.prenom LIKE :q')
+        ->orWhere('r.ville LIKE :q')
+        ->orWhere('r.mail LIKE :q')
+        ->setParameter('q', '%' . $q . '%')
+        ->getQuery()
+        ->getResult();
+}
+
 }

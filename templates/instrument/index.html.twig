@@ -11,12 +11,6 @@
     {% if is_granted('ROLE_ADMIN') %}
     <div class="toggle-btn-container">
         
-    <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-primary">
-        Louer un Instrument
-    </a>
-    <a href="{{ path('app_contrat_pret_index') }}" class="btn btn-primary">
-        Voir mes locations
-    </a>
     </div>
     {% elseif is_granted('ROLE_ELEVE') %}
     <div class="toggle-btn-container">
