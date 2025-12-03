@@ -261,7 +261,7 @@
         {% if is_granted('ROLE_ADMIN') %}
             <!-- Section Élève -->
             <div class="form-section">
-                <div class="section-title">👤 Élève</div>
+                <div class="section-title">Élève</div>
                 <input type="text" 
                        id="search-eleve" 
                        class="search-input" 
@@ -275,7 +275,7 @@
             </div>
 
             <div class="form-section">
-                <div class="section-title">👨‍👩‍👧 Responsable 1</div>
+                <div class="section-title">Responsable</div>
                 <input type="text" 
                        id="search-responsable1" 
                        class="search-input" 
@@ -292,29 +292,12 @@
                 </select>
             </div>
 
-            <div class="form-section">
-                <div class="section-title">👨‍👩‍👧 Responsable 2</div>
-                <input type="text" 
-                       id="search-responsable2" 
-                       class="search-input" 
-                       placeholder="🔍 Rechercher...">
-                <select name="responsable[]" id="responsable2" class="custom-select">
-                    <option value="">-- Optionnel --</option>
-                    {% for eleve in eleves %}
-                        {% if eleve.responsables|length > 1 %}
-                            <option value="{{ eleve.responsables[1].id }}">
-                                {{ eleve.responsables[1].nom }} {{ eleve.responsables[1].prenom }}
-                            </option>
-                        {% endif %}
-                    {% endfor %}
-                </select>
-            </div>
             {% else %}
             {% endif %}
 
 
             <div class="cours-section">
-                <div class="section-title">📚 Sélectionnez les cours</div>
+                <div class="section-title">Sélectionnez les cours</div>
                 <div class="cours-grid">
                     {% for cour in cours %}
                         <label class="cours-card">

@@ -3,7 +3,9 @@
 {% block title %}Utilisateur{% endblock %}
 
 {% block body %}
+
     <h1>utilisateur</h1>
+
 
     <table class="table">
         <tbody>
@@ -50,9 +52,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_user_index') }}">back to list</a>
+    <a class="btn btn-primary" href="{{ path('app_user_index') }}">Revenir en arrière</a>
 
-    <a href="{{ path('app_user_edit', {'id': user.id}) }}">edit</a>
+    <a class="btn btn-dark" href="{{ path('app_user_edit', {'id': user.id}) }}">Editer</a>
 
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}

@@ -3,7 +3,26 @@
 {% block title %}Eleve index{% endblock %}
 
 {% block body %}
-    <h1>Liste des Eleves</h1>
+    <h1 class="page-title">Liste des élèves</h1>
+
+    <br>
+    <br>
+
+    <form method="get" action="" style="margin-bottom:20px; display:flex; gap:10px;">
+        <input 
+            type="text"
+            name="q"
+            placeholder="Rechercher..."
+            value="{{ app.request.get('q') }}"
+            class="form-control"
+            style="max-width:300px;"
+        >
+        <button type="submit" class="btn btn-primary">
+            Rechercher
+        </button>
+    </form>
+
+
 
     <table class="table">
         <thead>
@@ -14,13 +33,14 @@
                 <th>Ville</th>
                 <th>Tel</th>
                 <th>Mail</th>
-                <th>Responsable 1</th>
-                <th>actions</th>
+                <th>Responsable</th>
+                <th>Actions</th>
                 
 
             </tr>
         </thead>
         <tbody>
+        
         {% for eleve in eleves %}
             {# On met le onclick directement sur la balise TR unique #}
             <tr onclick="window.location='{{ path('app_eleve_show', {'id': eleve.id}) }}'" style="cursor: pointer;">
@@ -36,12 +56,12 @@
                     {{ eleve.responsables|length > 0 ? eleve.responsables[0].nom : '' }}
                     {{ eleve.responsables|length > 0 ? eleve.responsables[0].prenom : '' }}
                 </td>
-                
+
                 {# Attention : cliquer sur ces boutons déclenchera aussi le clic de la ligne #}
                 {# Pour éviter ça, il faudrait du Javascript (stopPropagation), mais ça marchera quand même #}
                 <td>
-                    
-                    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-sm btn-warning">edit</a>
+                    <a href="{{ path('app_eleve_show', {'id': eleve.id}) }}" class="btn btn-small">Voir</a>
+                    <a href="{{ path('app_eleve_edit', {'id': eleve.id}) }}" class="btn btn-sm btn-primary">Editer</a>
                 </td>
             </tr>
         {% else %}

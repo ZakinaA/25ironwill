@@ -11,12 +11,6 @@
     {% if is_granted('ROLE_ADMIN') %}
     <div class="toggle-btn-container">
         
-    <a href="{{ path('app_contrat_pret_new') }}" class="btn btn-primary">
-        Louer un Instrument
-    </a>
-    <a href="{{ path('app_contrat_pret_index') }}" class="btn btn-primary">
-        Voir mes locations
-    </a>
     </div>
     {% elseif is_granted('ROLE_ELEVE') %}
     <div class="toggle-btn-container">
@@ -91,8 +85,8 @@
                     </td>
                     {% if is_granted('ROLE_ADMIN') %}
                         <td>
-                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-sm">Voir</a>
-                            <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-sm" style="background: #ffc107; color: black;">Modifier</a>
+                            <a href="{{ path('app_instrument_show', {'id': instrument.id}) }}" class="btn btn-small">Voir</a>
+                            <a href="{{ path('app_instrument_edit', {'id': instrument.id}) }}" class="btn btn-sm btn-primary">Modifier</a>
                         </td>
                     {% endif %}
                     {% if is_granted('ROLE_ELEVE') and not is_granted('ROLE_ADMIN') %}
