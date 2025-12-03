@@ -50,13 +50,113 @@
 
 <div class="mb-3">
     {{ form_label(form.responsables) }}
-    {{ form_widget(form.responsables, {
-        'attr': {'class': 'form-select', 'size': 5}  # size = nombre de lignes visibles
-    }) }}
+    
+    {# Barre de recherche #}
+    <input type="text" 
+           class="form-control mb-2" 
+           id="searchResponsables" 
+           placeholder="Rechercher un responsable...">
+    
+    {# Widget natif Symfony mais masqué visuellement #}
+    <div style="display: none;">
+        {{ form_widget(form.responsables) }}
+    </div>
+    
+    {# Container visuel avec scroll #}
+    <div class="responsables-container border rounded p-2" style="max-height: 200px; overflow-y: auto;">
+        {% for choice in form.responsables.vars.choices %}
+            <div class="form-check responsable-item" style="margin-left:20px;" data-value="{{ choice.value }}">
+                <input class="form-check-input responsable-checkbox" 
+                       type="radio" 
+                       name="responsable_visual" 
+                       id="responsable_visual_{{ choice.value }}" 
+                       value="{{ choice.value }}"
+                       data-target="{{ choice.value }}">
+                <label class="form-check-label" for="responsable_visual_{{ choice.value }}">
+                    {{ choice.label }}
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+    
     {{ form_errors(form.responsables) }}
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchResponsables');
+    const items = document.querySelectorAll('.responsable-item');
+    const realSelect = document.querySelector('[name="{{ form.responsables.vars.full_name }}"]');
+    const visualRadios = document.querySelectorAll('.responsable-checkbox');
+    
+    // Synchroniser la valeur initiale
+    if (realSelect && realSelect.value) {
+        const visualRadio = document.querySelector(`.responsable-checkbox[data-target="${realSelect.value}"]`);
+        if (visualRadio) {
+            visualRadio.checked = true;
+        }
+    }
+    
+    // Fonction de recherche
+    searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        items.forEach(item => {
+            const label = item.querySelector('label').textContent.toLowerCase();
+            if (label.includes(searchTerm)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // Synchroniser les radios visuels avec le select réel
+    visualRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (this.checked) {
+                const targetValue = this.getAttribute('data-target');
+                
+                // Mettre à jour le select Symfony (pour select simple ou multiple)
+                if (realSelect.tagName === 'SELECT') {
+                    realSelect.value = targetValue;
+                } else if (realSelect.type === 'radio') {
+                    // Si c'est un groupe de radios
+                    const targetRadio = document.querySelector(`[name="{{ form.responsables.vars.full_name }}"][value="${targetValue}"]`);
+                    if (targetRadio) {
+                        targetRadio.checked = true;
+                    }
+                }
+                
+                // Déclencher l'événement change pour la validation Symfony
+                realSelect.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+});
+</script>
 
-<button class="btn btn-primary">{{ button_label|default('Enregistrer') }}</button>
+<style>
+.responsables-container {
+    background-color: #fff;
+}
+
+.responsable-item {
+    padding: 5px 0;
+    transition: background-color 0.2s;
+}
+
+.responsable-item:hover {
+    background-color: #f8f9fa;
+}
+
+.form-check-input:focus {
+    border-color: #86b7fe;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+</style>
+
+
+<button class="btn btn-success">{{ button_label|default('Enregistrer') }}</button>
 
 {{ form_end(form) }}

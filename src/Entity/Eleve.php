@@ -6,6 +6,7 @@ use App\Repository\EleveRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EleveRepository::class)]
 class Eleve
@@ -42,6 +43,11 @@ class Eleve
     #[ORM\OneToMany(targetEntity: ContratPret::class, mappedBy: 'eleve')]
     private Collection $contratPrets;
 
+
+    #[Assert\Count(
+        max: 2,
+        maxMessage: 'Un élève ne peut avoir que 2 responsables maximum.'
+    )]
     #[ORM\ManyToMany(targetEntity: Responsable::class, mappedBy: 'eleve')]
     private Collection $responsables;
 
@@ -214,6 +220,7 @@ class Eleve
     {
         if (!$this->responsables->contains($responsable)) {
             $this->responsables->add($responsable);
+
             $responsable->addEleve($this);
         }
 
@@ -223,6 +230,7 @@ class Eleve
     public function removeResponsable(Responsable $responsable): static
     {
         if ($this->responsables->removeElement($responsable)) {
+
             $responsable->removeEleve($this);
         }
 
