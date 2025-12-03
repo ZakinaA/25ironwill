@@ -3,10 +3,16 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
+
 <div class="table-wrapper" style="max-width: 1200px; margin: 2em auto; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 8px 25px rgba(0,0,0,0.1);">
 
 
     <h1 style="color:#e91e63; margin-bottom: 20px; font-weight: 600;">Liste des utilisateurs</h1>
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ path('app_user_new') }}" class="btn btn-primary">
+            Créer un utilisateur
+        </a>
+    </div>
 
     <table class="styled-table" style="width: 100%; border-collapse: collapse; box-shadow: 0 2px 12px rgba(0,0,0,0.1);">
         <thead style="background-color: #2196f3; color: white; text-align: left;">

@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}User{% endblock %}
+{% block title %}Utilisateur{% endblock %}
 
 {% block body %}
-    <h1>User</h1>
+    <h1>utilisateur</h1>
 
     <table class="table">
         <tbody>
@@ -18,10 +18,6 @@
             <tr>
                 <th>Roles</th>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-            </tr>
-            <tr>
-                <th>Password</th>
-                <td>{{ user.password }}</td>
             </tr>
             <tr>
                 <th>Nom</th>
