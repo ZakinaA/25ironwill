@@ -1,5 +1,13 @@
 # 🎵 e-Music : Gestion d'École de Musique
 
+Compte Admin :
+   Email : 1@gmail.com
+   Mot de passe : 12345
+Compte Eleve :
+   Email :
+
+
+
 ![Symfony](https://img.shields.io/badge/Symfony-6.0-black?style=flat&logo=symfony) ![PHP](https://img.shields.io/badge/PHP-8.0-blue) ![MariaDB](https://img.shields.io/badge/Database-MariaDB-orange) ![License](https://img.shields.io/badge/License-MIT-green)
 
 > Une application web complète pour la digitalisation de l'école de musique municipale d'Ifs.
