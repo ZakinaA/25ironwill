@@ -4,7 +4,8 @@ Compte Admin :
    Email : 1@gmail.com
    Mot de passe : 12345
 Compte Eleve :
-   Email :
+   Email : cam@gmail.com
+   mdp : Root61.
 
 
 
