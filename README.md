@@ -1,8 +1,8 @@
 # 🎵 e-Music : Gestion d'École de Musique
 
 Compte Admin :
-   Email : 1@gmail.com
-   Mot de passe : 12345
+   Email : admin@gmail.com
+   Mot de passe : MPadmin
 Compte Eleve :
    Email : cam@gmail.com
    mdp : Root61.
